@@ -24,7 +24,7 @@ _Teams are 3–4 students (per syllabus). Solo teams are not permitted._
 2. Member 2 Full Name — uc-email@mail.uc.edu — _Role (e.g., Product Owner, ..)_
 3. Connor Slutsky — slutskcp@mail.uc.edu — Member
 4. Akul Jha — jhaal@mail.uc.edu — Member
-5. Member 5 Ong Jai Sheng — ongjs@mail.uc.edu — _Role_ _(if applicable)_
+5. Ong Jai Sheng — ongjs@mail.uc.edu — member
 
 ---
 
