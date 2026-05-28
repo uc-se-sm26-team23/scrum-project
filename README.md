@@ -20,7 +20,7 @@
 
 _Teams are 3–4 students (per syllabus). Solo teams are not permitted._
 
-1. Member 1 Full Name — uc-email@mail.uc.edu — _Role (e.g., Scrum Master, ..)_
+1. Marcus Nguyen — uc-email@mail.uc.edu — _Role (e.g., Scrum Master, ..)_
 2. Member 2 Full Name — uc-email@mail.uc.edu — _Role (e.g., Product Owner, ..)_
 3. Member 3 Full Name — uc-email@mail.uc.edu — _Role_ _(if applicable)_
 4. Member 4 Full Name — uc-email@mail.uc.edu — _Role_ _(if applicable)_
