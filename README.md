@@ -21,7 +21,7 @@
 _Teams are 3–4 students (per syllabus). Solo teams are not permitted._
 
 1. Marcus Nguyen — nguye8tu@mail.uc.edu — Product Owner
-2. Luke Falanga — uc-email@mail.uc.edu — _Role (e.g., Product Owner, ..)_
+2. Luke Falanga — falanglv@mail.uc.edu — _Role (e.g., Product Owner, ..)_
 3. Connor Slutsky — slutskcp@mail.uc.edu — Member
 4. Akul Jha — jhaal@mail.uc.edu — Member
 5. Ong Jai Sheng — ongjs@mail.uc.edu — member
