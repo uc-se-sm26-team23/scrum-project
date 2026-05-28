@@ -24,7 +24,7 @@ _Teams are 3–4 students (per syllabus). Solo teams are not permitted._
 2. Luke Falanga — falanglv@mail.uc.edu — Scrum Master
 3. Connor Slutsky — slutskcp@mail.uc.edu — Member
 4. Akul Jha — jhaal@mail.uc.edu — Member
-5. Ong Jai Sheng — ongjs@mail.uc.edu — member
+5. Ong Jai Sheng — ongjs@mail.uc.edu — Member
 
 ---
 
