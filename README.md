@@ -12,7 +12,7 @@
 
 ---
 
-# Scrum Project — TODO: Your Project Name
+# Scrum Project — uc-se-sm26-team23.github.io
 
 > Replace **"TODO: Your Project Name"** with the title of your team's secure web application.
 
