@@ -18,7 +18,7 @@
 
 ## Team Members
 
-_Teams are 3–4 students (per syllabus). Solo teams are not permitted._
+_Teams are 3–5 students (per syllabus). Solo teams are not permitted._
 
 1. Marcus Nguyen — nguye8tu@mail.uc.edu — Product Owner
 2. Luke Falanga — falanglv@mail.uc.edu — Scrum Master
