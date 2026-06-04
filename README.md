@@ -68,6 +68,8 @@ List the high-level functional and non-functional requirements. These will be re
 - **FR-1:** As a user, I want to send and receive messages in real time so that I can communicate instantly with other users without refreshing the page.
 - **FR-2:** As a user, I want to see how many online users have read my message so that I know its outreach
 - **FR-3:** As a user, I want to see real-time typing status so that I know someone is responding
+- **FR-4:** As a user, I want to be aware of which other user sent an incoming message
+- **FR-5:** As a user, I want my chats to be organized
 - **NFR-1 (Performance):** TODO
 - **NFR-2 (Usability):** TODO
 - **NFR-3 (Security — see §Security):** TODO
