@@ -66,7 +66,8 @@ _Start in Sprint 0; keep updating._
 List the high-level functional and non-functional requirements. These will be refined into user stories and use cases. _(Main focus of Sprint 0.)_
 
 - **FR-1:** As a user, I want to send and receive messages in real time so that I can communicate instantly with other users without refreshing the page.
-- **FR-2:** TODO
+- **FR-2:** As a user, I want to see how many online users have read my message so that I know its outreach
+- **FR-3:** As a user, I want to see real-time typing status so that I know someone is responding
 - **NFR-1 (Performance):** TODO
 - **NFR-2 (Usability):** TODO
 - **NFR-3 (Security — see §Security):** TODO
