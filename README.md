@@ -1,4 +1,6 @@
-# README.md — Scrum Project Report Template
+# Tean 23 Scrum Project Report
+
+Project Requirement: https://github.com/phung-se/uc-se/blob/main/scrum-project/description-requirements.md
 
 > _**Note:** This is a starter template for your team to begin Sprint 0._
 > _It is the **minimum** required structure for your final report and is expected to grow across sprints._
@@ -293,4 +295,4 @@ If your team chooses to publish the repository after the course, add an explicit
 
 ---
 
-_End of template. Last template revision: TODO: YYYY-MM-DD._
+_End of template. Last template revision: 2026-06-04._
