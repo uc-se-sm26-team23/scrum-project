@@ -98,7 +98,7 @@ Include the **use-case diagram** and a **brief description** (1–3 sentences) f
 | UC-07 | Ping Users | Connected User | Users pings other users in channel for need in immediate attention |
 | UC-08 | Navigate Channels | Connected User | Users navigate to different channels  |
 | UC-09 | See Message | Connected User | Users can see any messages when they log back into the app |
-| UC-10 | - | Connected User |  |    |
+| UC-10 | Send Request | Connected User | Users send request by clicking at their profile and click "Send Friend Request" |
 
 ---
 
