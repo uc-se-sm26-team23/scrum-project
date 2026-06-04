@@ -81,7 +81,7 @@ Include the **use-case diagram** and a **brief description** (1–3 sentences) f
 
 | UC ID | Use Case            | Primary Actor | Brief Description |
 |-------|---------------------|---------------|-------------------|
-| UC-01 | User Registration | Guest | A new user enters their name, email, and password to create an account. The system validates the input and stores the credentials securely. |
+| UC-01 | React Message | Connected User | After a connected user sends a message, other users in the chat can react to it with an emoji by hovering over the message and selecting a reaction from the reaction picker. |
 | UC-02 | Modify Message | Connected User | TODO              |
 
 ---
