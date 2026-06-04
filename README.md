@@ -1,4 +1,4 @@
-# Tean 23 Scrum Project Report
+# Team 23 Scrum Project Report
 
 Project Requirement: https://github.com/phung-se/uc-se/blob/main/scrum-project/description-requirements.md
 
