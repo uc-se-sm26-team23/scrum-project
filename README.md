@@ -77,7 +77,7 @@ List the high-level functional and non-functional requirements. These will be re
  - **FR-10:** As a user, I want to be able to add/remove/block friends so that I can manage my communication contacts
 - **NFR-1 (Performance):** TODO
 - **NFR-2 (Usability):** TODO
-- **NFR-3 (Security — see §Security):** TODO
+- **NFR-3 (Security — see §Security):** As a User, I want to be able to login securely and maintain secure access to my chats
 
 ## User Stories & Product Backlog
 
