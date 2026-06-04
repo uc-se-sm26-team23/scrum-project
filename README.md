@@ -75,7 +75,7 @@ List the high-level functional and non-functional requirements. These will be re
 - **FR-8:** As a user, I want to send a text message to the public chat room so that I can communicate with the entire class in real time
 - **FR-9:** As a user, I want minimal delay to reception after the other user sent the message
  - **FR-10:** As a user, I want to be able to add/remove/block friends so that I can manage my communication contacts
-- **NFR-1 (Performance):** TODO
+- **NFR-1 (Performance):** Minimal load time to see chat app, with high chat character limit and high group member limit
 - **NFR-2 (Usability):** TODO
 - **NFR-3 (Security — see §Security):** As a User, I want to be able to login securely and maintain secure access to my chats
 
