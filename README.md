@@ -14,7 +14,7 @@ Project Requirement: https://github.com/phung-se/uc-se/blob/main/scrum-project/d
 
 ---
 
-# Scrum Project — TODO: Your Project Name
+# Scrum Project — Mini-Messenger
 
 > Replace **"TODO: Your Project Name"** with the title of your team's secure web application.
 
