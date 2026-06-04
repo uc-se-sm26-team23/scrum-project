@@ -44,8 +44,8 @@ _Teams are 3–5 students (per syllabus). Solo teams are not permitted._
 
 | Date       | Version | Description                          | Author |
 |------------|---------|--------------------------------------|--------|
-| MM/DD/YYYY | 0.1     | Initial draft (Sprint 0)             | TODO   |
-| MM/DD/YYYY | 0.2     | Added use cases and architecture     | TODO   |
+| 05/28/2026 | 0.1     | Initial draft (Sprint 0)             | ALL   |
+| 06/04/2026 | 0.2     | Added use cases and architecture     | ALL   |
 
 ---
 
