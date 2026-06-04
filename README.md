@@ -79,7 +79,7 @@ Include the **use-case diagram** and a **brief description** (1–3 sentences) f
 
 | UC ID | Use Case            | Primary Actor | Brief Description |
 |-------|---------------------|---------------|-------------------|
-| UC-01 | User Registration | TODO          | TODO              |
+| UC-01 | User Registration | Guest | TODO              |
 | UC-02 | TODO                | TODO          | TODO              |
 
 ---
