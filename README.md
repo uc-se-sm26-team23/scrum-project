@@ -70,6 +70,8 @@ List the high-level functional and non-functional requirements. These will be re
 - **FR-3:** As a user, I want to see real-time typing status so that I know someone is responding
 - **FR-4:** As a user, I want to be aware of which other user sent an incoming message
 - **FR-5:** As a user, I want my chats to be organized
+- **FR-6:** As a user, I want to know what channel I am currently viewing
+- **FR-7:** As a user, I want to be able to seamlessly swap between channels
 - **NFR-1 (Performance):** TODO
 - **NFR-2 (Usability):** TODO
 - **NFR-3 (Security — see §Security):** TODO
