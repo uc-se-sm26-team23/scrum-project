@@ -63,7 +63,7 @@ _Start in Sprint 0; keep updating._
 
 List the high-level functional and non-functional requirements. These will be refined into user stories and use cases. _(Main focus of Sprint 0.)_
 
-- **FR-1:** TODO — _As a [role], I want to [capability] so that [benefit]._
+- **FR-1:** As a user, I want to send and receive messages in real time so that I can communicate instantly with other users without refreshing the page.
 - **FR-2:** TODO
 - **NFR-1 (Performance):** TODO
 - **NFR-2 (Usability):** TODO
