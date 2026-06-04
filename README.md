@@ -91,6 +91,7 @@ Include the **use-case diagram** and a **brief description** (1–3 sentences) f
 |-------|---------------------|---------------|-------------------|
 | UC-01 | Modify Messege | Connected User | Users modify the latest sent message and allow to modify within 3 minutes |
 | UC-02 | React Messege | Connected User | Users reach to messages sent in channels by holding the message for 2 seconds. |
+| UC-03 | Typing Indicator | Connected User | Users are able to see a real-time visual display of who is currently typing in the channel |
 ---
 
 # System Design
