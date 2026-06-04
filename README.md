@@ -90,7 +90,7 @@ Include the **use-case diagram** and a **brief description** (1–3 sentences) f
 | UC ID | Use Case            | Primary Actor | Brief Description |
 |-------|---------------------|---------------|-------------------|
 | UC-01 | Modify Messege | Connected User | Users modify the latest sent message and allow to modify within 3 minutes |
-
+| UC-02 | React Messege | Connected User | Users reach to messages sent in channels by holding the message for 2 seconds. |
 ---
 
 # System Design
