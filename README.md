@@ -55,6 +55,7 @@ _Start in Sprint 0; refine across all sprints._
 
 Describe the project in 2–4 paragraphs: the problem it addresses, the target users, and a high-level summary of the proposed solution. Include a **high-level architecture diagram** 
 
+The project is a messaging app with secure privacy features, freind request/block features and a group caht functionality. It will allow secure private and public chats for real time communications with seamless channel navigation.
 ---
 
 # System Analysis
