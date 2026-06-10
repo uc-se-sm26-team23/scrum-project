@@ -90,6 +90,8 @@ Link to your **GitHub Projects board** (above) and include a representative scre
 
 Include the **use-case diagram** and a **brief description** (1–3 sentences) for each use case. _(Main focus of Sprint 0.)_
 
+### Brief Description for each Use Cases
+
 | UC ID | Use Case            | Primary Actor | Brief Description |
 |-------|---------------------|---------------|-------------------|
 | UC-01 | Modify Messege | Connected User | Users modify the latest sent message and allow to modify within 3 minutes |
@@ -102,6 +104,10 @@ Include the **use-case diagram** and a **brief description** (1–3 sentences) f
 | UC-09 | See Message | Connected User | Users can see any messages when they log back into the app |
 | UC-10 | Send Request | Connected User | Users send request by clicking at their profile and click "Send Friend Request" |
 ---
+
+### Use Case Diagram
+<img width="473" height="775" alt="image" src="https://github.com/user-attachments/assets/de297859-503d-427e-a27d-b05b48005632" />
+
 
 # System Design
 
