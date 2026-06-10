@@ -84,8 +84,21 @@ List the high-level functional and non-functional requirements. These will be re
 
 ## User Stories & Product Backlog
 
+Team 23 Project Board Link: https://github.com/orgs/uc-se-sm26-team23/projects/1
+
 Link to your **GitHub Projects board** (above) and include a representative screenshot of the **Todo / In Progress / Done** columns at the end of each sprint. _(Sprint 0 onward.)_
 
+### Sprint 0
+- *to be updated w/ screenshots*
+
+### Sprint 1
+- *to be updated w/ screenshots*
+
+### Sprint 2
+- *to be updated w/ screenshots*
+
+### Sprint 3
+- *to be updated w/ screenshots*
 ## Use Cases
 
 Include the **use-case diagram** and a **brief description** (1–3 sentences) for each use case. _(Main focus of Sprint 0.)_
