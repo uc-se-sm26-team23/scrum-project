@@ -133,6 +133,15 @@ For each use case in §Use Cases, describe how it is realized in code: which mod
 
 Embed UI mockups or screenshots and describe the interaction model. Wireframes are acceptable for Sprint 1; final screenshots for Sprint 3. _(Sprint 1 onward.)_
 
+### UC-07 Login/Logout User  
+
+<img width="216" height="288" alt="image" src="https://github.com/user-attachments/assets/81e66b9f-047c-42ff-8016-aa216f49a7e5" />  
+
+### UC-01 Send Message  
+
+<img width="216" height="288" alt="image" src="https://github.com/user-attachments/assets/5059280d-96be-4a81-b9e8-abe9c8570540" />  
+
+
 ## Database
 
 Describe your **MongoDB Atlas** schema: collections, fields, indexes, and relationships. Include a sample document for each collection. _(Sprint 2 onward; refine in Sprint 3.)_
