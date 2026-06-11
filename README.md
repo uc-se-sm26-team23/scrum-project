@@ -165,9 +165,12 @@ This section documents how your team applies the **Secure Software Development L
 ## Security Requirements
 
 List security requirements alongside functional requirements. _(Sprint 0.)_
-- **SR-1:** TODO — _e.g., All authentication tokens must be transmitted over HTTPS only._
-- **SR-2:** TODO — _e.g., Passwords must be hashed with bcrypt (cost ≥ 12); plaintext passwords must never be logged or stored._
-
+* **SR-1:** All user-generated messages must be strictly outoyt-encoded before redener in the client interface to prevent execution of XSS.
+  * Task: Implement a function that escape HTML to prevent XSS when rendering user content.
+- **SR-2:** The system must strictly reject any incoming chat message that exceeds a certain characters (1k) at both client interface and the server API level.
+  * Task: Include *.length* check in JavaScript code before process message
+- **SR-3:** The web server must implement a strict Content-Security-Policy (CSP) HTTP header that restrict execution of scripts to the application's self origin, preventing execution of unauthorized scripts.
+  * Configure server's response headers.
 ## Threat Model
 
 Identify assets, trust boundaries, and threats. STRIDE or attack-tree format is acceptable. _(Sprint 0–1.)_
