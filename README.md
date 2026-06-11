@@ -214,6 +214,9 @@ For each sprint, add a subsection that summarizes new implementation work. Inclu
 git clone git@github.com:TODO/TODO.git
 cd TODO
 
+# Configure pull strategy (Rebase is recommended for a clean history)
+git config pull.rebase true
+
 # Install dependencies
 npm install
 
