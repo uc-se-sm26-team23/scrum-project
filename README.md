@@ -69,10 +69,10 @@ _Start in Sprint 0; keep updating._
 List the high-level functional and non-functional requirements. These will be refined into user stories and use cases. _(Main focus of Sprint 0.)_
 
 - **FR-1:** Users can login with only their username (Password implementation to be added later)
-- **FR-2:** A logged-in user can send and receive public chat messages in real-time
+- **FR-2:** A logged-in user can send and receive public chat messages in real-time in the public channel
 - **FR-3:** A logged-in user can view the list of all logged-in users
-- **FR-4:** A logged-in user can send and receive private 1:1 messages to/from another logged-in user
-- **FR-5:** A logged-in user can create and join private group chats with multiple other logged-in uesrs.
+- **FR-4:** A logged-in user can send and receive private 1:1 messages to/from another logged-in user in a private channel
+- **FR-5:** A logged-in user can create and join private group channels with multiple other logged-in users.
 - **NFR-1 (Performance):** Minimal load time to see chat app, with high chat character limit and high group member limit
 - **NFR-2 (Usability):** Chat login and viewing of unread messages is readily available with seamless UI
 - **NFR-3 (Security — see §Security):** As a User, I want to be able to login securely and maintain secure access to my chats
