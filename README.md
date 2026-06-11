@@ -112,7 +112,7 @@ Include the **use-case diagram** and a **brief description** (1–3 sentences) f
 ---
 
 ### Use Case Diagram
-<img width="473" height="775" alt="image" src="https://github.com/user-attachments/assets/de297859-503d-427e-a27d-b05b48005632" />
+![Use-Case-Diagram](https://www.plantuml.com/plantuml/png/PT7FQWCX40Rmkqynx3sKpP_qLW9xRLheaWUGzOihc15qDYMKldjTyI3fOUHpveUWdfBeAClDAu-ha0IApiv2naLCuW8hFKc8r0s1ENTWw98GEzA9oaIjJhFreEwCbC0MaSP74jmw-b54IyAaKnwFO4EhqHRbWClGj_ClJ71tF95jIyx1kElZIUnQCKHe0GspPeQlOj-A3trtzhyvj6QSmpTzidUCSjzKqR55xy4wVibhMAIeYbxLRtsrpUQjx7FLt3TvctDVywxfxrMkcWzD_wZK2MpMp_e3)
 
 
 # System Design
