@@ -68,16 +68,11 @@ _Start in Sprint 0; keep updating._
 
 List the high-level functional and non-functional requirements. These will be refined into user stories and use cases. _(Main focus of Sprint 0.)_
 
-- **FR-1:** As a user, I want to send and receive messages in real time so that I can communicate instantly with other users without refreshing the page.
-- **FR-2:** As a user, I want to see how many online users have read my message so that I know its outreach
-- **FR-3:** As a user, I want to see real-time typing status so that I know someone is responding
-- **FR-4:** As a user, I want to be aware of which other user sent an incoming message
-- **FR-5:** As a user, I want my chats to be organized
-- **FR-6:** As a user, I want to know what channel I am currently viewing
-- **FR-7:** As a user, I want to be able to seamlessly swap between channels
-- **FR-8:** As a user, I want to send a text message to the public chat room so that I can communicate with the entire class in real time
-- **FR-9:** As a user, I want minimal delay to reception after the other user sent the message
- - **FR-10:** As a user, I want to be able to add/remove/block friends so that I can manage my communication contacts
+- **FR-1:** Users can login with only their username (Password implementation to be added later)
+- **FR-2:** A logged-in user can send and receive public chat messages in real-time
+- **FR-3:** A logged-in user can view the list of all logged-in users
+- **FR-4:** A logged-in user can send and receive private 1:1 messages to/from another logged-in user
+- **FR-5:** A logged-in user can create and join private group chats with multiple other logged-in uesrs.
 - **NFR-1 (Performance):** Minimal load time to see chat app, with high chat character limit and high group member limit
 - **NFR-2 (Usability):** Chat login and viewing of unread messages is readily available with seamless UI
 - **NFR-3 (Security — see §Security):** As a User, I want to be able to login securely and maintain secure access to my chats
