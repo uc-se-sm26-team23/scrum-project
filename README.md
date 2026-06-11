@@ -177,7 +177,8 @@ Identify assets, trust boundaries, and threats. STRIDE or attack-tree format is 
 | Asset | Threat | Mitigation |
 |-------|--------|------------|
 | User credentials | Credential stuffing | Rate limiting + bcrypt |
-| TODO  | TODO   | TODO       |
+| Web artifacts  | XSS (Tampering)   | CSP, input validation       |
+| Whole Application | DoS | Rate limiting (on our eventual server) to an appropriate amount of traffic (e.g. 50) for the Messenger application | 
 
 ## Security Review Notes
 
