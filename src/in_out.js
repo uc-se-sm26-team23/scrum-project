@@ -35,9 +35,9 @@ function authenticateUser() {
 
     console.log("User authenticated:", username);
 
-    // Save username locally for now
+    // Save username so message page can know who logged in
     localStorage.setItem("username", username);
 
-    // Simple UI feedback
-    alert("Welcome, " + username + "!");
+    // Switch to message page
+    window.location.href = "send_message.html";
 }
