@@ -25,9 +25,11 @@ function sendMessage() {
     var input = chatMessageInput.value.trim();
     if (!input) return;   // AC-02.2: Empty messages are ignored
 
+    const username = localStorage.getItem("username");
+
     const msg = document.createElement("div");
     msg.className = "message";
-    msg.textContent = input;
+    msg.textContent = username + ": " + input;
 
     messageList.appendChild(msg);
     messageList.scrollTop = messageList.scrollHeight;
