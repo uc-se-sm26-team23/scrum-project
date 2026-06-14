@@ -310,34 +310,7 @@ TODO — one sentence.
 
 | Member | Hours | Contribution Summary |
 |--------|-------|----------------------|
-| Marcus Nguyen | 9 | M1
-Created team Organization and add teammate and professor
-Created project board
-Added Freatures
-Create PBIs for tasks
-Added name/role/email info to README and index.html
-
-M2
-Created Use-Cases for Modify Message, React Message, Type Indicator
-Created Persona for Student and Instructor role
-Update README with UCs and Funtional REquirement
-
-M3
-Created plantUML diagram for Modify Message and Login/Logout User UCs
-Write in_out.html and in_out.js for authenticate user and collect username
-Commented on PBI's to update status and add suggestions
-
-What went well?
-Every teammates put effort on the project
-We started to communicate and discuss more before beginning
-Everyone complete most of tasks at the end of meeting
-
-What could've gone better?
-We should have communicate about the UCs before writing so that we don't have to spend time for adjusting it latter
-
-What to improve?
-More discussion before starting task
-Communicate outside meeting |
+| Marcus Nguyen | 9 | TODO |
 | Member 2 | X | TODO |
 | Member 3 | X | TODO |
 | Member 4 | X | TODO |
