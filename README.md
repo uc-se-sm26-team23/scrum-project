@@ -294,7 +294,7 @@ Include:
 
 > Copy the block below for each sprint (Sprint 0, 1, 2, 3).
 
-### Sprint X
+### Sprint 0
 
 **Duration:** YYYY-MM-DD to YYYY-MM-DD
 
