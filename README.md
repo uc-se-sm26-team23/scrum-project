@@ -123,6 +123,16 @@ _Start in Sprint 1; keep updating._
 
 Describe the architectural style (e.g., layered, client-server, microservices) and the major components. Embed an architecture diagram if it differs from the high-level one in §Overview.
 
+The current sprint architecture follows a client-server model split into three distinct layers:
+
+- **Client Layer**: Consists of the user's web browser rendering the front-end user interface (built with HTML, CSS, and client-side JavaScript).
+
+- **Application Server Layer**: Has the Node.js application, which manages real-time, full-duplex communication using Socket.io connections.
+
+- **Database Layer**: Utilizes MongoDB Atlas for cloud-based data persistence and storage.
+
+[![](https://img.plantuml.biz/plantuml/svg/RP9DImCn48Rl-HL3Uz63OlLW4H5tktfR4RRYfI3JtN4tDisKoTHF_EzcFr0fJIx9coVll65o7HH5jsi7EOL0lYPvIgHih5AfMo5Z73qhA8FOkb6ehCG3ozwOiB9-Wu9hQ2NqjIFuCW0fIqLIw4VSLnWQgdx56JiM64-xqQfOhchXhQ_w4nNq8NgIL_Fzhu3dQl3UkJ2-cIRJqvFT0kdq_FGaYUejUnsqITBEGIli9y7aB1OnoZLfGzBv_xra177Cd8rHsjK8C0pRbDyx5lfOerJuBP0i_456OQMyEUpWR2-Iyz8wwebyBp77fIFjYNaaljkGFJHhKA4WUUt0Hrf2ijauMsBRa8Mt7kuYT_mIOE5X6wol8N2v8Zsst1iMncHmUNHq1GLSm3gs76iA9j-ZpVTeGuuC5PSOA9OvU8YfOviL8IWBLMtf62HdNtEMGg8Em_2QUsEAtlG-chPtZ37NvAlu_Nu0)](https://editor.plantuml.com/uml/RP9DImCn48Rl-HL3Uz63OlLW4H5tktfR4RRYfI3JtN4tDisKoTHF_EzcFr0fJIx9coVll65o7HH5jsi7EOL0lYPvIgHih5AfMo5Z73qhA8FOkb6ehCG3ozwOiB9-Wu9hQ2NqjIFuCW0fIqLIw4VSLnWQgdx56JiM64-xqQfOhchXhQ_w4nNq8NgIL_Fzhu3dQl3UkJ2-cIRJqvFT0kdq_FGaYUejUnsqITBEGIli9y7aB1OnoZLfGzBv_xra177Cd8rHsjK8C0pRbDyx5lfOerJuBP0i_456OQMyEUpWR2-Iyz8wwebyBp77fIFjYNaaljkGFJHhKA4WUUt0Hrf2ijauMsBRa8Mt7kuYT_mIOE5X6wol8N2v8Zsst1iMncHmUNHq1GLSm3gs76iA9j-ZpVTeGuuC5PSOA9OvU8YfOviL8IWBLMtf62HdNtEMGg8Em_2QUsEAtlG-chPtZ37NvAlu_Nu0)
+
 ## Use-Case Realization
 
 For each use case in §Use Cases, describe how it is realized in code: which modules, endpoints, and database collections participate. **Sequence diagrams** are encouraged for non-trivial flows (e.g., authentication, message send/receive). _(Sprint 1 onward.)_
