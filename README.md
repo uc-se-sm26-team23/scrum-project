@@ -139,134 +139,61 @@ For each use case in §Use Cases, describe how it is realized in code: which mod
 
   #Acceptance Criterias
   
-AC-01.1: Given that I am in chat window, When I tap the 'send' button, Then the app shows my message as sent in the chat window.
-AC-01.2: Given that I sent a non-empty message to the chat window, When connected user(s) are in the chat window, Then the app should display the message to them instantly without needing to refresh page.
-AC-01.3: Given that I am in chat window, When I send a message with the 'Send' button, Then the text input box should auto clear.
-AC-01.4: Given that I am in chat window, When a message appears, Then the system must display the sender's username alongside the message text.
-AC-01.5: Given that I have sent a message to the chat window, When other active user(s) open and view that chat window, Then my message should show which users have read it.
-AC-01.6: Given that I am viewing my own sent message, When the display showing which users has seen the sent message, Then the system should exclude the sent user from the display.
-AC-01.7: Given that a connected user is currently typing to the chat window, When they press any key, Then the typing indicator must appear at the bottom of the chat window.
-AC-01.8: Given that a typing user's typing indicator is visible on other users' screen, When the typing user stops typing for more than a certain seconds or delete all texts, Then the typing indicator must disappear from other users' screen.
+- AC-01.1: Given that I am in chat window, When I tap the 'send' button, Then the app shows my message as sent in the chat window.
+- AC-01.2: Given that I sent a non-empty message to the chat window, When connected user(s) are in the chat window, Then the app should display the message to them instantly without needing to refresh page.
+- AC-01.3: Given that I am in chat window, When I send a message with the 'Send' button, Then the text input box should auto clear.
+- AC-01.4: Given that I am in chat window, When a message appears, Then the system must display the sender's username alongside the message text.
+- AC-01.5: Given that I have sent a message to the chat window, When other active user(s) open and view that chat window, Then my message should show which users have read it.
+- AC-01.6: Given that I am viewing my own sent message, When the display showing which users has seen the sent message, Then the system should exclude the sent user from the display.
+- AC-01.7: Given that a connected user is currently typing to the chat window, When they press any key, Then the typing indicator must appear at the bottom of the chat window.
+- AC-01.8: Given that a typing user's typing indicator is visible on other users' screen, When the typing user stops typing for more than a certain seconds or delete all texts, Then the typing indicator must disappear from other users' screen.
 
-AC-02.01: Given that I am actively viewing a chat window, When a connected user sends a message, Then the app must immediately display the message in the chat area without needing to manual refresh page.
-AC-02.02: Given that a user joins or leaves the group chat, When that event happens, Then the system must display a status message in chat area (ex. " joined the chat")
-AC-02.03: Given that I am in the chat window, When a new message arrives from a connected user(s), Then the chat screen must auto scroll down to show the latest message visible.
-AC-02.04: Given that I receive a message from a connected user(s) in a different time zone, When the timestamp displays, Then the system must convert and display the time using my phone's current location time zone setting.
-AC-02.05: Given that the messenger app is running in the background, When a new message arrives, Then the system must trigger a visual push notification displaying the sender's name and a message preview.
+- AC-02.01: Given that I am actively viewing a chat window, When a connected user sends a message, Then the app must immediately display the message in the chat area without needing to manual refresh page.
+- AC-02.02: Given that a user joins or leaves the group chat, When that event happens, Then the system must display a status message in chat area (ex. " joined the chat")
+- AC-02.03: Given that I am in the chat window, When a new message arrives from a connected user(s), Then the chat screen must auto scroll down to show the latest message visible.
+- AC-02.04: Given that I receive a message from a connected user(s) in a different time zone, When the timestamp displays, Then the system must convert and display the time using my phone's current location time zone setting.
+- AC-02.05: Given that the messenger app is running in the background, When a new message arrives, Then the system must trigger a visual push notification displaying the sender's name and a message preview.
 
-AC-03.1: each message sent by the connected user, and only messages from that connected user, displays a triple dots button with available modification options (edit and delete).
-AC-03.2: when the connected user selects the edit option, the current message text becomes editable.
-AC-03.3: when the connected user submits a non-empty edited message, the updated message appears in the chat window of all connected users immediately, otherwise if the edited message is empty the message does not send.
-AC-03.4: when a message is edited, the displayed message shows an edited indicator.
-AC-03.5: when the connected user selects the delete option, the message is removed from that channel for all users in the channel
-AC-03.6: when the connected user deletes a message, a system status message will be sent to that channel informing the channel members that the connected user deleted a message
+- AC-03.1: each message sent by the connected user, and only messages from that connected user, displays a triple dots button with available modification options (edit and delete).
+- AC-03.2: when the connected user selects the edit option, the current message text becomes editable.
+- AC-03.3: when the connected user submits a non-empty edited message, the updated message appears in the chat window of all connected users immediately, otherwise if the edited message is empty the message does not send.
+- AC-03.4: when a message is edited, the displayed message shows an edited indicator.
+- AC-03.5: when the connected user selects the delete option, the message is removed from that channel for all users in the channel
+- AC-03.6: when the connected user deletes a message, a system status message will be sent to that channel informing the channel members that the connected user deleted a message
 
-AC-04.1: Given that I am in the main channel, when I tap the "Create Channel" button, then a new channel should be created
-AC-04.2: Given that I press the "Create Channel" button, then I should be prompted with connected users I wish to add to the channel
-AC-04.3: Given that I am in a channels view, when I press the "Leave Channel" button, I should exit the channel with access no longer allowed
-AC-04.4: Given that I create a channel, I should see the channel title, all active group members, and all chats in the channel.
-AC-04.5: Given that I am in a channel view, I should be able to send and receive messages to all other members in the channel
+- AC-04.1: Given that I am in the main channel, when I tap the "Create Channel" button, then a new channel should be created
+- AC-04.2: Given that I press the "Create Channel" button, then I should be prompted with connected users I wish to add to the channel
+- AC-04.3: Given that I am in a channels view, when I press the "Leave Channel" button, I should exit the channel with access no longer allowed
+- AC-04.4: Given that I create a channel, I should see the channel title, all active group members, and all chats in the channel.
+- AC-04.5: Given that I am in a channel view, I should be able to send and receive messages to all other members in the channel
 
-AC-05.01: Given that I am logged into the messenger app, When a connected user recieves a message from a specific channel, Then the app must immediately show a visually distinct and informative notification in the channel organization list/pannel.
-AC-05.02: Given that I am actively viewing a chat window, When a connected user switches to another channel, Then the app must immediately display the messages in that channel into the chat area without needing to manually refresh page.
-AC-05.03: Given that I am logged into the messenger app, When a connected user wants to swap channel through a button, Then the app must immediately open a navigation panel that allows user to change channels.
+- AC-05.01: Given that I am logged into the messenger app, When a connected user recieves a message from a specific channel, Then the app must immediately show a visually distinct and informative notification in the channel organization list/pannel.
+- AC-05.02: Given that I am actively viewing a chat window, When a connected user switches to another channel, Then the app must immediately display the messages in that channel into the chat area without needing to manually refresh page.
+- AC-05.03: Given that I am logged into the messenger app, When a connected user wants to swap channel through a button, Then the app must immediately open a navigation panel that allows user to change channels.
 
-AC-06.1: Given that I looked at the online user list, When the list renders, Then the system must display only connected user(s) that are active and exclude all offline user(s).
-AC-06.2: Given that I am viewing the online list, When I check the roster, Then the system must display my own username and beside the username marked "(You)".
-AC-06.3: Given that I log into the webpage, When the homepage loads, Then the online users list must display as an expanded sidebar panel on the far right side of the screen.
-AC-06.4: Given that the online users list panel is open, When I click the 'x' button on the panel, Then the sidebar must hide, and allow the main chat area use the remaining screen space.
-AC-06.5: Given that the online users list is hidden, when I clicked the '+' button, Then the right sidebar must reappear, and the main chat area must shrink back to its original screen space.
-AC-06.6: Given that I am viewing the online list panel, When connected user(s) logs into the webpage, Then their username must auto appear in online list immediately without needing to manual refresh page.
-AC-06.7: Given that I am actively viewing the online list, When connected user(s) went offline, Then their username must immediately be gone from the online list without needing to manual refresh page.
+- AC-06.1: Given that I looked at the online user list, When the list renders, Then the system must display only connected user(s) that are active and exclude all offline user(s).
+- AC-06.2: Given that I am viewing the online list, When I check the roster, Then the system must display my own username and beside the username marked "(You)".
+- AC-06.3: Given that I log into the webpage, When the homepage loads, Then the online users list must display as an expanded sidebar panel on the far right side of the screen.
+- AC-06.4: Given that the online users list panel is open, When I click the 'x' button on the panel, Then the sidebar must hide, and allow the main chat area use the remaining screen space.
+- AC-06.5: Given that the online users list is hidden, when I clicked the '+' button, Then the right sidebar must reappear, and the main chat area must shrink back to its original screen space.
+- AC-06.6: Given that I am viewing the online list panel, When connected user(s) logs into the webpage, Then their username must auto appear in online list immediately without needing to manual refresh page.
+- AC-06.7: Given that I am actively viewing the online list, When connected user(s) went offline, Then their username must immediately be gone from the online list without needing to manual refresh page.
 
-AC-07.1: When the connected user opens the webpage, they will be prompted to log in
-AC-07.2: After the connected user fills out the username and clicks Log-In, the client ensures that all required login fields are filled before continuing validation.
-AC-07.3: The client validates the inputted username (alpha-numeric characters only, not already in use) before forwarding it to the server
-AC-07.4: The server creates a new account in the database upon receiving the valid username
-AC-07.5: Upon a valid log-in, the user will be automatically redirected to the rest of the messaging system
-AC-07.6: The connected user can click a logout option while authenticated.
-AC-07.7: The system ends the connected user session and returns the connected user to the login page after logout.
+- AC-07.1: When the connected user opens the webpage, they will be prompted to log in
+- AC-07.2: After the connected user fills out the username and clicks Log-In, the client ensures that all required login fields are filled before continuing validation.
+- AC-07.3: The client validates the inputted username (alpha-numeric characters only, not already in use) before forwarding it to the server
+- AC-07.4: The server creates a new account in the database upon receiving the valid username
+- AC-07.5: Upon a valid log-in, the user will be automatically redirected to the rest of the messaging system
+- AC-07.6: The connected user can click a logout option while authenticated.
+- AC-07.7: The system ends the connected user session and returns the connected user to the login page after logout.
 
 ##Sequence Diagrams:
 #Modify Messages:
-@startuml Use-Case-01-Modify-Message
+![](https://www.plantuml.com/plantuml/png/XLJDSjCm4BxxANPwQcTgfgN0WGDJnd3Wq5F82JWeqgOMo9BHhXlozcWJMOuRGpKJUoRp_Npx8zyJgyX3vs1DM3SgFMvkwuTWx7PVFo2HUiIgKff3XEEvQ8Btg1cDKE85A89rrISLgsslF2U4i-Zv0l8HH3D7h30-OPmXLbMrXle3DF0UjBFw5t2qlKCmWGc21yB4x8wHuDl7fhwvUtNx8uLpqzyRTC4_4d00vGEt664WZ2TmSMj6dzOQX131M58RXz19tLOhjialzFAY2XtXae4UOfH8OZ3A9jrrqgKsxE2piPnI6FY43Xb7lTFemfBu0XqjAiYdT8CINsTG9hy-5hBWYWabjPJ4MulEJBm5-M7J9UMXDuhH51xZ7pucp2b5-XHW2R3hULymizP6_8bwL8KQJ00VM8POmjnDOQJ72_e--FeV7glaaSKpuJA_lvXhyBZxcl9VpQtAMOqAf9wmL2uLoy368CIAXpAlDsSIkT9D3CfeHMSjl9HYCPOqrrduwhkN_NGEzE6YK4bv3OjUquYDfTwf_TcmTfRRCRRrHbOun8NaAL1LbORdnNnfyJ8igxqjQjCW8luUa1WuW9bfmZQ63dIhl4Tthb06yPncFMFqohdzOI3R4ALVXwj6OFqBYZby8jAU6BjnaZxmTBsvLGowVCj4EgSmpxyoxsObpoVn7uSvMrell-e-FOVELNy1)
 
-actor       "Connected User" as U
-participant "Client"         as C
-participant "Server"         as S
+#Login/Logout User:
+![](https://www.plantuml.com/plantuml/png/bLHVRzCm47_FfpZr2QG6mK1CwWDQbuud9D2Yye9uy9nhQosnm_coic_FEN6yrLI8-I5owz-VtrbtllAiY8UkXQt7ibBoUNjPhWS-e6MZ5MCf1rGKIhCZcDQYSjQYPcm2YnQWF6oBNf4mJAyi2w8r8h20UGcYEaNKI0z89uYwQ1IhEmankcpYZyKJOdDT55ieFq6rWgyzMZZYNQ_sM5JXp-qAlf7hUeRMxOsLq2t35xS7sGU1cNbZ6Ga6YMvLX_1ZNKdHRzujOTfS_1pHLKH_LwsHNFX4U8M_ZMU_1DNs1rNQeKCoUWdMiLW5tEjPz68MVJ-9XaItk1SwAJRE2dxdg8jx3m_1R4Ic2FKAQhGDq7CQuQy1FOjDKe-h3fpDzGgg0-fxC3jGMhl1idWJgkOHflGpzKEY2WlAoV0MUI2Rc9uL3pxXGX7hUDGuzA7mIJL2yYJYomWMZqanpvq7a0xR6UeINeyIJQulu2gbFRaWFsYDtfyt2XSxzKjzSCVS13eXIbETPtnsT5JK0Bk8CtOF_j4pTec0hKTOdxts_wy0YHoz97_cz5SPQ9iYfVjN4ngRjU69stYMHunZ4rr6Xp1uRk2JoQjQe-_3TCh1pFielBpN8oBhyii9MKVaZG1rUed2T8ANaYLOJiYkEQfdBHB1gTW8pXpOJOyBX6Vd6JMKNLp9T-ZQuWy0)
 
-U -> C : click triple dots on sent message [AC-03.1]
-
-alt message belongs to another user [AC-03.1]
-    C -> C : hide or disable modification options
-else message belongs to current user
-    C --> U : show Edit and Delete options [AC-03.1]
-
-    alt Edit message
-        U -> C : select Edit [AC-03.2]
-        C --> U : show editable message field [AC-03.2]
-        U -> C : submit updated message text
-
-        alt edited message is empty
-            C -> C : reject update - do not send [AC-03.3]
-        else edited message is non-empty
-            C -> S : update message(messageId, newText) [AC-03.3]
-            S -> S : save updated text and edited status [AC-03.4]
-            S --> C : broadcast updated message(sender, newText, edited)\nto all clients [AC-03.3, AC-03.4]
-            C --> U : display updated message with edited indicator [AC-03.4]
-        end
-
-    else Delete message
-        U -> C : select Delete [AC-03.5]
-        C -> S : request to delete message from channel [AC-03.5]
-        S -> S : delete message internally and for all users in channel [AC-03.5]
-        S -> C : send system status notification that connected user deleted message [AC-03.6]
-        C -> U : display system status notification [AC-03.6]
-    end
-end
-
-@enduml
-
-#/Logout User
-@startuml Use-Case-07-Authenticate-User
-
-actor       "Connected User" as U
-participant "Client"         as C
-participant "Server"         as S
-database    "Database"       as DB
-
-U -> C: Open webpage
-C -> U: Prompt login
-
-alt Log in
-    U -> C: Enter username [AC-07.1, AC-07.2]
-    C -> C: Validate username (exists, alpha-numeric, not in use) [AC-07.2, AC-07.3]
-    alt Registration information is valid
-        C -> S: Send registration request [AC-07.3]
-        S -> DB: Check if account already exists [AC-07.4]
-        DB --> S: Return account status
-        alt Account does not exist
-            S -> DB: Create new account [AC-07.3]
-            DB --> S: Confirm account created
-            S --> C: Return registration success [AC-07.3]
-            C --> U: Show account created message
-            C --> U: Forward to messaging system
-        else Account already exists
-            S --> C: Return registration error [AC-07.3]
-            C --> U: Show account already exists message
-        end
-    else Registration information is invalid
-        C --> U: Show validation error [AC-07.2]
-    end
-else Log out
-    U -> C: Click logout [AC-07.6]
-    C -> S: Send logout request [AC-07.7]
-    S -> S: End connected user session [AC-07.7]
-    S --> C: Return logout success [AC-07.7]
-    C --> U: Return connected user to login page [AC-07.7]
-end
-
-@enduml
 
 
 
