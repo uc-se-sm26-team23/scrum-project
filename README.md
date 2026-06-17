@@ -34,7 +34,7 @@ _Teams are 3–5 students (per syllabus). Solo teams are not permitted._
 
 | Item | URL |
 |---|---|
-| Team homepage / landing page | https://uc-se-sm26-team-TODO.github.io |
+| Team homepage / landing page | uc-se-sm26-team23.github.io |
 | Live prototype (Azure App Services) | https://TODO.azurewebsites.net |
 | GitHub Projects board (private) | https://github.com/orgs/uc-se-sm26-team23/projects/1 |
 | Source code repository (private) | https://github.com/uc-se-sm26-team23/scrum-project |
@@ -55,9 +55,9 @@ _Start in Sprint 0; refine across all sprints._
 
 Describe the project in 2–4 paragraphs: the problem it addresses, the target users, and a high-level summary of the proposed solution. Include a **high-level architecture diagram** 
 
+The project is a messaging app with secure privacy features, private and group chat functionality. It will allow securechats for real time communications with seamless channel navigation whilsts showing online available users. It is intended for users of all age and audience that are able to access internet, though user stories largely target a student-professor dynamic.
 
-The project is a messaging app with secure privacy features, friend request/block features and a group chat functionality. It will allow secure private and public chats for real time communications with seamless channel navigation
-
+*High level architecture diagram currently provided in SYstems Design Section
 ---
 
 # System Analysis
