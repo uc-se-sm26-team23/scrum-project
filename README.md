@@ -85,6 +85,8 @@ Link to your **GitHub Projects board** (above) and include a representative scre
 
 ### Sprint 0
 - *to be updated w/ screenshots*
+<img width="1000" height="717" alt="image" src="https://github.com/user-attachments/assets/c633ef63-b754-4937-ad9e-6fce7b9871b9" />
+<img width="210" height="632" alt="image" src="https://github.com/user-attachments/assets/91ff42b4-6770-45db-bd2c-2e7a5a669411" />
 
 ### Sprint 1
 - *to be updated w/ screenshots*
