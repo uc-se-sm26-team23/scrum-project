@@ -34,11 +34,12 @@ _Teams are 3–5 students (per syllabus). Solo teams are not permitted._
 
 | Item | URL |
 |---|---|
-| Team homepage / landing page | uc-se-sm26-team23.github.io |
+| Team homepage / landing page | [https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/tree/main](https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/tree/main) |
 | Live prototype (Azure App Services) | https://TODO.azurewebsites.net |
-| GitHub Projects board (private) | https://github.com/orgs/uc-se-sm26-team23/projects/1 |
-| Source code repository (private) | https://github.com/uc-se-sm26-team23/scrum-project |
+| GitHub Projects board (private) | [https://github.com/orgs/uc-se-sm26-team23/projects/1](https://github.com/orgs/uc-se-sm26-team23/projects/1) |
+| Source code repository (private) | [https://github.com/uc-se-sm26-team23/scrum-project](https://github.com/uc-se-sm26-team23/scrum-project) |
 | MongoDB Atlas cluster (configuration only — no credentials) | _e.g., cluster name, region_ |
+
 
 ## Revision History
 
@@ -79,7 +80,7 @@ List the high-level functional and non-functional requirements. These will be re
 
 ## User Stories & Product Backlog
 
-Team 23 Project Board Link: https://github.com/orgs/uc-se-sm26-team23/projects/1
+Team 23 Project Board Link: [https://github.com/orgs/uc-se-sm26-team23/projects/1](https://github.com/orgs/uc-se-sm26-team23/projects/1)
 
 Link to your **GitHub Projects board** (above) and include a representative screenshot of the **Todo / In Progress / Done** columns at the end of each sprint. _(Sprint 0 onward.)_
 
