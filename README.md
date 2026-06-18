@@ -364,6 +364,87 @@ Include:
 **Duration:** YYYY-MM-DD to YYYY-MM-DD
 
 #### Sprint Goal
+Get comfortable with environment and tools, learn agile and scrum process and documentation procedures, create UC, Sequence diagrams, user stories etc to guide rest of messenger app project
+
+#### Completed PBIs / Tasks
+1. Add your name to the project homepage	https://github.com/uc-se-sm26-team23/scrum-project/issues/5
+2. Create a Github Project board for Scrum Team Planning	https://github.com/uc-se-sm26-team23/scrum-project/issues/1
+3. Create public repository	https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/issues/1
+4. Create Private Repository	https://github.com/uc-se-sm26-team23/scrum-project/issues/2
+5. Copy README.md template from course repository	https://github.com/uc-se-sm26-team23/scrum-project/issues/6
+6. Copy index.html template from course repository	https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/issues/2
+7. Change Fields in Project Board	https://github.com/uc-se-sm26-team23/scrum-project/issues/4
+8. Edit README.md with your information	https://github.com/uc-se-sm26-team23/scrum-project/issues/7
+9. [M3 S0 2/4] Prioritize Use Cases for Sprint 1	https://github.com/uc-se-sm26-team23/scrum-project/issues/34
+10. [M3 3/5] Design and Implement UI for two use cases	https://github.com/uc-se-sm26-team23/scrum-project/issues/29
+11. [M3 S0 1/4] All teamwork tasks are done, verify homepage is good	https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/issues/4
+12. [M3 S0 4/4] Create sprint1 branch	https://github.com/uc-se-sm26-team23/scrum-project/issues/36
+13. [M3 5/5] Update # Security in README	https://github.com/uc-se-sm26-team23/scrum-project/issues/33
+14. [M3 2/5] Sequence diagrams for two use cases	https://github.com/uc-se-sm26-team23/scrum-project/issues/30
+15. [M3 1/5] AC list for all use cases	https://github.com/uc-se-sm26-team23/scrum-project/issues/31
+16. M3 Pre-Task Discussion: Review Use Cases	https://github.com/uc-se-sm26-team23/scrum-project/issues/37
+17. Plan and develop UI/UC/task distribution etc (not listed)
+
+#### Contributions
+
+| Member | Hours | Contribution Summary |
+|--------|-------|----------------------|
+| Marcus Nguyen | 9 | TODO |
+| Member 2 | X | TODO |
+| Member 3 | X | TODO |
+| Akul Jha| 10 | M1: 
+Added name.role.email into to Readme/index
+Copied readme into our repo
+
+M2:
+PB:
+Created UC10 send requests
+Created UC6 create group chats
+created scenario 6 spam message block
+create scenario 7 block people
+-README:
+Added revision history details and dates
+Added few FR and 3 NFR (security, usability, reliability)
+Added project overview description
+
+M3:
+PB:
+Refined and polished UC2 Recieve Messages
+Merged essential and overlapping details from  UC 5, 7, 9 (ping, see messages) into UC2 and deleted them
+Created Acceptance criteria for Navigate Channel
+Commented on PBI for individual task completion.
+README:
+Added architecture diagram plantUML and description
+Added AC list and seq diagrams |
+| Member 5 | X | TODO |
+
+#### Sprint Retrospective
+
+| Good | Could have been better | How to improve |
+|------|------------------------|----------------|
+|   Task completion   |       Communication               |        Using Discord, frequent meetings and updates      |
+|   Team Dynamics   |        Organizing our goals and requirements                |     Spend time to discuss clear guidelines/expectations           |
+|      |                        |                |
+
+
+
+Working through the sprints is a continuous-improvement process. The retrospective happens at the end of a sprint, before planning the next one. Cover three things briefly:
+
+- **What went well** — celebrate and reinforce.
+-  Good teamwork dynamics leading to timely and productive contributions to deadlines
+- starting to have effective communication and open discussions for efficient tackling of tasks
+- **What could have been better** — be specific (e.g., "we underestimated authentication" not "things were hard").
+- Being organized and prepared for expectations for the final product. This applies to being categorical of our UC in the first meeting, thinking of project demands and minimum requirements before leaping in to suggest a final product, and effectively distributing task evenly.
+- **How we will improve next sprint** — concrete, owned actions.
+- We will meet twice weekly and update our goals/todo and expectations via discord frequently
+
+Keep it under an hour. The output is bullet points in the table above and any new PBIs created on the board.
+
+### Sprint 1
+
+**Duration:** YYYY-MM-DD to YYYY-MM-DD
+
+#### Sprint Goal
 TODO — one sentence.
 
 #### Completed PBIs / Tasks
