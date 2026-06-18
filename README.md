@@ -133,7 +133,7 @@ The current sprint architecture follows a client-server model split into three d
 
 - **Database Layer**: Utilizes MongoDB Atlas for cloud-based data persistence and storage.
 
-[![](https://img.plantuml.biz/plantuml/svg/RP9DImCn48Rl-HL3Uz63OlLW4H5tktfR4RRYfI3JtN4tDisKoTHF_EzcFr0fJIx9coVll65o7HH5jsi7EOL0lYPvIgHih5AfMo5Z73qhA8FOkb6ehCG3ozwOiB9-Wu9hQ2NqjIFuCW0fIqLIw4VSLnWQgdx56JiM64-xqQfOhchXhQ_w4nNq8NgIL_Fzhu3dQl3UkJ2-cIRJqvFT0kdq_FGaYUejUnsqITBEGIli9y7aB1OnoZLfGzBv_xra177Cd8rHsjK8C0pRbDyx5lfOerJuBP0i_456OQMyEUpWR2-Iyz8wwebyBp77fIFjYNaaljkGFJHhKA4WUUt0Hrf2ijauMsBRa8Mt7kuYT_mIOE5X6wol8N2v8Zsst1iMncHmUNHq1GLSm3gs76iA9j-ZpVTeGuuC5PSOA9OvU8YfOviL8IWBLMtf62HdNtEMGg8Em_2QUsEAtlG-chPtZ37NvAlu_Nu0)](https://editor.plantuml.com/uml/RP9DImCn48Rl-HL3Uz63OlLW4H5tktfR4RRYfI3JtN4tDisKoTHF_EzcFr0fJIx9coVll65o7HH5jsi7EOL0lYPvIgHih5AfMo5Z73qhA8FOkb6ehCG3ozwOiB9-Wu9hQ2NqjIFuCW0fIqLIw4VSLnWQgdx56JiM64-xqQfOhchXhQ_w4nNq8NgIL_Fzhu3dQl3UkJ2-cIRJqvFT0kdq_FGaYUejUnsqITBEGIli9y7aB1OnoZLfGzBv_xra177Cd8rHsjK8C0pRbDyx5lfOerJuBP0i_456OQMyEUpWR2-Iyz8wwebyBp77fIFjYNaaljkGFJHhKA4WUUt0Hrf2ijauMsBRa8Mt7kuYT_mIOE5X6wol8N2v8Zsst1iMncHmUNHq1GLSm3gs76iA9j-ZpVTeGuuC5PSOA9OvU8YfOviL8IWBLMtf62HdNtEMGg8Em_2QUsEAtlG-chPtZ37NvAlu_Nu0)
+<img width="796" height="321" alt="image" src="https://github.com/user-attachments/assets/bb8c5001-6ac3-4d49-b306-bcd73b17326f" />
 
 ## Use-Case Realization
 
@@ -237,10 +237,12 @@ _Start in Sprint 0; **mandatory** updates at the Sprint 1–2 SSDLC checkpoint a
 
 This section documents how your team applies the **Secure Software Development Lifecycle** across every phase. Do **not** treat security as an afterthought — it is graded across all sprints.
 
+Security must be implemented using a cross cutting concern principle and applied across all layers in software/architecture to prevent vulnerable points across the system. As such security must be a priorty throughout development.
+
 ## Security Requirements
 
 List security requirements alongside functional requirements. _(Sprint 0.)_
-* **SR-1:** All user-generated messages must be strictly outoyt-encoded before redener in the client interface to prevent execution of XSS.
+* **SR-1:** All user-generated messages must be strictly output-encoded before render in the client interface to prevent execution of XSS.
   * Task: Implement a function that escape HTML to prevent XSS when rendering user content.
 - **SR-2:** The system must strictly reject any incoming chat message that exceeds a certain characters (1k) at both client interface and the server API level.
   * Task: Include *.length* check in JavaScript code before process message
@@ -366,24 +368,24 @@ Include:
 #### Sprint Goal
 Get comfortable with environment and tools, learn agile and scrum process and documentation procedures, create UC, Sequence diagrams, user stories etc to guide rest of messenger app project
 
-#### Completed PBIs / Tasks
-1. Add your name to the project homepage	https://github.com/uc-se-sm26-team23/scrum-project/issues/5
-2. Create a Github Project board for Scrum Team Planning	https://github.com/uc-se-sm26-team23/scrum-project/issues/1
-3. Create public repository	https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/issues/1
-4. Create Private Repository	https://github.com/uc-se-sm26-team23/scrum-project/issues/2
-5. Copy README.md template from course repository	https://github.com/uc-se-sm26-team23/scrum-project/issues/6
-6. Copy index.html template from course repository	https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/issues/2
-7. Change Fields in Project Board	https://github.com/uc-se-sm26-team23/scrum-project/issues/4
-8. Edit README.md with your information	https://github.com/uc-se-sm26-team23/scrum-project/issues/7
-9. [M3 S0 2/4] Prioritize Use Cases for Sprint 1	https://github.com/uc-se-sm26-team23/scrum-project/issues/34
-10. [M3 3/5] Design and Implement UI for two use cases	https://github.com/uc-se-sm26-team23/scrum-project/issues/29
-11. [M3 S0 1/4] All teamwork tasks are done, verify homepage is good	https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/issues/4
-12. [M3 S0 4/4] Create sprint1 branch	https://github.com/uc-se-sm26-team23/scrum-project/issues/36
-13. [M3 5/5] Update # Security in README	https://github.com/uc-se-sm26-team23/scrum-project/issues/33
-14. [M3 2/5] Sequence diagrams for two use cases	https://github.com/uc-se-sm26-team23/scrum-project/issues/30
-15. [M3 1/5] AC list for all use cases	https://github.com/uc-se-sm26-team23/scrum-project/issues/31
-16. M3 Pre-Task Discussion: Review Use Cases	https://github.com/uc-se-sm26-team23/scrum-project/issues/37
-17. Plan and develop UI/UC/task distribution etc (not listed)
+#### Completed PBIs / Tasks (all below are done)
+1. ALL - Add your name to the project homepage	https://github.com/uc-se-sm26-team23/scrum-project/issues/5
+2. MArcus - Create a Github Project board for Scrum Team Planning	https://github.com/uc-se-sm26-team23/scrum-project/issues/1
+3. Jai/Connor - Create public repository	https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/issues/1
+4. Luke - Create Private Repository	https://github.com/uc-se-sm26-team23/scrum-project/issues/2
+5. Akul - Copy README.md template from course repository	https://github.com/uc-se-sm26-team23/scrum-project/issues/6
+6. Jai - Copy index.html template from course repository	https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/issues/2
+7. ALL - Change Fields in Project Board	https://github.com/uc-se-sm26-team23/scrum-project/issues/4
+8. ALL - Edit README.md with your information	https://github.com/uc-se-sm26-team23/scrum-project/issues/7
+9. ALL - [M3 S0 2/4] Prioritize Use Cases for Sprint 1	https://github.com/uc-se-sm26-team23/scrum-project/issues/34
+10. Connor/Luke/Marcus - [M3 3/5] Design and Implement UI for two use cases	https://github.com/uc-se-sm26-team23/scrum-project/issues/29
+11. All - [M3 S0 1/4] All teamwork tasks are done, verify homepage is good	https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/issues/4
+12. Connor/Marcus - [M3 S0 4/4] Create sprint1 branch	https://github.com/uc-se-sm26-team23/scrum-project/issues/36
+13. Jai - [M3 5/5] Update # Security in README	https://github.com/uc-se-sm26-team23/scrum-project/issues/33
+14. Marcus/Akul - [M3 2/5] Sequence diagrams for two use cases	https://github.com/uc-se-sm26-team23/scrum-project/issues/30
+15. ALL -[M3 1/5] AC list for all use cases	https://github.com/uc-se-sm26-team23/scrum-project/issues/31
+16. ALL - M3 Pre-Task Discussion: Review Use Cases	https://github.com/uc-se-sm26-team23/scrum-project/issues/37
+17. ALL - Plan and develop UI/UC/task distribution etc (not listed)
 
 #### Contributions
 
@@ -392,7 +394,7 @@ Get comfortable with environment and tools, learn agile and scrum process and do
 | Marcus Nguyen | 10 | Across module 1–3, my key contributions focused on project setup, requirements development, use-case design, documentation, and implementation support. In module 1, I created the team organization, added teammates and the professor, set up the project board, added features, created PBIs for tasks, and updated the README and index.html with team member names, roles, and emails. In module 2, I created use cases for Modify Message, React Message, and Type Indicator, developed personas for the Student and Instructor roles, and updated the README with use cases and functional requirements. In module 3, I created PlantUML diagrams for the Modify Message and Login/Logout User use cases, wrote the in_out.html and in_out.js files for user authentication and username collection, and commented on PBIs to update their status and provide suggestions. |
 | Luke Falanga | 10 | For the module 1 work, I added my name, role, and email information to README.md and index.html. For module 2 work I created Use-Case PBIs for Navigate Channels, Send Message, and Receive Message. I also created a scenario for notification priority. For module 3 I created a PBI for discussion that needed to take place before working on the project task, as we needed to decide how to divide work and refine our existing Use-Cases. I also created the acceptance criteria for the "Create Channel" Use-Case. I then updated the README with the proper functional requirements, as well as our team addition of Channels (public, private, and group chats). I then created the src directory and the SendMessage.js and send_message.html chatbox UI. I then reconfigured SendMessage.js to connect with the Authentication UI that Marcus created to show the username for each message. I then finally commented on PBI's regarding completing acceptance criteria and UI to indicate my individual task completion. |
 | Connor Slutsky | 10 | In Module 1, I contributed to adding my name/contact info to the README.md. In Module 2, I created a couple Use Cases (Send Urgent Notification, See New/Unread Messages, both of which got fused with other UCs or dropped in M3), polished the Sick Student scenario, and updated the project description on the homepage. And in Module 3, I contributed towards filtering through our existing Use Cases (particularly Receive Message, Create Channel, and deleting Request Friend), polishing up the remaining Use Cases (Modify Message and Log In/Out User), and helping some of the others with little tasks, such as making contributions to the README (UI Design and STRIDE analysis) and creating the sprint1 branch. For M3 I also created tasks pertaining to the goals of M3 in the Project Board to help organize lab time. |
-| Akul Jha | 10 | Across milestones 1 through 3, I focused on core requirements engineering, documentation, and architecture setup. In the initial phases, I initialized the repository's documentation by adding the project overview, foundational functional requirements, and non-functional requirements (security, usability, reliability), while establishing initial use cases for managing requests, creating group chats, and blocking users. In the final milestone, I refined the messaging and channel navigation use cases, integrated overlapping details into unified requirements, mapped out sequence and PlantUML architecture diagrams, and fully documented the team's sprint retrospectives.|
+| Akul Jha | 10 | Across milestones 1 through 3, I focused on core requirements engineering, documentation, and architecture setup. In the initial phases, I initialized the repository's documentation by adding the project overview, foundational functional requirements, and non-functional requirements (security, usability, reliability), while establishing initial use cases for managing requests, creating group chats, and blocking users. In the final milestone, I refined the messaging and channel navigation use cases, integrated overlapping details into unified requirements, mapped out sequence and PlantUML architecture diagrams, and fully documented the team's sprint retrospectives.I also polished and added submission requirements into README|
 | Member 5 | X | TODO |
 
 #### Sprint Retrospective
