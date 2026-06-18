@@ -456,7 +456,7 @@ TODO — one sentence.
 
 | Member | Hours | Contribution Summary |
 |--------|-------|----------------------|
-| Marcus Nguyen | 9 | TODO |
+| Marcus Nguyen | 9 | Across sprint 1–3, my key contributions focused on project setup, requirements development, use-case design, documentation, and implementation support. In sprint 1, I created the team organization, added teammates and the professor, set up the project board, added features, created PBIs for tasks, and updated the README and index.html with team member names, roles, and emails. In sprint 2, I created use cases for Modify Message, React Message, and Type Indicator, developed personas for the Student and Instructor roles, and updated the README with use cases and functional requirements. In sprint 3, I created PlantUML diagrams for the Modify Message and Login/Logout User use cases, wrote the in_out.html and in_out.js files for user authentication and username collection, and commented on PBIs to update their status and provide suggestions. |
 | Member 2 | X | TODO |
 | Member 3 | X | TODO |
 | Member 4 | X | TODO |
