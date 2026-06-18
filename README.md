@@ -363,7 +363,7 @@ Include:
 
 ### Sprint 0
 
-**Duration:** YYYY-MM-DD to YYYY-MM-DD
+**Duration:** 2026-05-25 to 2026-06-15
 
 #### Sprint Goal
 Get comfortable with environment and tools, learn agile and scrum process and documentation procedures, create UC, Sequence diagrams, user stories etc to guide rest of messenger app project
