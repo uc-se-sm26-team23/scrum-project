@@ -102,7 +102,7 @@ function sendMessage() {
 // UC-03 modify message, edit message
 function editMessage(e) {
     console.log("edit");
-    // replace text with text box
+    // replace text with t box
     // what does the dom look like?
     /*
     div
@@ -117,14 +117,34 @@ function editMessage(e) {
 
     /* pseudocode
     *turn text into a p with a class message-text
-    -how do you replace?
+    *how do you replace?
         // id = e.target.id + //string manipulation to get the id
         // text = document.getElementById("message-text-" + id)
-        // textbox = createElement("textbox") // or whatever the elemtn is called
+        // textbox = createElement("textbox") // or whatever the element is called
         // e.target.parentElement.replaceChild(textbox, text)
-    -how to string manip the id
-    -what is the new element supposed to look like
+    *how to string manip the id
+        x = text.split("-");
+        id = x[x.length-1];
+    *what is the new element supposed to look like
+        <label for="input1">username:</label> 
+        <input type="text" id="input1" name="input1" value=message>
+        and on enter it's fine
     -code
     */
     return;
 }
+
+
+/*
+example message structure for testing
+<div id="message-1" class="message">
+    <!-- <p class="message-text" id="message-text-1" style="display: inline;">con: hello this is a test message</p> -->
+    <label for="input1">username:</label> 
+    <input type="text" id="input1" name="input1" value="something">
+    <button class="message-options-button" id="message-options-1">⋅ ⋅ ⋅</button>
+    <div class="message-options-menu" style="display: none;">
+        <button class="message-options-edit">Edit</button>
+        <button class="message-options-edit">Delete</button>
+    </div>
+</div>
+ */
