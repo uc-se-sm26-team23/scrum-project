@@ -8,6 +8,13 @@
     integrity="sha512-vBe+8DnrK9HGgW5O2AOqY/sJxCkEXEilaOolPs6lx/dxgn9K7dJIsHCOYAJL9ZaqImJbeV9MQsLLaSToUWSCXQ==" 
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- <link rel="stylesheet" href="index.css"></link> uncomment this to include the styling-->
+
+    <!-- CSP-->
+    <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; img-src 'self' https://*; child-src 'none'; style-src 'self' 'unsafe-inline';" />
+
+    <!-- 1. Load client library to send/receive real-time messages -->
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
