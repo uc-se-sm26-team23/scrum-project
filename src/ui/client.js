@@ -53,3 +53,14 @@ function sendMessage() {
 //TODO: code to implement AC-02.1: display system status events (join/leave) in the status area
 // AC-02.2: shows timestamp for each message
 // AC-02.3 (UI): auto-scroll to the latest message
+
+// encodeHTML function
+// replace dangerous HTML character into text
+function encodeHTML(string) {
+  return string
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
