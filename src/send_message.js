@@ -17,20 +17,18 @@ chatMessageInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') sendMessage();
 });
 
-
 // if click elsewhere, hide all triple dot menu buttons (edit, delete)
 document.body.addEventListener("click", (e) => {
     if (e.target.className != "message-options-button" && e.target.className != "message-options-edit" && e.target.className != "message-options-delete") {
         var messageOptionsMenuList = document.getElementsByClassName("message-options-menu");
         for (var i = 0; i < messageOptionsMenuList.length; i++) {
             messageOptionsMenuList[i].style.display = "none";
-            messageOptionsMenuList[i].style.display = "none";
         }
     }
 });
 
 // gets incremented with each new message
-var messageId = 1; //lwk this isn't needed anywhere but it MIGHT be needed so...i didn't delete it
+var messageId = 1;
 
 // ==================================================
 // Use-Case-01: Send Message
@@ -40,56 +38,23 @@ function sendMessage() {
     var input = chatMessageInput.value.trim();
     if (!input) return;   // AC-02.2: Empty messages are ignored
 
+    // get username
     const username = localStorage.getItem("username");
 
-    // turn input into a text element (because i need it to be)
-    const msgText = document.createElement("p");
-    msgText.textContent = username + ": " + input;
-    msgText.className = "message-text";
-    msgText.id = "message-text-" + messageId;
-    msgText.style.display = "inline";
-
-    // create message element
+    // create message div
     const msg = document.createElement("div");
     msg.className = "message";
     msg.id = "message-" + messageId;
+
+    // element that contains the text of the message
+    const msgText = createMessageTextElement(messageId, input, false);
     msg.appendChild(msgText);
 
-    // create button element AC-03.1
-    const btn = document.createElement("button");
-    btn.className="message-options-button"
-    btn.id="message-options-" + messageId;
-    btn.textContent = "⋅ ⋅ ⋅"
-    msg.appendChild(btn);
-    btn.addEventListener("click", () => {
-        for (let i = 0; i < menuList.length; i++) {
-            menuList[i].style.display = "none";
-        }
-        menuDiv.style.display="inline";
-    });
+    // div that contains three dots and edit/delete buttons
+    const msgOptDiv = createMessageOptionsElement(messageId);
 
-    // append edit and delete buttons but make them not visible by default
-    const menuDiv = document.createElement("div");
-    menuDiv.className = "message-options-menu";
-    menuDiv.style.display = "none";
-    const editBtn = document.createElement("button");
-    editBtn.textContent = "Edit";
-    editBtn.className="message-options-edit";
-    // editBtn.style.display = "none";
-    menuDiv.appendChild(editBtn);
-    editBtn.addEventListener("click", editMessage);
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Delete";
-    deleteBtn.className="message-options-edit";
-    // deleteBtn.style.display = "none";
-    menuDiv.appendChild(deleteBtn);
-    deleteBtn.addEventListener("click", () => {
-        console.log("delete");
-    });
-    msg.appendChild(menuDiv);
-    // menu list (edit and delete buttons) so i can re-hide them all when one gets clicked
-    const menuList = document.getElementsByClassName("message-options-menu");
- 
+    msg.appendChild(msgOptDiv);
+
     messageId++;
 
     messageList.appendChild(msg);
@@ -101,50 +66,184 @@ function sendMessage() {
 
 // UC-03 modify message, edit message
 function editMessage(e) {
-    console.log("edit");
-    // replace text with t box
-    // what does the dom look like?
-    /*
-    div
-        text
-        button
-        div
-            button
-            button
-        /div
-    /div
-    */
+    // get the id from edit button id ("message-options-edit-#")
+    var id = e.target.id.split("-"); // id is just a placeholder here
+    id = id[id.length-1]; // get the real id (at the end of the array)
 
-    /* pseudocode
-    *turn text into a p with a class message-text
-    *how do you replace?
-        // id = e.target.id + //string manipulation to get the id
-        // text = document.getElementById("message-text-" + id)
-        // textbox = createElement("textbox") // or whatever the element is called
-        // e.target.parentElement.replaceChild(textbox, text)
-    *how to string manip the id
-        x = text.split("-");
-        id = x[x.length-1];
-    *what is the new element supposed to look like
-        <label for="input1">username:</label> 
-        <input type="text" id="input1" name="input1" value=message>
-        and on enter it's fine
-    -code
-    */
+    // get the message text
+    const msgText = document.getElementById("message-text-"+id);
+
+    // create div "edit-message"
+    const editMsgDiv = document.createElement("div");
+    editMsgDiv.className = "edit-message";
+    editMsgDiv.id = "edit-message-" + id;
+    editMsgDiv.style.display = "inline";
+
+    // get username
+    var username = localStorage.getItem("username");
+
+    // create the label
+    const editLbl = document.createElement("label");
+    editLbl.htmlFor = "edit-input-" + id;
+    editLbl.textContent = username + ":";
+
+    // get placeholder text
+    // (take the text content and remove the "username: ")
+    var editPlaceholder = msgText.textContent.split(": ");
+    editPlaceholder = editPlaceholder.splice(1); // remove username
+    editPlaceholder = editPlaceholder.join(": "); // just in case there are any ": " in the message itself
+
+    // create the input
+    const editInput = document.createElement("input");
+    editInput.type = "text";
+    editInput.id = "edit-input-" + id;
+    editInput.name = editInput.id;
+    editInput.value = editPlaceholder;
+    // on Enter press, submit edited message
+    editInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+            submitEditMessage(e);
+        };
+    });
+    editMsgDiv.appendChild(editInput);
+
+    // create submit edit button
+    const submitEditBtn = document.createElement("button");
+    submitEditBtn.className = "edit-submit";
+    submitEditBtn.id = "edit-submit-" + id;
+    submitEditBtn.textContent = "Submit";
+    submitEditBtn.addEventListener("click", submitEditMessage);
+    editMsgDiv.appendChild(submitEditBtn);
+
+    // replace text with div
+    const msgDiv = document.getElementById("message-"+id);
+    msgDiv.replaceChild(editMsgDiv, msgText);
+    
+    // hide other buttons
+    const msgOptDiv = document.getElementById("message-options-"+id);
+    msgOptDiv.style.display="none";
+
+    // focus the edit message
+    editInput.focus();
+
     return;
 }
 
+function submitEditMessage(e) {
+    // get id
+    var id = e.target.id.split("-");
+    id = id[id.length - 1];
 
-/*
-example message structure for testing
-<div id="message-1" class="message">
-    <!-- <p class="message-text" id="message-text-1" style="display: inline;">con: hello this is a test message</p> -->
-    <label for="input1">username:</label> 
-    <input type="text" id="input1" name="input1" value="something">
-    <button class="message-options-button" id="message-options-1">⋅ ⋅ ⋅</button>
-    <div class="message-options-menu" style="display: none;">
-        <button class="message-options-edit">Edit</button>
-        <button class="message-options-edit">Delete</button>
-    </div>
-</div>
- */
+    // get text content
+    const editInput = document.getElementById("edit-input-"+id);
+    var text = editInput.value;
+    // if edited message is empty, return
+    if (text === "") {
+        return;
+    }
+
+    // create message text again
+    const msgText = createMessageTextElement(id, text, true);
+
+    // replace edit div with message text
+    const msgDiv = document.getElementById("message-"+id);
+    const editDiv = document.getElementById("edit-message-"+id);
+    msgDiv.replaceChild(msgText, editDiv);
+
+    // show msgOptDiv (since it was hidden in editMessage)
+    const msgOptDiv = document.getElementById("message-options-"+id);
+    msgOptDiv.style.display = "inline";
+    return;
+}
+
+// create the <p>message</p> element
+function createMessageTextElement(id, textContent, edited) {
+    // get username
+    var username = localStorage.getItem("username");
+
+    // turn input into a text element
+    const msgText = document.createElement("p");
+    if (!edited) {
+        msgText.innerHTML = username + ": " + textContent;
+    } else {
+        msgText.innerHTML = username + " <i>\(edited\)</i>: " + textContent;
+    }
+    msgText.className = "message-text";
+    msgText.id = "message-text-" + id;
+    msgText.style.display = "inline";
+
+    return msgText;
+}
+
+// triple dots button + edit / delete buttons
+// okay right now this is only being used in sendMessage (as of 6/25/26) because i thought i would need it in submitEditMessage but i didn't
+function createMessageOptionsElement(id) {
+    // create message options div (aka the triple dots button)
+    const msgOptDiv = document.createElement("div");
+    msgOptDiv.className = "message-options";
+    msgOptDiv.id = "message-options-" + id;
+    msgOptDiv.style.display = "inline";
+
+    // create button element AC-03.1
+    const tripleDotsBtn = document.createElement("button");
+    tripleDotsBtn.className="message-options-button"
+    tripleDotsBtn.id="message-options-" + id;
+    tripleDotsBtn.textContent = "⋅ ⋅ ⋅";
+    tripleDotsBtn.addEventListener("click", () => {
+        var isMenuCurrentlyVisible = menuDiv.style.display === "inline";
+        for (let i = 0; i < menuList.length; i++) {
+            menuList[i].style.display = "none";
+        }
+        if (!isMenuCurrentlyVisible) {
+            menuDiv.style.display = "inline";
+        }
+    });
+    msgOptDiv.appendChild(tripleDotsBtn);
+
+    // menu contains edit and delete buttons
+    const menuDiv = document.createElement("div");
+    menuDiv.className = "message-options-menu";
+    menuDiv.style.display = "none";
+
+    // edit button
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "Edit";
+    editBtn.className = "message-options-edit";
+    editBtn.id = "message-options-edit-" + id;
+    menuDiv.appendChild(editBtn);
+    editBtn.addEventListener("click", editMessage);
+
+    // delete button
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
+    deleteBtn.className = "message-options-delete";
+    deleteBtn.id = "message-options-delete-" + id;
+    menuDiv.appendChild(deleteBtn);
+    deleteBtn.addEventListener("click", deleteMessage);
+
+    msgOptDiv.appendChild(menuDiv);
+
+    // menu list (edit and delete buttons) so i can re-hide them all when one gets clicked
+    // apparently the above variables can access this variable i think? idk. idk how javascript works
+    const menuList = document.getElementsByClassName("message-options-menu");
+
+    return msgOptDiv;
+}
+
+function deleteMessage(e) {
+    // get id
+    var id = e.target.id.split("-");
+    id = id[id.length-1];
+
+    // get username
+    username = localStorage.getItem("username");
+
+    // replace text content
+    const msgText = document.getElementById("message-text-"+id);
+    msgText.innerHTML = "<i>deleted by " + username + "</i>";
+
+    // remove message options
+    const msgOptDiv = document.getElementById("message-options-"+id);
+    msgOptDiv.remove();
+    return;
+}
