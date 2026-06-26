@@ -1,3 +1,11 @@
+//Socket Connection
+var socket = io(); //connect to the Socket.io Server
+socket.on("connect", () => { //connected to the server
+    console.log(`Connected to Socket.io server: 
+    ${socket.io.opts.hostname}, port: ${socket.io.opts.port}`);
+});
+
+
 // UI References
 var messageList = document.getElementById("messages");
 
@@ -41,8 +49,21 @@ function sendMessage() {
     // get username
     const username = localStorage.getItem("username");
 
+    socket.emit('message', input);
+
+    chatMessageInput.value = ''; // AC-01.3: clear input after sending
+    chatMessageInput.focus();
+}
+
+// Display the message:
+socket.on('message', displayMessage);
+
+function displayMessage(data) {
     // create message div
     const msg = document.createElement("div");
+    var timestamp = new Date().toLocaleTimeString();
+    msg.innerHTML = '<span style="color: #2431e5">[' + timestamp + ']</span> ' 
+                    + DOMPurify.sanitize(data);
     msg.className = "message";
     msg.id = "message-" + messageId;
 
@@ -59,10 +80,18 @@ function sendMessage() {
 
     messageList.appendChild(msg);
     messageList.scrollTop = messageList.scrollHeight;
-
-    chatMessageInput.value = ''; // AC-01.3: clear input after sending
-    chatMessageInput.focus();
 }
+
+// Display system status events
+socket.on('status', function(data) {
+    var statusElm = document.getElementById('status');
+    // Show timestamp
+    var timestamp = new DataTransfer().toLocaleTimeString();
+    statusElm.innerHTML = statusElm.innerHTML + '<br><span style="color: #2ee524">[' + timestamp + ']</span> ' + DOMPurify.sanitize(data);
+
+    // Auto-scroll to latest message
+    statusElm.scrollTop = statusElm.scrollHeight;
+})
 
 // UC-03 modify message, edit message
 function editMessage(e) {
