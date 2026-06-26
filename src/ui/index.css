@@ -60,7 +60,7 @@ body {
     border-color: #0078ff;
 }
 
-#enter-button {
+#joinBtn {
     width: 100%;
     padding: 12px;
     border: none;
@@ -71,6 +71,6 @@ body {
     cursor: pointer;
 }
 
-#enter-button:hover {
+#joinBtn:hover {
     background: #005fcc;
 }

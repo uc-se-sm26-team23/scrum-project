@@ -7,7 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.4.11/purify.min.js" 
     integrity="sha512-vBe+8DnrK9HGgW5O2AOqY/sJxCkEXEilaOolPs6lx/dxgn9K7dJIsHCOYAJL9ZaqImJbeV9MQsLLaSToUWSCXQ==" 
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- <link rel="stylesheet" href="index.css"></link> uncomment this to include the styling-->
+    <link rel="stylesheet" href="index.css">
 
     <!-- CSP-->
     <meta http-equiv="Content-Security-Policy"
@@ -24,10 +24,10 @@
 
         <div class="input-group">
             <label for="username">Username</label>
-            <input id="username" type="text" placeholder="Enter your username" />
+            <input type="text" id="username" placeholder="Username" pattern="\w{3,20}" required title="Username must be between 3–20 characters"/>
         </div>
 
-        <button id="enter-button">Enter</button>
+        <button id="joinBtn">Join Chat</button>
     </div>
 
     <script src="in_out.js"></script>
