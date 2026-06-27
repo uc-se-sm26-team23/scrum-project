@@ -18,18 +18,35 @@
 </head>
 
 <body>
-    <div class="login-container">
-        <h1>Messenger</h1>
-        <p>Enter your username to start chatting</p>
+    <div id="loginUI">
+        <div class="login-container">
+            <h1>Messenger</h1>
+            <p>Enter your username to start chatting</p>
 
-        <div class="input-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" placeholder="Username" pattern="\w{3,20}" required title="Username must be between 3–20 characters"/>
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Username" pattern="\w{3,20}" required title="Username must be between 3–20 characters"/>
+            
+            </div>
+
+            <button id="joinBtn">Join Chat</button>
         </div>
-
-        <button id="joinBtn">Join Chat</button>
     </div>
 
-    <script src="in_out.js"></script>
+    <div id="chatUI" style="display:none">
+        <b>System status: </b><br>
+        <div id="status" style="width:625px; height:75px; overflow-y:scroll;"></div>
+        <b>Chat Responses:</b><br>
+        <div class="chat-container">
+            <div class="messages" id="messages"></div>
+            <div class="input-area">
+                <input type="text" id="chat-message" placeholder="Type Message Here...">
+                <button id="send-button">Send</button>
+                <script src="send_message.js"></script>
+            </div>
+        </div>
+    </div>
+
+    <script src="client.js"></script>
 </body>
 </html>

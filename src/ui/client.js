@@ -30,6 +30,20 @@ chatMessageInput.addEventListener('keypress', function(e) {
   if (e.key === 'Enter') sendMessage();
 });
 
+document.getElementById('joinBtn').addEventListener('click', joinChat);
+function joinChat() {
+  //input validation here before sending to the server
+  const username = document.getElementById('username').value;
+  const pattern = /^\w{3,20}$/;
+  if (!username || !pattern.test(username)) {
+    alert("Username cannot be empty and must be between 3–20 characters!");
+    return;
+  }
+  //the following lines should be moved to the authentication confirmation from the server
+  document.getElementById('loginUI').style.display = 'none';
+  document.getElementById('chatUI').style.display = '';
+}
+
 // =============================================================================
 // Use-Case-01: Send Message
 // =============================================================================
