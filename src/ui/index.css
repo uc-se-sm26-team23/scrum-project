@@ -1,4 +1,4 @@
-* {
+/* * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -72,5 +72,137 @@ body {
 }
 
 #joinBtn:hover {
+    background: #005fcc;
+} */
+
+/* ==================================================
+   1. Global Reset & Base Styles
+   ================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Keeps everything nicely centered vertically */
+    background: #f4f6f8;
+}
+
+/* ==================================================
+   2. Login Page Styles
+   ================================================== */
+.login-container {
+    width: 350px;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    text-align: center;
+}
+
+.login-container h1 {
+    margin-bottom: 10px;
+    color: #222;
+    font-size: 28px;
+}
+
+.login-container p {
+    margin-bottom: 25px;
+    color: #666;
+    font-size: 14px;
+}
+
+.input-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    font-size: 15px;
+}
+
+.input-group input:focus {
+    border-color: #0078ff;
+}
+
+#joinBtn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #0078ff;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#joinBtn:hover {
+    background: #005fcc;
+}
+
+/* ==================================================
+   3. Chat Screen Styles
+   ================================================== */
+.chat-container {
+    width: 400px;
+    border: 1px solid #000000;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white; /* Ensures the chat box frame stays solid */
+}
+
+.messages {
+    height: 300px;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: #f5f5f5;
+}
+
+.message {
+    background: white;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+}
+
+.input-area {
+    display: flex;
+    border-top: 1px solid #ccc;
+}
+
+.input-area input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    outline: none;
+}
+
+.input-area button {
+    padding: 10px 15px;
+    border: none;
+    background: #0078ff;
+    color: white;
+    cursor: pointer;
+}
+
+.input-area button:hover {
     background: #005fcc;
 }

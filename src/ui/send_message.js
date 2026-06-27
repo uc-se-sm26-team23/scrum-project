@@ -46,8 +46,7 @@ function sendMessage() {
     var input = chatMessageInput.value.trim();
     if (!input) return;   // AC-02.2: Empty messages are ignored
 
-    // get username
-    const username = localStorage.getItem("username");
+    // get username moved to join chat
 
     socket.emit('message', input);
 
@@ -290,11 +289,15 @@ document.getElementById('joinBtn').addEventListener('click', joinChat);
 function joinChat() {
     const username = document.getElementById('username').value;
     const pattern = /^\w{3,20}$/;
+    
 
     if (!username || !pattern.test(username)) {
         alert("Username cannot be empty and must be between 3–20 characters!");
         return;
     }
+    
+    localStorage.setItem("username", username);
+    socket.emit("set username", username);
 
     document.getElementById('loginUI').style.display = 'none';
     document.getElementById('chatUI').style.display = '';

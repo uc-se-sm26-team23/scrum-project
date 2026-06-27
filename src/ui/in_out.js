@@ -37,6 +37,7 @@ function authenticateUser() {
 
     // Save username so message page can know who logged in
     localStorage.setItem("username", username);
+    socket.emit("set username", username);
 
     // Switch to message page
     window.location.href = "send_message.html";
