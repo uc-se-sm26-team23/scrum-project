@@ -5,9 +5,10 @@ socket.on("connect", () => { //connected to the server
     ${socket.io.opts.hostname}, port: ${socket.io.opts.port}`);
 });
 
-
 // UI References
 var messageList = document.getElementById("messages");
+
+var typingIndicator = document.getElementById("typingIndicator");
 
 var sendBtnElm = document.getElementById('send-button');
 if(!sendBtnElm) {
@@ -24,6 +25,9 @@ if(!chatMessageInput) {
 chatMessageInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') sendMessage();
 });
+
+// Listens for user input
+chatMessageInput.addEventListener('input', typingIndication);
 
 // if click elsewhere, hide all triple dot menu buttons (edit, delete)
 document.body.addEventListener("click", (e) => {
@@ -54,12 +58,62 @@ function sendMessage() {
     chatMessageInput.focus();
 }
 
+
+const typingUsers = new Set();
+let typing = false;
+let timeout;
+
+function typingIndication() {
+
+    if (!typing) {
+        typing = true;
+        socket.emit('typing');
+    }
+
+    clearTimeout(timeout);
+
+    timeout = setTimeout(() => {
+        typing = false;
+        socket.emit('stopTyping');
+    }, 1000); // Typing indicator will disappear after 1 second of no typing
+}
+
+const client = localStorage.getItem('username');
+
+// Someone began typing
+socket.on('typing', (client) => {
+    typingUsers.add(client);
+    updateTypingIndicator();
+});
+
+// Someone stopped typing
+socket.on('stopTyping', (client) => {
+    typingUsers.delete(client);
+    updateTypingIndicator();
+});
+
+function updateTypingIndicator() {
+    if (typingUsers.size === 0) {
+        typingIndicator.textContent = "";
+    } else if (typingUsers.size === 1) {
+        typingIndicator.textContent =
+        `${[...typingUsers][0]} is typing...`;
+    }
+
+    else {
+        typingIndicator.textContent = 
+        `${typingUsers.size} people are currently typing...`;
+    }
+}
+
+
 // AC-02.01 & AC-02.05
 // get message from server
 socket.on('message', function(data) {
     showNotification('New Message', data);
     displayMessage(data);
 });
+
 
 function displayMessage(data) {
     
@@ -134,6 +188,11 @@ function editMessage(e) {
     // get placeholder text
     // (take the text content and remove the "username: ")
     var editPlaceholder = msgText.textContent.split(": ");
+
+    if (username !== editPlaceholder[0]) {
+        return;
+    }
+
     editPlaceholder = editPlaceholder.splice(1); // remove username
     editPlaceholder = editPlaceholder.join(": "); // just in case there are any ": " in the message itself
 

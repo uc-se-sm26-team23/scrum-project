@@ -63,6 +63,24 @@ io.on('connection', (socket) => {
     io.emit('message', sender + ': ' + data.trim());
   });
 
+  // AC-01.7: Typing indicator event is sent to all connected users besides the one typing
+  socket.on('typing', () => {
+    const username = userlist.get(socket.id);
+
+    if (username) {
+      socket.broadcast.emit('typing', username);
+    }
+  })
+
+  // AC-01.8: Typing indicator event is ended for all connected users
+    socket.on('stopTyping', () => {
+    const username = userlist.get(socket.id);
+
+    if (username) {
+      socket.broadcast.emit('stopTyping', username);
+    }
+  })
+
   // ---------------------------------------------------------------------------
   // Use-Case-02: Receive message — disconnect notification
   //
@@ -70,6 +88,7 @@ io.on('connection', (socket) => {
   // ---------------------------------------------------------------------------
   socket.on('disconnect', () => {
     const username = userlist.get(socket.id);
+    socket.broadcast.emit('stopTyping', username); // If a user is disconnected while typing, their indicator is removed from all other connected users
     userlist.delete(socket.id);
     console.log('Client disconnected - socket ID: ' + socket.id);
     //todo: code to broadcast the status
