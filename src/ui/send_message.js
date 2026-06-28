@@ -54,10 +54,16 @@ function sendMessage() {
     chatMessageInput.focus();
 }
 
-// Display the message:
-socket.on('message', displayMessage);
+// AC-02.01 & AC-02.05
+// get message from server
+socket.on('message', function(data) {
+    showNotification('New Message', data);
+    displayMessage(data);
+});
 
 function displayMessage(data) {
+    
+    // AC-02.04 - Timestamps display in brower's local system clock
     // create message div
     const msg = document.createElement("div");
     var timestamp = new Date().toLocaleTimeString();
@@ -86,10 +92,12 @@ function displayMessage(data) {
     messageId++;
     console.log(msg);
     messageList.appendChild(msg);
+
+    // AC-02.03 - Auto-scroll to latest message.
     messageList.scrollTop = messageList.scrollHeight;
 }
 
-// Display system status events
+//AC-02.02:  Display system status events
 socket.on('status', function(data) {
     var statusElm = document.getElementById('status');
     // Show timestamp
@@ -199,10 +207,10 @@ function createMessageTextElement(id, textContent, edited) {
 
     // turn input into a text element
     const msgText = document.createElement("p");
-    if (!edited) {
-        msgText.innerHTML = textContent;
+    if (!edited) { // AC-02.06 - Output-Encoding strings coming from server
+        msgText.innerHTML = encodeHTML(textContent);
     } else {
-        msgText.innerHTML = textContent + " <i>(edited)</i>";
+        msgText.innerHTML = encodeHTML(textContent) + " <i>(edited)</i>";
     }
     msgText.className = "message-text";
     msgText.id = "message-text-" + id;
@@ -299,6 +307,40 @@ function joinChat() {
     localStorage.setItem("username", username);
     socket.emit("set username", username);
 
+    // AC-02.05 - Request Notification on message
+    Notification.requestPermission();
+
     document.getElementById('loginUI').style.display = 'none';
     document.getElementById('chatUI').style.display = '';
+}
+
+
+// encodeHTML function
+// replace dangerous HTML character into text
+function encodeHTML(string) {
+    return string
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+  }
+  /*
+  ==============================
+  // Functio: showNotification
+  Parameters:
+  - sender: String Type
+    - Title of notification pop up; hardcoded as 'New Message' at line 60
+  - message_body: String Type
+    - The message data to notify from server.
+  ==============================
+  */
+function showNotification(sender, message_body) {
+
+    // check if permission is allow AND user has tab in background (user not looking at the app)
+    if (Notification.permission =='granted' && document.hidden) {
+
+        // if true, notifications can fire
+        new Notification(sender, {body: message_body});
+    }
 }

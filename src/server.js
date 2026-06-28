@@ -11,6 +11,7 @@ const app    = express();
 const server = http.createServer(app);
 const io     = new Server(server);
 
+// CSP Header
 app.use((req, res, next) => {
   res.setHeader(
       'Content-Security-Policy',
@@ -32,7 +33,7 @@ const userlist = new Map();
 
 io.on('connection', (socket) => {
 
-  // Auto-assign a unique username from the socket ID
+  // AC-02.02 - Auto-assign a unique username from the socket ID
   socket.on("set username", (username) => {
     userlist.set(socket.id, username);
     console.log(`Socket ${socket.id} updated username to: ${username}`);
@@ -59,7 +60,7 @@ io.on('connection', (socket) => {
     // AC-01.3 + AC-01.4: Broadcast to all clients with sender username
     const sender = userlist.get(socket.id);
     console.log(`Debug> "${sender}" sent: ${data}`);
-    io.emit('message', sender + ' says: ' + data.trim());
+    io.emit('message', sender + ': ' + data.trim());
   });
 
   // ---------------------------------------------------------------------------
