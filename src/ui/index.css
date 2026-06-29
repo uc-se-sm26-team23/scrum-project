@@ -206,3 +206,20 @@ body {
 .input-area button:hover {
     background: #005fcc;
 }
+
+#loginUI{
+        background-image: url(''); 
+            
+            /* Prevent the image from repeating like tiles */
+        background-repeat: no-repeat; 
+        
+        /* Scale the image to perfectly cover the entire screen */
+        background-size: cover; 
+        
+        /* Center the image horizontally and vertically */
+        background-position: center; 
+        
+        /* Keep the background fixed while scrolling content */
+        background-attachment: fixed; 
+
+}
