@@ -351,7 +351,18 @@ function deleteMessage(e) {
     return;
 }
 
-document.getElementById('joinBtn').addEventListener('click', joinChat);
+var joinBtn = document.getElementById('joinBtn');
+if (joinBtn) {
+    joinBtn.addEventListener('click', joinChat);
+}
+
+var loginUsernameInput = document.getElementById('username');
+if (loginUsernameInput) {
+    loginUsernameInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') joinChat();
+    });
+}
+
 
 function joinChat() {
     const username = document.getElementById('username').value;

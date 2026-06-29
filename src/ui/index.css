@@ -208,18 +208,19 @@ body {
 }
 
 #loginUI{
-        background-image: url(''); 
+        background-image: url('resources/Background_mini_messenger_login.jfif'); 
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
             
-            /* Prevent the image from repeating like tiles */
         background-repeat: no-repeat; 
-        
-        /* Scale the image to perfectly cover the entire screen */
         background-size: cover; 
-        
-        /* Center the image horizontally and vertically */
         background-position: center; 
-        
-        /* Keep the background fixed while scrolling content */
         background-attachment: fixed; 
 
 }
