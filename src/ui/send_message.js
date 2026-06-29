@@ -8,6 +8,7 @@ socket.on("connect", () => { //connected to the server
 // UI References
 var messageList = document.getElementById("messages");
 
+
 var typingIndicator = document.getElementById("typingIndicator");
 
 var sendBtnElm = document.getElementById('send-button');
@@ -41,6 +42,15 @@ document.body.addEventListener("click", (e) => {
 
 // gets incremented with each new message
 var messageId = 1;
+
+
+// show userlist panel
+var UsersbtnElm = document.getElementById('users-toggle-btn');
+if(!UsersbtnElm) {
+    console.log("Error in getting 'users-button' button");
+}
+UsersbtnElm.addEventListener('click', ShowUsers);
+
 
 // ==================================================
 // Use-Case-01: Send Message
@@ -363,6 +373,17 @@ if (loginUsernameInput) {
     });
 }
 
+window.toggleSidebar = function() {
+    const panel = document.getElementById('side-panel');
+    if (panel) {
+        panel.classList.toggle('open');
+    }
+};
+
+function ShowUsers(){
+    document.getElementById('side-panel').style.left = '0px';
+}
+
 
 function joinChat() {
     const username = document.getElementById('username').value;
@@ -380,7 +401,7 @@ function joinChat() {
     // AC-02.05 - Request Notification on message
     Notification.requestPermission();
 
-    document.getElementById('loginUI').style.display = 'none';
+    document.getElementById('loginUI').style.left = '100%';
     document.getElementById('chatUI').style.display = '';
 }
 
