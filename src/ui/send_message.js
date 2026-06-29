@@ -44,13 +44,6 @@ document.body.addEventListener("click", (e) => {
 var messageId = 1;
 
 
-// show userlist panel
-var UsersbtnElm = document.getElementById('users-toggle-btn');
-if(!UsersbtnElm) {
-    console.log("Error in getting 'users-button' button");
-}
-UsersbtnElm.addEventListener('click', ShowUsers);
-
 
 // ==================================================
 // Use-Case-01: Send Message
@@ -373,17 +366,6 @@ if (loginUsernameInput) {
     });
 }
 
-window.toggleSidebar = function() {
-    const panel = document.getElementById('side-panel');
-    if (panel) {
-        panel.classList.toggle('open');
-    }
-};
-
-function ShowUsers(){
-    document.getElementById('side-panel').style.left = '0px';
-}
-
 
 function joinChat() {
     const username = document.getElementById('username').value;
@@ -434,4 +416,42 @@ function showNotification(sender, message_body) {
         // if true, notifications can fire
         new Notification(sender, {body: message_body});
     }
+}
+
+
+// ==================================================
+// Use-Case-0X: Show online users
+// ==================================================
+
+// show userlist panel
+document.getElementById('users-toggle-main').addEventListener('click', ShowUsers);
+document.getElementById('users-toggle-close').addEventListener('click', ShowUsers);
+
+socket.on('userList', function(users) {
+    const userListElement = document.getElementById("user-list");
+    
+    // Clear the current list
+    userListElement.innerHTML = "";
+
+    // Add each user to the list
+    users.forEach(user => {
+        const li = document.createElement("li");
+        li.textContent = user;
+        userListElement.appendChild(li);
+    });
+});
+
+
+function ShowUsers(){
+//    const currentLeft = window.getComputedStyle(panel).left;
+    const panel = document.getElementById('side-panel');
+
+    // // If it's 0px (visible), hide it. Otherwise, show it.
+    // if (currentLeft === '0px') {
+    //     panel.style.left = '-260px';
+    // } else {
+    //     panel.style.left = '0px';
+    // }
+    panel.classList.toggle('open');
+
 }
