@@ -125,7 +125,7 @@ function authenticateUser() {
 
 function sendMessage() {
     var input = chatMessageInput.value.trim();
-    if (!input) return;   // AC-02.2: Empty messages are ignored
+    if (!input) return;   // AC-01.2: Empty messages are ignored
 
     // get username moved to join chat
 
@@ -144,7 +144,7 @@ function typingIndication() {
 
     if (!typing) {
         typing = true;
-        socket.emit('typing');
+        socket.emit('typing');  // AC-01.7: Emit typing status to the server
     }
 
     clearTimeout(timeout);
@@ -152,7 +152,7 @@ function typingIndication() {
     timeout = setTimeout(() => {
         typing = false;
         socket.emit('stopTyping');
-    }, 1000); // Typing indicator will disappear after 1 second of no typing
+    }, 1000); // AC-01.8: Typing indicator will disappear after 1 second of no typing
 }
 
 const client = localStorage.getItem('username');
@@ -174,12 +174,12 @@ function updateTypingIndicator() {
         typingIndicator.textContent = "";
     } else if (typingUsers.size === 1) {
         typingIndicator.textContent =
-        `${[...typingUsers][0]} is typing...`;
+        `${[...typingUsers][0]} is typing...`; // AC-01.7: Displays user who is currently typing
     }
 
     else {
         typingIndicator.textContent = 
-        `${typingUsers.size} people are currently typing...`;
+        `${typingUsers.size} people are currently typing...`; // AC-01.7: Displays number of users typing if multiple are currently
     }
 }
 
