@@ -48,29 +48,29 @@ io.on('connection', (socket) => {
   // ---------------------------------------------------------------------------
   // Use-Case-01: Send message
   //
-  // AC-01.1: a username is always assigned on connection — every sender
-  //          is identified before any message can be sent
+  // AC-01.1: Given that I am in chat window, When I tap the 'send' button, Then the app shows my message as sent in the chat window.
   // AC-01.2: empty or non-string messages are ignored — no broadcast is sent
-  // AC-01.3: the message is broadcast to ALL connected clients
-  // AC-01.4: the broadcast payload includes the sender's username and the text
-  // AC-01.5: input is cleared after sending (enforced client-side)
+  // AC-01.5: Given that I have sent a message to the chat window, when the message appears my username should show up alongside it.
+  // AC-01.6: Given that only I am typing, I should not be notified that there are any users typing.
+  // AC-01.7: Given that a connected user is currently typing to the chat window, When they press any key, Then the typing indicator must appear at the bottom of the chat window.
+  // AC-01.8: Given that a typing user's typing indicator is visible on other users' screen, When the typing user stops typing for more than a certain seconds or delete all texts, Then the typing indicator must disappear from other users' screen.
   // ---------------------------------------------------------------------------
   //Todo: code to implement the above use case and AC items
   socket.on('message', (data) => {
     // AC-01.2: ignore empty messages
     if (!data || data.trim() === '') return;
-    // AC-01.3 + AC-01.4: Broadcast to all clients with sender username
+    // AC-01.2 + AC-01.5: Broadcast to all clients with sender username
     const sender = userlist.get(socket.id);
     console.log(`Debug> "${sender}" sent: ${data}`);
     io.emit('message', sender + ': ' + data.trim());
   });
 
-  // AC-01.7: Typing indicator event is sent to all connected users besides the one typing
+  // AC-01.7: Typing indicator event is sent to connected users 
   socket.on('typing', () => {
     const username = userlist.get(socket.id);
 
     if (username) {
-      socket.broadcast.emit('typing', username);
+      socket.broadcast.emit('typing', username); // AC-01.6: The user typing is not notified that typing has started
     }
   })
 
@@ -79,7 +79,7 @@ io.on('connection', (socket) => {
     const username = userlist.get(socket.id);
 
     if (username) {
-      socket.broadcast.emit('stopTyping', username);
+      socket.broadcast.emit('stopTyping', username); // AC-01.6: The user who stopped typing does not receive the stopTyping socket emission
     }
   })
 
