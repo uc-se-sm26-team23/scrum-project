@@ -75,13 +75,19 @@ io.on('connection', (socket) => {
   })
 
   // AC-01.8: Typing indicator event is ended for all connected users
-    socket.on('stopTyping', () => {
+  socket.on('stopTyping', () => {
     const username = userlist.get(socket.id);
 
     if (username) {
       socket.broadcast.emit('stopTyping', username);
     }
   })
+
+  // edit message
+  socket.on("edit", (data) => {
+    console.log("server.js data", data);
+    io.emit("edit", data);
+  });
 
   // ---------------------------------------------------------------------------
   // Use-Case-02: Receive message — disconnect notification
