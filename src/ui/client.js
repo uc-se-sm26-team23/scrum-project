@@ -289,7 +289,7 @@ function updateTypingIndicator() {
 socket.on('message', function(data) { // data (string): {Alice: hello...}
     
     // get senderName
-    var senderName = data.split(':')[0];
+    var senderName = data.message.split(':')[0];
 
     // get current user's username from browser storage
     var currUsername = localStorage.getItem('username')
@@ -344,12 +344,10 @@ socket.on('privateMessage', (data) => {
 
 });
 
-
+// data
 function displayMessage(data) { // server sends data as string
-    //var msgText = data.message;
-    //var messageId = data.id;
-
-
+    var msgText = data.message;
+    var messageId = data.id;
 
     // create message div
     const msg = document.createElement("div");
@@ -357,12 +355,6 @@ function displayMessage(data) { // server sends data as string
     //                 + DOMPurify.sanitize(data);
     msg.className = "message";
     msg.id = "message-" + messageId;
-
-    // create and add timestamp
-    const timestampSpan = document.createElement("span");
-    timestampSpan.style.color = "#2431e5";
-    timestampSpan.textContent = "[" + new Date().toLocaleTimeString() + "] ";
-    msg.appendChild(timestampSpan);
 
     // element that contains the text of the message
     const msgTextElm = createMessageTextElement(messageId, data, false);
@@ -377,7 +369,6 @@ function displayMessage(data) { // server sends data as string
         msg.appendChild(msgOptDiv);
     }
 
-    messageId++; //increment the counter for next message
     messageList.appendChild(msg);
 
     // AC-02.03 - Auto-scroll to latest message.
