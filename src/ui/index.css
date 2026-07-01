@@ -291,7 +291,7 @@ body {
 @ https://codepen.io/arthak/pen/rmqvgo
 ================================================== 
 */
-#typing-indicator,
+#typingIndicator,
 #private-typingIndicator {
     display: flex;
     align-items: center;
