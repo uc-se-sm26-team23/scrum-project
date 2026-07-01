@@ -347,7 +347,7 @@ socket.on('privateMessage', (data) => {
 
 function displayMessage(data) { // server sends data as string
     //var msgText = data.message;
-    //var messageId = data.id; <- object doesnt work
+    //var messageId = data.id;
 
 
 
@@ -358,13 +358,14 @@ function displayMessage(data) { // server sends data as string
     msg.className = "message";
     msg.id = "message-" + messageId;
 
+    // create and add timestamp
     const timestampSpan = document.createElement("span");
     timestampSpan.style.color = "#2431e5";
     timestampSpan.textContent = "[" + new Date().toLocaleTimeString() + "] ";
     msg.appendChild(timestampSpan);
 
     // element that contains the text of the message
-    const msgTextElm = createMessageTextElement(messageId, msgText, false);
+    const msgTextElm = createMessageTextElement(messageId, data, false);
     msg.appendChild(msgTextElm);
 
     // get username of data
@@ -376,7 +377,7 @@ function displayMessage(data) { // server sends data as string
         msg.appendChild(msgOptDiv);
     }
 
-    messeageId++; //increment the counter for next message
+    messageId++; //increment the counter for next message
     messageList.appendChild(msg);
 
     // AC-02.03 - Auto-scroll to latest message.
