@@ -134,6 +134,8 @@ io.on('connection', (socket) => {
   // Sends the typing indicator to the client that another client is typing to
   socket.on('privateTyping', (data) => {
 
+    if (data.to === socket.id) return;
+
     const sender = userlist.get(socket.id);
 
     io.to(data.to).emit('privateTyping', {
