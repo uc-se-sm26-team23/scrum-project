@@ -357,7 +357,7 @@ function displayMessage(data) { // server sends data as string
     msg.id = "message-" + messageId;
 
     // element that contains the text of the message
-    const msgTextElm = createMessageTextElement(messageId, data, false);
+    const msgTextElm = createMessageTextElement(messageId, msgText, false);
     msg.appendChild(msgTextElm);
 
     // get username of data
