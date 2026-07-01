@@ -76,9 +76,11 @@ io.on('connection', (socket) => {
     io.emit('message', sender + ': ' + data.trim());
   });
 
+  // Handles private messages
   socket.on('privateMessage', (data) => {
     const sender = userlist.get(socket.id);
 
+    // Sends the message to the recipient
     io.to(data.to).emit('privateMessage', {
       from: sender,
       fromSocket: socket.id,
@@ -112,6 +114,8 @@ io.on('connection', (socket) => {
     }
   })
 
+
+  // Sends the typing indicator to the client that another client is typing to
   socket.on('privateTyping', (data) => {
 
     const sender = userlist.get(socket.id);
@@ -123,6 +127,7 @@ io.on('connection', (socket) => {
 
   });
 
+  // Sends the privateStopTyping event to the user the client was typing to
   socket.on('privateStopTyping', (data) => {
 
     io.to(data.to).emit('privateStopTyping', {

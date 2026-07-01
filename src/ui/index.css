@@ -205,7 +205,12 @@ body {
     border-radius: 5px;
 }
 
-
+.priv-message {
+    background: white;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+}
 
 .input-area {
     display: flex;

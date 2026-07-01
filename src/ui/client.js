@@ -159,22 +159,25 @@ function sendMessage() {
     chatMessageInput.focus();
 }
 
+// Handles sending private messages to a user
 function sendPrivateMessage() {
 
     var input = privChatMessageInput.value.trim();
     if (!input || !currentPrivateUser) return;
 
+    // Sends the message only to the current connected user you clicked on
     socket.emit("privateMessage", {
         to: currentPrivateUser.socketId,
         message: input
     });
 
+    // Ends the typing indicator upon message send
     privateTyping = false;
     socket.emit('privateStopTyping', {
         to: currentPrivateUser.socketId
     });
 
-    privChatMessageInput.value = "";
+    privChatMessageInput.value = ""; // Sets the input value to empty
     privChatMessageInput.focus();
 }
 
@@ -198,8 +201,11 @@ function typingIndication() {
     }, 1000); // AC-01.8: Typing indicator will disappear after 1 second of no typing
 }
 
+
 let privateTyping = false;
 let privateTypingTimeout;
+
+// Handles private typing indicators
 function privateTypingIndication() {
 
     if (!currentPrivateUser) return;
@@ -236,6 +242,7 @@ socket.on('stopTyping', (client) => {
     updateTypingIndicator();
 });
 
+// Starts typing indicator for private chats
 socket.on('privateTyping', (data) => {
     if(
         currentPrivateUser &&
@@ -245,6 +252,7 @@ socket.on('privateTyping', (data) => {
     }
 });
 
+// Ends typing indicator for private chats
 socket.on('privateStopTyping', (data) => {
     if (
         currentPrivateUser &&
@@ -276,6 +284,8 @@ socket.on('message', function(data) {
     displayMessage(data);
 });
 
+
+// Handles private message reception
 socket.on('privateMessage', (data) => {
     const chatId = data.self ? data.toSocket : data.fromSocket;
 
@@ -290,14 +300,15 @@ socket.on('privateMessage', (data) => {
 
     privateChats[chatId].push({
         from: data.from,
-        message: data.message
+        message: data.message,
+        timestamp: new Date().toLocaleTimeString()
     });
 
     if (
         currentPrivateUser && 
         currentPrivateUser.socketId === chatId
     ) {
-        renderPrivateChat(chatId);
+        displayPrivateMessage(chatId);
     }
     
     privateTypingIndicator.textContent = "";
@@ -339,6 +350,37 @@ function displayMessage(data) {
 
     // AC-02.03 - Auto-scroll to latest message.
     messageList.scrollTop = messageList.scrollHeight;
+}
+
+// Displays private messages
+function displayPrivateMessage(socketId){
+    const messagesDiv = document.getElementById("private-messages");
+    messagesDiv.innerHTML= "";
+
+    // Gets past conversation with current user or creates a new conversation
+    const conversation = privateChats[socketId] || [];
+
+    // Displays each past message
+    conversation.forEach(msg=>{
+
+        // Creates div for each message
+        const privMessageDiv=document.createElement("div");
+        privMessageDiv.className = 'priv-message'
+
+        // Displays the timestamp
+        const timestampSpan = document.createElement("span");
+        timestampSpan.style.color = "#2431e5";
+        timestampSpan.textContent = `[${msg.timestamp}] `;
+        privMessageDiv.appendChild(timestampSpan);
+
+        // Displays the message content
+        const messageSpan = document.createElement('span');
+        messageSpan.textContent = `${msg.from}: ${msg.message}`;
+        privMessageDiv.appendChild(messageSpan);
+
+        messagesDiv.appendChild(privMessageDiv);
+    })
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
 //AC-02.02:  Display system status events
@@ -620,34 +662,22 @@ socket.on('userList', function(users) {
 
     userListElement.appendChild(li);
 
+    // Opens the private chat UI when clicking a user on the userlist
     li.addEventListener("click", () => {
         openPrivateChat(user);
     });
 });
 });
 
+// Opens the private chat UI on the webpage
 function openPrivateChat(user){
     currentPrivateUser = user;
 
-    renderPrivateChat(user.socketId);
+    displayPrivateMessage(user.socketId);
 
     document.getElementById("private-chat").style.display = "block";
     document.getElementById("private-header").textContent = 
         "Chat with " + user.username;
-}
-
-function renderPrivateChat(socketId){
-    const messagesDiv = document.getElementById("private-messages");
-    messagesDiv.innerHTML="";
-
-    const conversation = privateChats[socketId] || [];
-    conversation.forEach(msg=>{
-        const div=document.createElement("div");
-
-        div.textContent = msg.from + ": " + msg.message;
-        messagesDiv.appendChild(div);
-    })
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
 function ShowUsers(){
