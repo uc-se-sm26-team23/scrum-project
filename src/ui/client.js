@@ -166,22 +166,25 @@ function sendMessage() {
     chatMessageInput.focus();
 }
 
+// Handles sending private messages to a user
 function sendPrivateMessage() {
 
     var input = privChatMessageInput.value.trim();
     if (!input || !currentPrivateUser) return;
 
+    // Sends the message only to the current connected user you clicked on
     socket.emit("privateMessage", {
         to: currentPrivateUser.socketId,
         message: input
     });
 
+    // Ends the typing indicator upon message send
     privateTyping = false;
     socket.emit('privateStopTyping', {
         to: currentPrivateUser.socketId
     });
 
-    privChatMessageInput.value = "";
+    privChatMessageInput.value = ""; // Sets the input value to empty
     privChatMessageInput.focus();
 }
 
@@ -205,8 +208,11 @@ function typingIndication() {
     }, 1000); // AC-01.8: Typing indicator will disappear after 1 second of no typing
 }
 
+
 let privateTyping = false;
 let privateTypingTimeout;
+
+// Handles private typing indicators
 function privateTypingIndication() {
 
     if (!currentPrivateUser) return;
@@ -243,6 +249,7 @@ socket.on('stopTyping', (client) => {
     updateTypingIndicator();
 });
 
+// Starts typing indicator for private chats
 socket.on('privateTyping', (data) => {
     if(
         currentPrivateUser &&
@@ -252,6 +259,7 @@ socket.on('privateTyping', (data) => {
     }
 });
 
+// Ends typing indicator for private chats
 socket.on('privateStopTyping', (data) => {
     if (
         currentPrivateUser &&
@@ -301,6 +309,8 @@ socket.on('message', function(data) { // data (string): {Alice: hello...}
     displayMessage(data);
 });
 
+
+// Handles private message reception
 socket.on('privateMessage', (data) => {
     const chatId = data.self ? data.toSocket : data.fromSocket;
 
@@ -319,14 +329,15 @@ socket.on('privateMessage', (data) => {
 
     privateChats[chatId].push({
         from: data.from,
-        message: data.message
+        message: data.message,
+        timestamp: new Date().toLocaleTimeString()
     });
 
     if (
         currentPrivateUser && 
         currentPrivateUser.socketId === chatId
     ) {
-        renderPrivateChat(chatId);
+        displayPrivateMessage(chatId);
     }
     
     privateTypingIndicator.textContent = "";
@@ -335,27 +346,22 @@ socket.on('privateMessage', (data) => {
 
 
 function displayMessage(data) {
-    
-    // AC-02.04 - Timestamps display in brower's local system clock
+    var msgText = data.message;
+    var messageId = data.id;
+
     // create message div
     const msg = document.createElement("div");
-    var timestamp = new Date().toLocaleTimeString();
     // msg.innerHTML = '<span style="color: #2431e5">[' + timestamp + ']</span> ' 
     //                 + DOMPurify.sanitize(data);
     msg.className = "message";
     msg.id = "message-" + messageId;
 
-    const timestampSpan = document.createElement("span");
-    timestampSpan.style.color = "#2431e5";
-    timestampSpan.textContent = `[${timestamp}] `;
-    msg.appendChild(timestampSpan);
-
     // element that contains the text of the message
-    const msgText = createMessageTextElement(messageId, data, false);
-    msg.appendChild(msgText);
+    const msgTextElm = createMessageTextElement(messageId, msgText, false);
+    msg.appendChild(msgTextElm);
 
     // get username of data
-    var messageSender = data.split(":")[0];
+    var messageSender = msgText.split(":")[0];
     var username = document.getElementById("username").value
     if (messageSender === username) { // only display options if they're your messages
         // div that contains three dots and edit/delete buttonsconst 
@@ -363,11 +369,41 @@ function displayMessage(data) {
         msg.appendChild(msgOptDiv);
     }
 
-    messageId++;
     messageList.appendChild(msg);
 
     // AC-02.03 - Auto-scroll to latest message.
     messageList.scrollTop = messageList.scrollHeight;
+}
+
+// Displays private messages
+function displayPrivateMessage(socketId){
+    const messagesDiv = document.getElementById("private-messages");
+    messagesDiv.innerHTML= "";
+
+    // Gets past conversation with current user or creates a new conversation
+    const conversation = privateChats[socketId] || [];
+
+    // Displays each past message
+    conversation.forEach(msg=>{
+
+        // Creates div for each message
+        const privMessageDiv=document.createElement("div");
+        privMessageDiv.className = 'priv-message'
+
+        // Displays the timestamp
+        const timestampSpan = document.createElement("span");
+        timestampSpan.style.color = "#2431e5";
+        timestampSpan.textContent = `[${msg.timestamp}] `;
+        privMessageDiv.appendChild(timestampSpan);
+
+        // Displays the message content
+        const messageSpan = document.createElement('span');
+        messageSpan.textContent = `${msg.from}: ${msg.message}`;
+        privMessageDiv.appendChild(messageSpan);
+
+        messagesDiv.appendChild(privMessageDiv);
+    })
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
 //AC-02.02:  Display system status events
@@ -381,7 +417,14 @@ socket.on('status', function(data) {
     statusElm.scrollTop = statusElm.scrollHeight;
 })
 
-// UC-03 modify message, edit message
+
+
+
+// =====================================
+// UC-03 Modify Message (Edit Message)
+// =====================================
+
+// changes DOM to allow you to edit the message
 function editMessage(e) {
     // get the id from edit button id ("message-options-edit-#")
     var id = e.target.id.split("-"); // id is just a placeholder here
@@ -397,20 +440,17 @@ function editMessage(e) {
     editMsgDiv.style.display = "inline";
 
     // get username
-    var username = localStorage.getItem("username");
+    var username = document.getElementById("username").value;
 
     // create the label
     const editLbl = document.createElement("label");
     editLbl.htmlFor = "edit-input-" + id;
     editLbl.textContent = username + ":";
+    editMsgDiv.appendChild(editLbl);
 
     // get placeholder text
     // (take the text content and remove the "username: ")
     var editPlaceholder = msgText.textContent.split(": ");
-
-    if (username !== editPlaceholder[0]) {
-        return;
-    }
 
     editPlaceholder = editPlaceholder.splice(1); // remove username
     editPlaceholder = editPlaceholder.join(": "); // just in case there are any ": " in the message itself
@@ -465,53 +505,121 @@ function submitEditMessage(e) {
     }
 
     // send to server
-    socket.emit("edit", {id, text});
+    socket.emit("edit", {id: id, message: document.getElementById("username").value + ": " + text});
     return;
 }
 
 // replace DOM elements with edited message
-// data should be {id, text}
+// data should be {id: id, message: message}
+socket.on("edit", handleEditMessage);
 function handleEditMessage(data) {
-    console.log("hEM data", data);
-    var text = data.text;
+    var text = data.message;
     var id = data.id;
-     // create message text again
+    // create message text again
     const msgText = createMessageTextElement(id, text, true);
-
-    // replace edit div with message text
-    const msgDiv = document.getElementById("message-"+id);
-    const editDiv = document.getElementById("edit-message-"+id);
-    console.log("msgdiv", msgDiv);
-    console.log("editDiv", editDiv);
-    msgDiv.replaceChild(msgText, editDiv);
-
-    // show msgOptDiv (since it was hidden in editMessage)
-    var messageSender = text.split(":")[0];
+    // get sender
+    var sender = text.split(":")[0];
     var username = document.getElementById("username").value;
-    if (messageSender === username) {
+    const msgDiv = document.getElementById("message-"+id);
+
+    if (sender === username) {
+        // replace edit div with message text if it's your own
+        const editDiv = document.getElementById("edit-message-"+id);
+        msgDiv.replaceChild(msgText, editDiv);
+
+        // show msgOptDiv (since it was hidden in editMessage) if it's your own
         const msgOptDiv = document.getElementById("message-options-"+id);
         msgOptDiv.style.display = "inline";
+
+        // hide the menu though
+        const msgOptMenu = document.getElementById("message-options-menu-"+id);
+        msgOptMenu.style.display = "none";
+    } else {
+        // replace the message normally if someone else edited theirs
+        const oldMsgTextElm = document.getElementById("message-text-"+id);
+        msgDiv.replaceChild(msgText, oldMsgTextElm);
     }
 
+    return;
 }
 
-// handle edit message from server
-socket.on("edit", handleEditMessage);
+// ===================================================
+// UC-03 Modify Message (Delete Message)
+// ===================================================
+
+// gets username and id and sends to server
+function deleteMessage(e) {
+    // get id
+    var id = e.target.id.split("-");
+    id = id[id.length-1];
+
+    // get username
+    username = document.getElementById("username").value;
+
+    // emit to server
+    socket.emit("delete", {id: id, username: username});
+
+    return;
+}
+
+// removes/alters DOM element
+socket.on("delete", handleDeleteMessage);
+function handleDeleteMessage(data) {
+    var id = data.id;
+    var sender = data.username;
+    var username = document.getElementById("username").value;
+
+    // replace text content and timestamp
+    const msgText = document.getElementById("message-content-"+id);
+    const timestampElm = document.getElementById("timestamp-"+id);
+    const newTimestamp = new Date().toLocaleTimeString();
+    msgText.innerHTML = "<i> deleted by " + sender + "</i>";
+    timestampElm.textContent = "[" + newTimestamp + "]";
+
+    if (username === sender) {
+        // remove message options if you delete your own message
+        const msgOptDiv = document.getElementById("message-options-"+id);
+        msgOptDiv.remove();
+    }
+    return;
+}
 
 // create the <p>message</p> element
 function createMessageTextElement(id, textContent, edited) {
+    const msgTextDiv = document.createElement("div");
+    msgTextDiv.className = "message-text";
+    msgTextDiv.id = "message-text-" + id;
+    msgTextDiv.style.display = "inline";
+    
+    // AC-02.04 - Timestamps display in brower's local system clock
+    var timestamp = new Date().toLocaleTimeString();
+    const timestampSpan = document.createElement("span");
+    timestampSpan.style.color = "#2431e5";
+    timestampSpan.textContent = `[${timestamp}] `;
+    timestampSpan.id = "timestamp-"+id;
+    timestampSpan.className = "timestamp";
+    msgTextDiv.appendChild(timestampSpan);
+    
     // turn input into a text element
     const msgText = document.createElement("p");
+    var encodedText = encodeHTML(textContent);
     if (!edited) { // AC-02.06 - Output-Encoding strings coming from server
-        msgText.innerHTML = encodeHTML(textContent);
+        msgText.innerHTML = encodedText;
     } else {
-        msgText.innerHTML = encodeHTML(textContent) + " <i>(edited)</i>";
+        //add (edited) next to username
+        encodedText = encodedText.split(": ");
+        encodedText[0] = encodedText[0] + " <i>(edited)</i>";
+        encodedText = encodedText.join(": ");
+        msgText.innerHTML = encodedText;
     }
-    msgText.className = "message-text";
-    msgText.id = "message-text-" + id;
+    msgText.className = "message-content";
+    msgText.id = "message-content-"+id;
     msgText.style.display = "inline";
 
-    return msgText;
+    
+    msgTextDiv.appendChild(msgText);
+
+    return msgTextDiv;
 }
 
 // triple dots button + edit / delete buttons
@@ -542,6 +650,7 @@ function createMessageOptionsElement(id) {
     // menu contains edit and delete buttons
     const menuDiv = document.createElement("div");
     menuDiv.className = "message-options-menu";
+    menuDiv.id = "message-options-menu-"+id;
     menuDiv.style.display = "none";
 
     // edit button
@@ -569,23 +678,6 @@ function createMessageOptionsElement(id) {
     return msgOptDiv;
 }
 
-function deleteMessage(e) {
-    // get id
-    var id = e.target.id.split("-");
-    id = id[id.length-1];
-
-    // get username
-    username = localStorage.getItem("username");
-
-    // replace text content
-    const msgText = document.getElementById("message-text-"+id);
-    msgText.innerHTML = "<i>deleted by " + username + "</i>";
-
-    // remove message options
-    const msgOptDiv = document.getElementById("message-options-"+id);
-    msgOptDiv.remove();
-    return;
-}
 
 
 // encodeHTML function
@@ -600,7 +692,7 @@ function encodeHTML(string) {
   }
   /*
   ==============================
-  // Functio: showNotification
+  // Function: showNotification
   Parameters:
   - sender: String Type
     - Title of notification pop up: sender's username
@@ -640,47 +732,42 @@ document.getElementById('users-toggle-close').addEventListener('click', ShowUser
 
 socket.on('userList', function(users) {
     const userListElement = document.getElementById("user-list");
+    const currentUser = localStorage.getItem("username"); // get logged in username
     
     // Clear the current list
     userListElement.innerHTML = "";
 
     // Add each user to the list
     users.forEach(user => {
-        const li = document.createElement("li");
+    const li = document.createElement("li");
 
-        li.style.cursor = "pointer";
+    li.style.cursor = "pointer";
 
+    // Show "(You)" only for the current user
+    if (user.username === currentUser) {
+        li.textContent = `${user.username} (You)`;
+    } else {
         li.textContent = user.username;
-        userListElement.appendChild(li);
+    }
 
-        li.addEventListener("click", () => {
-            openPrivateChat(user);
-        });
+    userListElement.appendChild(li);
+
+    // Opens the private chat UI when clicking a user on the userlist
+    li.addEventListener("click", () => {
+        openPrivateChat(user);
     });
 });
+});
 
+// Opens the private chat UI on the webpage
 function openPrivateChat(user){
     currentPrivateUser = user;
 
-    renderPrivateChat(user.socketId);
+    displayPrivateMessage(user.socketId);
 
     document.getElementById("private-chat").style.display = "block";
     document.getElementById("private-header").textContent = 
         "Chat with " + user.username;
-}
-
-function renderPrivateChat(socketId){
-    const messagesDiv = document.getElementById("private-messages");
-    messagesDiv.innerHTML="";
-
-    const conversation = privateChats[socketId] || [];
-    conversation.forEach(msg=>{
-        const div=document.createElement("div");
-
-        div.textContent = msg.from + ": " + msg.message;
-        messagesDiv.appendChild(div);
-    })
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
 function ShowUsers(){
