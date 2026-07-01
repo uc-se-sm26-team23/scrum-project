@@ -17,6 +17,9 @@ var privateChats = {};
 
 let currentPrivateUser = null;
 
+// variable to track if connected user(s) allow notification on
+var notificationEnable = false;
+
 // UI References
 var messageList = document.getElementById("messages");
 
@@ -72,6 +75,10 @@ document.body.addEventListener("click", (e) => {
     }
 });
 
+// Notification Prompt w/ User click Yes Button
+$('#notify-yes').on('click', yesNotification);
+$('#notify-no').on('click', noNotification);
+
 // gets incremented with each new message
 var messageId = 1;
 
@@ -107,7 +114,7 @@ function joinChat() {
     socket.emit("set username", username);
 
     // AC-02.05 - Request Notification on message
-    Notification.requestPermission();
+    $("#notify-prompt").css("display", "block"); // show the prompt we made after joining
 
     document.getElementById('loginUI').style.left = '100%';
     document.getElementById('chatUI').style.display = '';
@@ -271,18 +278,40 @@ function updateTypingIndicator() {
 
 // AC-02.01 & AC-02.05
 // get message from server
-socket.on('message', function(data) {
-    showNotification('New Message', data);
+socket.on('message', function(data) { // data (string): {Alice: hello...}
+    
+    // get senderName
+    var senderName = data.split(':')[0];
+
+    // get current user's username from browser storage
+    var currUsername = localStorage.getItem('username')
+
+    /*if senderName equal currentUsername then 
+    dont show notification to the current user 
+    
+    else show notification because senderName isnt the current Username */
+
+    if (senderName !== currUsername) {
+
+        showNotification(senderName + ' says:', data);
+
+    }
+
+    // Else Always display message
     displayMessage(data);
 });
 
 socket.on('privateMessage', (data) => {
     const chatId = data.self ? data.toSocket : data.fromSocket;
 
-    showNotification(
-        'Private Message',
-        `${data.from}: ${data.message}`
-    );
+    // if data.self is true == our own mesaage else from someone else so notify
+    if (!data.self) {
+        showNotification(
+            'Private Message from',
+            `${data.from}: ${data.message}`
+        );
+    }
+    
 
     if (!privateChats[chatId]) {
         privateChats[chatId] = [];
@@ -574,19 +603,30 @@ function encodeHTML(string) {
   // Functio: showNotification
   Parameters:
   - sender: String Type
-    - Title of notification pop up; hardcoded as 'New Message' at line 60
+    - Title of notification pop up: sender's username
   - message_body: String Type
-    - The message data to notify from server.
+    - The message content to show in notification body
   ==============================
   */
 function showNotification(sender, message_body) {
 
-    // check if permission is allow AND user has tab in background (user not looking at the app)
-    if (Notification.permission =='granted' && document.hidden) {
-
-        // if true, notifications can fire
-        new Notification(sender, {body: message_body});
+    // do ntg if user say no
+    if (!notificationEnable) {
+        return;
     }
+
+    // check if browser permission is granted
+    if (Notification.permission !== "granted") {
+        return;
+    }
+
+    // if user is looking at the app, dont need to show notification
+    if (!document.hidden) {
+        return;
+    }
+
+    // if all conditions passed - can fire notification
+    new Notification(sender , {body: message_body});
 }
 
 
@@ -655,4 +695,39 @@ function ShowUsers(){
     // }
     panel.classList.toggle('open');
 
+}
+
+function yesNotification() {
+    // prompt user for permission
+    Notification.requestPermission().then(function(permission) {
+
+        // hide yellow warning
+        $("#notify-prompt").hide();
+
+        // if allow notification
+        if (permission == "granted") {
+            notificationEnable = true;
+
+            // show the blue confirmation
+            $("#notify-confirmed").show();
+
+            // hide confirmation pop up after 3 second
+            setTimeout(function() {
+                $("#notify-confirmed").hide();
+            }, 3000);
+            
+            
+        } else {
+            // permission deny or non-response which default by deny
+            notificationEnable = false;
+            $("#notify-prompt").hide();
+            $("#notify-confirmed").hide();
+        }
+    });
+}
+
+function noNotification() {
+
+    notificationEnable =  false;
+    $("#notify-prompt").hide();
 }

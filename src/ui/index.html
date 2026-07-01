@@ -51,6 +51,22 @@
             </div>
         </aside>
 
+        <!--Notification Permission Message - shown after join w/ Bootstrap class
+        @ reference: https://www.w3schools.com/w3css/w3css_alerts.asp-->
+        <div id="notify-prompt" class="alert alert-warning" role="alert" style="display:none">
+            <h5> Enable Notifications?</h5>
+            <p>Would you like to enable notifications on new messages?</p>
+            <button id="notify-yes" class="btn btn-sm btn-success">Yes, Enable!</button>
+            <button id="notify-no" class="btn btn-sm btn-secondary">Nope!</button>
+
+        </div>
+
+        <div id="notify-confirmed" class="alert alert-info" role="alert" style="display:none">
+            <h5>Notifications Enabled!</h5>
+            <p>You will be notified w/ incoming new messages!</p>
+        </div>
+
+
         <button id="users-toggle-main">☰ Users</button>
 
         <br><b>System status: </b><br>
