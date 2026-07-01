@@ -31,6 +31,9 @@ server.listen(PORT, () => console.log('Server running on port ' + PORT));
 // In-memory store: socketId → username
 const userlist = new Map();
 
+// variable to hold the message id
+var messageId = 0;
+
 io.on('connection', (socket) => {
 
   // AC-02.02 - Auto-assign a unique username from the socket ID
@@ -72,8 +75,9 @@ io.on('connection', (socket) => {
     if (!data || data.trim() === '') return;
     // AC-01.2 + AC-01.5: Broadcast to all clients with sender username
     const sender = userlist.get(socket.id);
-    console.log(`Debug> "${sender}" sent: ${data}`);
-    io.emit('message', sender + ': ' + data.trim());
+    messageId += 1;
+    console.log(`Debug> "${sender}" sent: ${data}, id: ${messageId}`);
+    io.emit('message', {message: sender + ': ' + data.trim(), id: messageId});
   });
 
   // Handles private messages
@@ -137,9 +141,17 @@ io.on('connection', (socket) => {
   });
 
   // edit message
+  // data is {id: id, message: message}
   socket.on("edit", (data) => {
-    console.log("server.js data", data);
+    console.log(`Debug> "${userlist.get(socket.id)}" edited to: ${data.message}, id: ${data.id}`);
     io.emit("edit", data);
+  });
+
+  // delete message
+  // data is {id: id, username: username}
+  socket.on("delete", (data) => {
+    console.log(`Debug> "${data.username}" deleted, id: ${data.id}`);
+    io.emit("delete", data);
   });
 
   // ---------------------------------------------------------------------------
