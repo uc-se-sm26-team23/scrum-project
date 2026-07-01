@@ -55,17 +55,46 @@
 
         <br><b>System status: </b><br>
         <div id="status" style="width:625px; height:75px; overflow-y:scroll;"></div>
-        <b>Chat Responses:</b><br>
-        <div class="chat-container">
-            <div class="messages" id="messages"></div>
 
-            <div id="typingIndicator"></div>
+        <div class="chat-layout">
 
-            <div class="input-area">
-                <input type="text" id="chat-message" placeholder="Type Message Here...">
-                <button id="send-button">Send</button>
+            <div class="public-chat">
+
+                <h4 id="public-header">Public Chat Responses:</h4>
+
+                <div class="chat-container">
+                    <div class="messages" id="messages"></div>
+
+                    <div id="typingIndicator"></div>
+
+                    <div class="input-area">
+                        <input type="text" id="chat-message" placeholder="Type Message Here...">
+                        <button id="send-button">Send</button>
+                    </div>
+
+                </div>
+
             </div>
+
+            <div id="private-chat">
+
+                <h4 id="private-header">
+                    Select a User from the User List to Start Chatting
+                </h4>
+
+                <div id="private-messages"></div>
+
+                <div id="private-typingIndicator"></div>
+
+                <div class="input-area">
+                    <input type="text" id="private-message" placeholder="Type Private Message Here...">
+                    <button id="private-send-button">Send</button>
+                </div>
+
+            </div>
+
         </div>
+
     </div>
 
     <!-- jQuery - CDN link -->

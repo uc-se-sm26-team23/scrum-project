@@ -13,11 +13,16 @@ socket.on("connect", () => { //connected to the server
     ${socket.io.opts.hostname}, port: ${socket.io.opts.port}`);
 });
 
+var privateChats = {};
+
+let currentPrivateUser = null;
 
 // UI References
 var messageList = document.getElementById("messages");
 
 var typingIndicator = document.getElementById("typingIndicator");
+
+var privateTypingIndicator = document.getElementById("private-typingIndicator");
 
 var sendBtnElm = document.getElementById('send-button');
 if(!sendBtnElm) {
@@ -25,6 +30,13 @@ if(!sendBtnElm) {
 }
 // AC-01.1: Send button click triggers sendMessage()
 sendBtnElm.addEventListener('click', sendMessage);
+
+var privSendBtnElm = document.getElementById('private-send-button');
+if(!privSendBtnElm) {
+    console.log("Error in getting 'private-send-button' button");
+}
+
+privSendBtnElm.addEventListener('click', sendPrivateMessage);
 
 var chatMessageInput = document.getElementById('chat-message');
 if(!chatMessageInput) {
@@ -34,6 +46,18 @@ if(!chatMessageInput) {
 chatMessageInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') sendMessage();
 });
+
+var privChatMessageInput = document.getElementById('private-message');
+if(!privChatMessageInput) {
+    console.log("Error in getting 'private-message' input");
+}
+
+privChatMessageInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') sendPrivateMessage();
+});
+
+privChatMessageInput.addEventListener('input', privateTypingIndication);
+
 
 // Listens for user input
 chatMessageInput.addEventListener('input', typingIndication);
@@ -135,6 +159,25 @@ function sendMessage() {
     chatMessageInput.focus();
 }
 
+function sendPrivateMessage() {
+
+    var input = privChatMessageInput.value.trim();
+    if (!input || !currentPrivateUser) return;
+
+    socket.emit("privateMessage", {
+        to: currentPrivateUser.socketId,
+        message: input
+    });
+
+    privateTyping = false;
+    socket.emit('privateStopTyping', {
+        to: currentPrivateUser.socketId
+    });
+
+    privChatMessageInput.value = "";
+    privChatMessageInput.focus();
+}
+
 
 const typingUsers = new Set();
 let typing = false;
@@ -155,6 +198,30 @@ function typingIndication() {
     }, 1000); // AC-01.8: Typing indicator will disappear after 1 second of no typing
 }
 
+let privateTyping = false;
+let privateTypingTimeout;
+function privateTypingIndication() {
+
+    if (!currentPrivateUser) return;
+
+    if (!privateTyping) {
+        privateTyping = true;
+        socket.emit('privateTyping', {
+            to: currentPrivateUser.socketId
+        });  // Emit typing status to currently selected private user
+    }
+
+    clearTimeout(privateTypingTimeout);
+
+    privateTypingTimeout = setTimeout(() => {
+        privateTyping = false;
+        socket.emit('privateStopTyping', {
+            to: currentPrivateUser.socketId
+        });
+
+    }, 1000); // Private typing indicator will disappear after 1 second of no typing
+}
+
 const client = localStorage.getItem('username');
 
 // Someone began typing
@@ -167,6 +234,24 @@ socket.on('typing', (client) => {
 socket.on('stopTyping', (client) => {
     typingUsers.delete(client);
     updateTypingIndicator();
+});
+
+socket.on('privateTyping', (data) => {
+    if(
+        currentPrivateUser &&
+        currentPrivateUser.socketId === data.fromSocket
+    ) {
+        privateTypingIndicator.textContent = data.from + " is typing...";
+    }
+});
+
+socket.on('privateStopTyping', (data) => {
+    if (
+        currentPrivateUser &&
+        currentPrivateUser.socketId === data.fromSocket
+    ) {
+        privateTypingIndicator.textContent = "";
+    }
 });
 
 function updateTypingIndicator() {
@@ -189,6 +274,34 @@ function updateTypingIndicator() {
 socket.on('message', function(data) {
     showNotification('New Message', data);
     displayMessage(data);
+});
+
+socket.on('privateMessage', (data) => {
+    const chatId = data.self ? data.toSocket : data.fromSocket;
+
+    showNotification(
+        'Private Message',
+        `${data.from}: ${data.message}`
+    );
+
+    if (!privateChats[chatId]) {
+        privateChats[chatId] = [];
+    }
+
+    privateChats[chatId].push({
+        from: data.from,
+        message: data.message
+    });
+
+    if (
+        currentPrivateUser && 
+        currentPrivateUser.socketId === chatId
+    ) {
+        renderPrivateChat(chatId);
+    }
+    
+    privateTypingIndicator.textContent = "";
+
 });
 
 
@@ -494,11 +607,41 @@ socket.on('userList', function(users) {
     // Add each user to the list
     users.forEach(user => {
         const li = document.createElement("li");
-        li.textContent = user;
+
+        li.style.cursor = "pointer";
+
+        li.textContent = user.username;
         userListElement.appendChild(li);
+
+        li.addEventListener("click", () => {
+            openPrivateChat(user);
+        });
     });
 });
 
+function openPrivateChat(user){
+    currentPrivateUser = user;
+
+    renderPrivateChat(user.socketId);
+
+    document.getElementById("private-chat").style.display = "block";
+    document.getElementById("private-header").textContent = 
+        "Chat with " + user.username;
+}
+
+function renderPrivateChat(socketId){
+    const messagesDiv = document.getElementById("private-messages");
+    messagesDiv.innerHTML="";
+
+    const conversation = privateChats[socketId] || [];
+    conversation.forEach(msg=>{
+        const div=document.createElement("div");
+
+        div.textContent = msg.from + ": " + msg.message;
+        messagesDiv.appendChild(div);
+    })
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
 
 function ShowUsers(){
 //    const currentLeft = window.getComputedStyle(panel).left;

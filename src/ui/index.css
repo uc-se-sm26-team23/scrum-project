@@ -161,6 +161,21 @@ body {
 /* ==================================================
    3. Chat Screen Styles
    ================================================== */
+
+.chat-layout{
+    display:flex;
+    gap:20px;
+}
+
+.public-chat{
+    flex:1;
+}
+
+#private-chat{
+    flex:1;
+    display:none;
+}
+
 .chat-container {
     width: 400px;
     border: 1px solid #000000;

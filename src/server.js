@@ -42,8 +42,19 @@ io.on('connection', (socket) => {
         "status",
         username + " joined the chat. Number of connected clients: " + userlist.size
     );
-    io.emit('userList', Array.from(userlist.values()));
-});
+    
+    const users = [];
+
+    for (const [socketId, username] of userlist) {
+      users.push({
+        socketId,
+        username
+      });
+    };
+
+    io.emit('userList', users);
+  });
+
 
   // ---------------------------------------------------------------------------
   // Use-Case-01: Send message
@@ -65,6 +76,24 @@ io.on('connection', (socket) => {
     io.emit('message', sender + ': ' + data.trim());
   });
 
+  socket.on('privateMessage', (data) => {
+    const sender = userlist.get(socket.id);
+
+    io.to(data.to).emit('privateMessage', {
+      from: sender,
+      fromSocket: socket.id,
+      message: data.message
+    });
+
+    // Sends a copy back to the sender
+    socket.emit("privateMessage", {
+      from: sender,
+      toSocket: data.to,
+      message: data.message,
+      self: true
+    });
+  });
+
   // AC-01.7: Typing indicator event is sent to connected users 
   socket.on('typing', () => {
     const username = userlist.get(socket.id);
@@ -83,6 +112,25 @@ io.on('connection', (socket) => {
     }
   })
 
+  socket.on('privateTyping', (data) => {
+
+    const sender = userlist.get(socket.id);
+
+    io.to(data.to).emit('privateTyping', {
+      from: sender,
+      fromSocket: socket.id
+    });
+
+  });
+
+  socket.on('privateStopTyping', (data) => {
+
+    io.to(data.to).emit('privateStopTyping', {
+      fromSocket: socket.id
+    });
+    
+  });
+
   // edit message
   socket.on("edit", (data) => {
     console.log("server.js data", data);
@@ -99,8 +147,17 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('stopTyping', username); // If a user is disconnected while typing, their indicator is removed from all other connected users
     userlist.delete(socket.id);
     console.log('Client disconnected - socket ID: ' + socket.id);
-    //todo: code to broadcast the status
+    // AC-02.2: Code to broadcast the status
     io.emit('status', username + ' left the chat. Number of connected clients: ' + userlist.size);
-    io.emit('userList', Array.from(userlist.values()));
+
+    const users = [];
+    for (const [socketId, username] of userlist) {
+      users.push({
+        socketId,
+        username
+      });
+    }
+
+    io.emit('userList', users);
   });
 });
