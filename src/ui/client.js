@@ -255,7 +255,8 @@ socket.on('privateTyping', (data) => {
         currentPrivateUser &&
         currentPrivateUser.socketId === data.fromSocket
     ) {
-        privateTypingIndicator.textContent = data.from + " is typing...";
+        $('#private-typing-label').text(data.from + " is typing...");
+        $('#private-typingIndicator').show();
     }
 });
 
@@ -265,21 +266,32 @@ socket.on('privateStopTyping', (data) => {
         currentPrivateUser &&
         currentPrivateUser.socketId === data.fromSocket
     ) {
-        privateTypingIndicator.textContent = "";
+        $('#private-typingIndicator').hide();
+        $('#private-typingIndicator').empty();
     }
 });
 
+/*
+if nobody typing: clear indictaor
+if one person is typing: Show user typing...
+if multiple people typing: [size] people are typing...
+*/
 function updateTypingIndicator() {
-    if (typingUsers.size === 0) {
-        typingIndicator.textContent = "";
-    } else if (typingUsers.size === 1) {
-        typingIndicator.textContent =
-        `${[...typingUsers][0]} is typing...`; // AC-01.7: Displays user who is currently typing
-    }
 
-    else {
-        typingIndicator.textContent = 
-        `${typingUsers.size} people are currently typing...`; // AC-01.7: Displays number of users typing if multiple are currently
+    if (typingUsers.size === 0) {
+        
+        $('#typingIndicator').hide();
+        $('#typing-label').empty();
+
+    } else if (typingUsers.size === 1) {
+
+        $('#typing-label').text(`${[...typingUsers][0]} is typing...`); // AC-01.7: Displays user who is currently typing
+
+        $('#typingIndicator').show();
+    
+    } else {
+        $('#typing-label').text(`${typingUsers.size} people are currently typing...`); // AC-01.7: Displays number of users typing if multiple are currently
+        $('#typingIndicator').show();
     }
 }
 
