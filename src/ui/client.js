@@ -286,13 +286,13 @@ function updateTypingIndicator() {
 
 // AC-02.01 & AC-02.05
 // get message from server
-socket.on('message', function(data) { // data (string): {Alice: hello...}
+socket.on('message', function(data) { // data (object) - { message: "Alice: hello", id: 1 }
     
     // get senderName
     var senderName = data.message.split(':')[0];
 
     // get current user's username from browser storage
-    var currUsername = localStorage.getItem('username')
+    var currUsername = document.getElementById("username").value;
 
     /*if senderName equal currentUsername then 
     dont show notification to the current user 
@@ -301,7 +301,7 @@ socket.on('message', function(data) { // data (string): {Alice: hello...}
 
     if (senderName !== currUsername) {
 
-        showNotification(senderName + ' says:', data);
+        showNotification(senderName + ' says:', data.message);
 
     }
 
@@ -344,8 +344,8 @@ socket.on('privateMessage', (data) => {
 
 });
 
-// data
-function displayMessage(data) { // server sends data as string
+// data: {}
+function displayMessage(data) {
     var msgText = data.message;
     var messageId = data.id;
 
@@ -362,6 +362,7 @@ function displayMessage(data) { // server sends data as string
 
     // get username of data
     var messageSender = msgText.split(":")[0];
+
     var username = document.getElementById("username").value
     if (messageSender === username) { // only display options if they're your messages
         // div that contains three dots and edit/delete buttonsconst 
@@ -732,7 +733,7 @@ document.getElementById('users-toggle-close').addEventListener('click', ShowUser
 
 socket.on('userList', function(users) {
     const userListElement = document.getElementById("user-list");
-    const currentUser = localStorage.getItem("username"); // get logged in username
+    const currentUser = document.getElementById("username").value; // get logged in username
     
     // Clear the current list
     userListElement.innerHTML = "";
@@ -744,7 +745,7 @@ socket.on('userList', function(users) {
     li.style.cursor = "pointer";
 
     // Show "(You)" only for the current user
-    if (user.username === currentUser) {
+    if (user.socket.id === socket.id) {
         li.textContent = `${user.username} (You)`;
     } else {
         li.textContent = user.username;
