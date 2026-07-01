@@ -600,23 +600,30 @@ document.getElementById('users-toggle-close').addEventListener('click', ShowUser
 
 socket.on('userList', function(users) {
     const userListElement = document.getElementById("user-list");
+    const currentUser = localStorage.getItem("username"); // get logged in username
     
     // Clear the current list
     userListElement.innerHTML = "";
 
     // Add each user to the list
     users.forEach(user => {
-        const li = document.createElement("li");
+    const li = document.createElement("li");
 
-        li.style.cursor = "pointer";
+    li.style.cursor = "pointer";
 
+    // Show "(You)" only for the current user
+    if (user.username === currentUser) {
+        li.textContent = `${user.username} (You)`;
+    } else {
         li.textContent = user.username;
-        userListElement.appendChild(li);
+    }
 
-        li.addEventListener("click", () => {
-            openPrivateChat(user);
-        });
+    userListElement.appendChild(li);
+
+    li.addEventListener("click", () => {
+        openPrivateChat(user);
     });
+});
 });
 
 function openPrivateChat(user){
