@@ -745,7 +745,7 @@ socket.on('userList', function(users) {
     li.style.cursor = "pointer";
 
     // Show "(You)" only for the current user
-    if (user.socket.id === socket.id) {
+    if (user.socketId === socket.id) {
         li.textContent = `${user.username} (You)`;
     } else {
         li.textContent = user.username;
