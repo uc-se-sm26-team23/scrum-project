@@ -475,19 +475,17 @@ Keep it under an hour. The output is bullet points in the table above and any ne
 Complete the functional requirements and use-case acceptance criteria to implement a working prototype of the web-based messenger application.
 
 #### Completed PBIs / Tasks
-1. TODO
-2. TODO
-3. TODO
+1. UC-03 Modify Message
 
 #### Contributions
 
 | Member | Hours | Contribution Summary |
 |--------|-------|----------------------|
-| Member 1 | X | TODO |
-| Member 2 | X | TODO |
-| Member 3 | X | TODO |
-| Member 4 | X | TODO |
-| Member 5 | X | TODO |
+| Marcus Nguyen | X | TODO |
+| Luke Falanga | X | TODO |
+| Connor Slutsky | X | I completed all the development for UC-03 Modify Message, added paragraphs for scrum applications, tools used, and post a picture of the GitHub roadmap. Added images of the Project Board for Sprint 1, a quick blurb of how testing in Sprint 1 worked, and an update for our Implementation in our README as well.  |
+| Akul Jha | X | TODO |
+| Ong Jai Sheng | X | TODO |
 
 #### Sprint Retrospective
 
