@@ -326,6 +326,8 @@ Describe how to deploy and the URL of the live application. Include a note on en
 
 _Start in Sprint 1; **major** focus in Sprint 3._
 
+In Sprint 1 we would test our changes as we were making them, then test the core functionality of the rest of the app before pushing changes.  
+
 ## Test Plan
 
 Summarize your testing strategy across unit, integration, and system testing. _(Sprint 2 onward.)_
