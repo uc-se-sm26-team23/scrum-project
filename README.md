@@ -481,10 +481,12 @@ Complete the functional requirements and use-case acceptance criteria to impleme
   - All tasks were completed as designated on the PBI board
   - All members contributed as expected
   - Bugs were noticed and fixed before any other major implementation
+
 **What could have been better**
   - There were a few times that merge conflicts that arose when pushing changes were not resolved correctly and then not tested, which broke some aspect of the code
   - Code is somewhat messy as each member worked on different implementations, so some values (such as username) are assigned to different local variables instead of every function using the same global variable
   - UI visuals were not discussed very well since we prioritized understanding functionality, so there were moments where team members were unclear of what to expect from different visual implementation. This led to members having the desire to modify UI that was already implemented to be more up to what they had in mind, when the original member working on the UI could have easily implemented an agreed upon visual expectation while they were working on it.
+
 **How we will improve next sprint**
   - Test changes on the web preview after every single change before pushing to make sure no code breaks any functionality already implemented
   - When working on code, we will analyze other functions and existing variables to see if we could use them in the implementation we are currently working on (this will help clean up the code and condense everything to be far more readable)
