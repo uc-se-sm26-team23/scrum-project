@@ -314,9 +314,32 @@ Describe the GitHub Actions workflow(s) under `.github/workflows/`. _(Sprint 1 o
 - **Build & test:** triggered on every push and pull request.
 - **Deploy:** triggered on merge to `main`; deploys to Azure App Services.
 
+### Sprint 1
+
+Describe: `.github/workflows/` includes a set of isntructions that tells what to do when an event triggers. Once triggered, Github Actions look inside `.github/workflows/` folder to find out what to do when a specific event triggers. 
+
+- **Build & test:** triggered on every push and pull request.
+  * Whenever a team memebr pushes code to 'sprint1' branch or any branches, to merge their code/work. Github's server recognize the action happend, then look into `.github/workflows/` folder to see if any left instructions for what to do to react to the action. After Github finds the  `.yml` file, opens it and starts reading it line by line from top to bottom. After finding the specific section to handle the action, it type  `npm` commands like  `npm install` and npm `npm run test` .
+  * If this phase fails, Github Actions will report back with the any problem exist in the push code.
+
+- **Deploy:** triggered on merge to `main`; deploys to Azure App Services.
+  * In the `.yml` file, defined by `deploy` as a separate job that has its own set of roles, when **Deply** action is triggered.
+  * A specific instruction is configed into  `.github/workflows/` to trigger when code is pushed or merged specifically into `main` branch, so this job configured to use Publish Profile that is set up in Azure Deployment Center which allows the Github Action log into Azure securely without needing to type a password every time. So when the trigger is met, the worrkflow perform:
+      * It downloads `"node-app"` artifact that the `build` job created. during "Build & testing" phase.
+      * It then executes command to upload code directly to the Azure APp Service.
+  *  This result in our live website is instantly updated with new and merged code.
+
 ## Deployment
 
 Describe how to deploy and the URL of the live application. Include a note on environment variables (set in Azure App Services Configuration, never in source). _(Sprint 1 onward.)_
+
+### Process
+The application itlitizes an automated CD pipeline managed by Gihub Axtions, The deploymnet workflow is triggered whenever new code is merged or pushed to branches. During this process, the Github Actions runner completes by authenticating securely with Azure using the set Publish Profile secret, download the pre-built and tested code artifact generated during CI phase, then deploys the packaged application directly to Azure App Services.
+
+### Live Application URL:
+https://team23-uc-se-messenger.azurewebsites.net/
+
+> Note: Environment variables are set securely within the **Azure App Services Configuration** panel. To maintain a secure software development practies, since storing sensitive environment variables into source code repository is illegal and should be publicly executed.
 
 ---
 
