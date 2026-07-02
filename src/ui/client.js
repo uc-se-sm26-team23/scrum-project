@@ -154,41 +154,6 @@ function authenticateUser() {
 // Use-Case-01: Send Message and Use-Case-03: Edit Message
 // ========================================================
 
-function sendMessage() {
-    var input = chatMessageInput.value.trim();
-    if (!input) return;   // AC-01.2: Empty messages are ignored
-
-    // get username moved to join chat
-
-    socket.emit('message', input);
-
-    chatMessageInput.value = ''; // AC-01.3: clear input after sending
-    chatMessageInput.focus();
-}
-
-// Handles sending private messages to a user
-function sendPrivateMessage() {
-
-    var input = privChatMessageInput.value.trim();
-    if (!input || !currentPrivateUser) return;
-
-    // Sends the message only to the current connected user you clicked on
-    socket.emit("privateMessage", {
-        to: currentPrivateUser.socketId,
-        message: input
-    });
-
-    // Ends the typing indicator upon message send
-    privateTyping = false;
-    socket.emit('privateStopTyping', {
-        to: currentPrivateUser.socketId
-    });
-
-    privChatMessageInput.value = ""; // Sets the input value to empty
-    privChatMessageInput.focus();
-}
-
-
 const typingUsers = new Set();
 let typing = false;
 let timeout;
@@ -296,6 +261,19 @@ function updateTypingIndicator() {
 }
 
 
+
+function sendMessage() {
+    var input = chatMessageInput.value.trim();
+    if (!input) return;   // AC-01.2: Empty messages are ignored
+
+    // get username moved to join chat
+
+    socket.emit('message', input);
+
+    chatMessageInput.value = ''; // AC-01.3: clear input after sending
+    chatMessageInput.focus();
+}
+
 // AC-02.01 & AC-02.05
 // get message from server
 socket.on('message', function(data) { // data (object) - { message: "Alice: hello", id: 1 }
@@ -322,11 +300,77 @@ socket.on('message', function(data) { // data (object) - { message: "Alice: hell
 });
 
 
+// data
+function displayMessage(data) { // server sends data as string
+    var msgText = data.message;
+    var messageId = data.id;
+
+    // create message div
+    const msg = document.createElement("div");
+    // msg.innerHTML = '<span style="color: #2431e5">[' + timestamp + ']</span> ' 
+    //                 + DOMPurify.sanitize(data);
+    msg.className = "message";
+    msg.id = "message-" + messageId;
+
+    // element that contains the text of the message
+    const msgTextElm = createMessageTextElement(messageId, msgText, false, false);
+    msg.appendChild(msgTextElm);
+
+    // get username of data
+    var messageSender = msgText.split(":")[0];
+    var username = document.getElementById("username").value
+    if (messageSender === username) { // only display options if they're your messages
+        // div that contains three dots and edit/delete buttonsconst 
+        msgOptDiv = createMessageOptionsElement(messageId);
+        msg.appendChild(msgOptDiv);
+    }
+
+    messageList.appendChild(msg);
+
+    // AC-02.03 - Auto-scroll to latest message.
+    messageList.scrollTop = messageList.scrollHeight;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Handles sending private messages to a user
+function sendPrivateMessage() {
+
+    var input = privChatMessageInput.value.trim();
+    if (!input || !currentPrivateUser) return;
+
+    // Sends the message only to the current connected user you clicked on
+    socket.emit("privateMessage", {
+        to: currentPrivateUser.socketId,
+        message: input
+    });
+
+    // Ends the typing indicator upon message send
+    privateTyping = false;
+    socket.emit('privateStopTyping', {
+        to: currentPrivateUser.socketId
+    });
+
+    privChatMessageInput.value = ""; // Sets the input value to empty
+    privChatMessageInput.focus();
+}
+
 // Handles private message reception
 socket.on('privateMessage', (data) => {
     const chatId = data.self ? data.toSocket : data.fromSocket;
 
-    // if data.self is true == our own mesaage else from someone else so notify
+    // if data.self is true == our own message else from someone else so notify
     if (!data.self) {
         showNotification(
             'Private Message from',
@@ -397,7 +441,7 @@ function displayPrivateMessage(socketId){
     const conversation = privateChats[socketId] || [];
 
     // Displays each past message
-    conversation.forEach(msg=>{
+    conversation.forEach(msg=>{ 
 
         // Creates div for each message
         const privMessageDiv=document.createElement("div");
@@ -408,13 +452,21 @@ function displayPrivateMessage(socketId){
         timestampSpan.style.color = "#2431e5";
         timestampSpan.textContent = `[${msg.timestamp}] `;
         privMessageDiv.appendChild(timestampSpan);
-
+    
         // Displays the message content
         const messageSpan = document.createElement('span');
         messageSpan.textContent = `${msg.from}: ${msg.message}`;
         privMessageDiv.appendChild(messageSpan);
 
+        // commented out b/c they could be used to implement modify message in private chat
+        // const privMessageText = createMessageTextElement(socketId, msg, false, true); 
+        // privMessageDiv.appendChild(privMessageText);
+
+        // const privMsgOptDiv = createMessageOptionsElement(socketId);
+        // privMessageDiv.appendChild(privMsgOptDiv);
+
         messagesDiv.appendChild(privMessageDiv);
+        
     })
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
@@ -529,7 +581,7 @@ function handleEditMessage(data) {
     var text = data.message;
     var id = data.id;
     // create message text again
-    const msgText = createMessageTextElement(id, text, true);
+    const msgText = createMessageTextElement(id, text, true); // priv messages?
     // get sender
     var sender = text.split(":")[0];
     var username = document.getElementById("username").value;
@@ -598,25 +650,48 @@ function handleDeleteMessage(data) {
 }
 
 // create the <p>message</p> element
-function createMessageTextElement(id, textContent, edited) {
+// if the message is private, textContent is the msg struct that comes from the server
+//      {toSocket, sender, message, etc...}
+//      it's bad code, i'm aware
+function createMessageTextElement(id, textContent, isEdited, isPrivate) {
+
+    // `${msg.from}: ${msg.message}`
     const msgTextDiv = document.createElement("div");
-    msgTextDiv.className = "message-text";
-    msgTextDiv.id = "message-text-" + id;
+    if (isPrivate) {
+        msgTextDiv.className = "priv-message-text";
+        msgTextDiv.id = "priv-message-text-" + id;
+    } else {
+        msgTextDiv.className = "message-text";
+        msgTextDiv.id = "message-text-" + id;
+    }
     msgTextDiv.style.display = "inline";
+
     
     // AC-02.04 - Timestamps display in brower's local system clock
-    var timestamp = new Date().toLocaleTimeString();
     const timestampSpan = document.createElement("span");
     timestampSpan.style.color = "#2431e5";
-    timestampSpan.textContent = `[${timestamp}] `;
-    timestampSpan.id = "timestamp-"+id;
-    timestampSpan.className = "timestamp";
+    if (!isPrivate) {
+        var timestamp = new Date().toLocaleTimeString();
+        timestampSpan.textContent = `[${timestamp}] `;
+    } else {
+        timestampSpan.textContent = `[${textContent.timestamp}]`
+    }
+    if (isPrivate) {
+        timestampSpan.id = "priv-timestamp-"+id;
+        timestampSpan.className = "priv-timestamp";
+    } else {
+        timestampSpan.id = "timestamp-"+id;
+        timestampSpan.className = "timestamp";
+    }
     msgTextDiv.appendChild(timestampSpan);
     
     // turn input into a text element
     const msgText = document.createElement("p");
+    if (isPrivate) {
+        textContent = textContent.message;
+    }
     var encodedText = encodeHTML(textContent);
-    if (!edited) { // AC-02.06 - Output-Encoding strings coming from server
+    if (!isEdited) { // AC-02.06 - Output-Encoding strings coming from server
         msgText.innerHTML = encodedText;
     } else {
         //add (edited) next to username
@@ -625,10 +700,14 @@ function createMessageTextElement(id, textContent, edited) {
         encodedText = encodedText.join(": ");
         msgText.innerHTML = encodedText;
     }
-    msgText.className = "message-content";
-    msgText.id = "message-content-"+id;
+    if (isPrivate) {
+        msgText.className = "priv-message-content";
+        msgText.id = "priv-message-content-"+id;
+    } else {
+        msgText.className = "message-content";
+        msgText.id = "message-content-"+id;        
+    }
     msgText.style.display = "inline";
-
     
     msgTextDiv.appendChild(msgText);
 
