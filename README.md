@@ -275,10 +275,28 @@ _Start in Sprint 1; keep updating._
 
 Specify your development approach, languages, frameworks, and runtime. Default stack for this course:
 
+
+### Sprint 1
+
 | Layer            | Technology                                      |
 |------------------|-------------------------------------------------|
 | Runtime          | Node.js (Azure Cloud Shell for development)     |
-| Server framework | TODO _(e.g., Express)_                          |
+| Server framework | Express                         |
+| Database         | None                                  |
+| Client           | HTML / CSS / JavaScript / Bootstrap / jQuery  |
+| Version control  | git + GitHub (branches + pull requests + code review) |
+| Project mgmt     | GitHub Projects                                 |
+| Hosting          | Azure App Services                              |
+| CI/CD            | GitHub Actions                                  |
+
+
+
+### End Result:
+
+| Layer            | Technology                                      |
+|------------------|-------------------------------------------------|
+| Runtime          | Node.js (Azure Cloud Shell for development)     |
+| Server framework | Express                         |
 | Database         | MongoDB Atlas                                   |
 | Client           | HTML / CSS / JavaScript _(framework optional)_  |
 | Version control  | git + GitHub (branches + pull requests + code review) |
