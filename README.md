@@ -431,13 +431,13 @@ Working through the sprints is a continuous-improvement process. The retrospecti
 
 Keep it under an hour. The output is bullet points in the table above and any new PBIs created on the board.
 
-### Sprint 1
+## Sprint 1
 
 **Duration:** 2026-06-25 to 2026-07-09
 
 ### Requirements Engineering
 
-## Persona 1: Bob (Student User)
+#### Persona 1: Bob (Student User)
 - Role: Graduate Student | Major: Computer Science
 - Uses Slack and Discord daily for managing multiple project teams
 - Goal: organize and manage multiple project teams without switching between tools
@@ -446,13 +446,17 @@ Keep it under an hour. The output is bullet points in the table above and any ne
 - Suggested features: private messages, real-time chat responses, notifications
 
 **Scenario:**
-Bob is sick at home and is unable to come to his graduate CS lecture class. The next day, he wants to see the latest changes on upcoming tasks/exams/team projects. He opens the Messenger App, navigates to the class group chat, and sends a message to the group chat. Someone else will get a notification, open the Messenger application, see and read the message, and respond with the requested information. Bob will receive the notification and read the response message.
-
-**User Stories:**
 Bob is working on his team project and needs to ask a quick question to a team member, as he may need to interact with their code. However, he does not want this message to be broadcast to the whole class. So Bob needs to move the conversation to a private chat room to avoid leaking privacy. Bob needs to send private message to his team member to discuss the project
 
+**User Stories:**
+- As a connected user, I want to be able to easily access private 1-on-1 messages with another user.
+- As a connected user, I want to be able to send and receive messages in private chats the same way as in public chat 
+- As a connected user, I want 1-on-1 chats to be visually separated from the public chat. 
+- As a connected user, I want my private chats with another user to persist, even if I switch to private chat with another user before coming back. 
+- As a connected user, I want to be able to private chat with myself in case I want to keep notes in the messenger. 
 
-## Persona 2: Prof. Davis (Instructor)
+
+#### Persona 2: Prof. Davis (Instructor)
 - Role: Faculty | Department: Engineering
 - Uses email and Canvas daily for class communication
 - Goal: broadcast announcements to an entire class and receive student questions in one place
@@ -468,7 +472,7 @@ Instructor is chilling at home during weekend, but then he receive an email on m
 - As a user, I want my name to be attached to my message so all other users know who sent it.
 - As a user, I want to see real-time typing status so that I know someone is responding.
 
-## Persona 3: Team Leader Michael
+#### Persona 3: Team Leader Michael
  - Role: Team Leader at a professional establishment
  - Uses email daily and exclusively (we will pretend MS Teams doesn't exist)
  - Goal: Have one destination to organize announcements, agendas, plans, etc.
