@@ -67,11 +67,15 @@ _Start in Sprint 0; keep updating._
 
 List the high-level functional and non-functional requirements. These will be refined into user stories and use cases. _(Main focus of Sprint 0.)_
 
-- **FR-1:** Users can login with only their username (Password implementation to be added later)
-- **FR-2:** A logged-in user can send and receive public chat messages in real-time in the public channel
-- **FR-3:** A logged-in user can view the list of all logged-in users
-- **FR-4:** A logged-in user can send and receive private 1:1 messages to/from another logged-in user in a private channel
-- **FR-5:** A logged-in user can create and join private group channels with multiple other logged-in users.
+- **F1.1:** Login and chat UIs are visually and functionally separated
+- **F1.2:** Users can log in with a username (no password required yet)
+- **F1.3:** Only logged-in users can access the chat interface
+- **F1.4:** Logged-in users can send and receive public messages in real time
+- **F1.5:** Logged-in users can send and receive private (direct) messages to/from a specific online user
+- **F1.6:** An online user list is displayed and updated in real time
+- **F1.7:** Public chat and private chat are visually distinct (separate views or panels)
+- **F1.8:** Real-time typing status indicator for public and private chat
+- **F1.9:** Logged-in users can modify (edit and delete) previously sent messages in public chat (private chat implementation later)
 - **NFR-1 (Performance):** Minimal load time to see chat app, with high chat character limit and high group member limit
 - **NFR-2 (Usability):** Chat login and viewing of unread messages is readily available with seamless UI
 - **NFR-3 (Security — see §Security):** As a User, I want to be able to login securely and maintain secure access to my chats
@@ -371,7 +375,7 @@ Our team uses a variety of tools to manage the project and organize our code cha
 
 ### Sprint 0
 
-**Duration:** 2026-05-25 to 2026-06-15
+**Duration:** 2026-06-18 to 2026-07-15
 
 #### Sprint Goal
 Get comfortable with environment and tools, learn agile and scrum process and documentation procedures, create UC, Sequence diagrams, user stories etc to guide rest of messenger app project
@@ -429,10 +433,24 @@ Keep it under an hour. The output is bullet points in the table above and any ne
 
 ### Sprint 1
 
-**Duration:** YYYY-MM-DD to YYYY-MM-DD
+**Duration:** 2026-06-25 to 2026-07-09
+
+### Requirements Engineering
+
+## Persona (name):
+**Scenario (name):**
+**User Stories:**
+
+## Persona (name):
+**Scenario (name):**
+**User Stories:**
+
+## Persona (name):
+**Scenario (name):**
+**User Stories:**
 
 #### Sprint Goal
-TODO — one sentence.
+Complete the functional requirements and use-case acceptance criteria to implement a working prototype of the web-based messenger application.
 
 #### Completed PBIs / Tasks
 1. TODO
@@ -453,15 +471,25 @@ TODO — one sentence.
 
 | Good | Could have been better | How to improve |
 |------|------------------------|----------------|
-|      |                        |                |
-|      |                        |                |
+| Communication | Merge Conflict Resolution  | Test code after every small change |
+| Task Completion | Messy Code  | Analyze Functions/Variables for Reusability |
+| Debugging  | Visual Expectations of UI | Discuss Visual Expectations more Clearly |
 
-
-Working through the sprints is a continuous-improvement process. The retrospective happens at the end of a sprint, before planning the next one. Cover three things briefly:
-
-- **What went well** — celebrate and reinforce.
-- **What could have been better** — be specific (e.g., "we underestimated authentication" not "things were hard").
-- **How we will improve next sprint** — concrete, owned actions.
+**What went well**
+  - Communication of task work, everybody was on the same page
+  - When a task was being worked on, the team member completing the task would notify others of what they were working on, the final product of what they had worked on, and any other issues they may have noticed when working on their task
+  - All tasks were completed as designated on the PBI board
+  - All members contributed as expected
+  - Bugs were noticed and fixed before any other major implementation
+**What could have been better**
+  - There were a few times that merge conflicts that arose when pushing changes were not resolved correctly and then not tested, which broke some aspect of the code
+  - Code is somewhat messy as each member worked on different implementations, so some values (such as username) are assigned to different local variables instead of every function using the same global variable
+  - UI visuals were not discussed very well since we prioritized understanding functionality, so there were moments where team members were unclear of what to expect from different visual implementation. This led to members having the desire to modify UI that was already implemented to be more up to what they had in mind, when the original member working on the UI could have easily implemented an agreed upon visual expectation while they were working on it.
+**How we will improve next sprint**
+  - Test changes on the web preview after every single change before pushing to make sure no code breaks any functionality already implemented
+  - When working on code, we will analyze other functions and existing variables to see if we could use them in the implementation we are currently working on (this will help clean up the code and condense everything to be far more readable)
+  - When working on similar aspects of code, (i.e., the private and public chat) we will use the same functions for both, using a switch statement based on private/public chat
+  - We will discuss the visual expectations of UI before implementing them, that way everybody is clear of what to expect visually
 
 Keep it under an hour. The output is bullet points in the table above and any new PBIs created on the board.
 
