@@ -16,8 +16,6 @@ Project Requirement: https://github.com/phung-se/uc-se/blob/main/scrum-project/d
 
 # Scrum Project — Mini-Messenger
 
-> Replace **"TODO: Your Project Name"** with the title of your team's secure web application.
-
 ## Team Members
 
 _Teams are 3–5 students (per syllabus). Solo teams are not permitted._
@@ -54,11 +52,11 @@ _Teams are 3–5 students (per syllabus). Solo teams are not permitted._
 
 _Start in Sprint 0; refine across all sprints._
 
-Describe the project in 2–4 paragraphs: the problem it addresses, the target users, and a high-level summary of the proposed solution. Include a **high-level architecture diagram** 
+_Describe the project in 2–4 paragraphs: the problem it addresses, the target users, and a high-level summary of the proposed solution. Include a **high-level architecture diagram**_ 
 
 The project is a messaging app with secure privacy features, private and group chat functionality. It will allow securechats for real time communications with seamless channel navigation whilsts showing online available users. It is intended for users of all age and audience that are able to access internet, though user stories largely target a student-professor dynamic.
 
-*High level architecture diagram currently provided in SYstems Design Section
+*High level architecture diagram currently provided in Systems Design Section
 ---
 
 # System Analysis
@@ -85,7 +83,6 @@ Team 23 Project Board Link: [https://github.com/orgs/uc-se-sm26-team23/projects/
 Link to your **GitHub Projects board** (above) and include a representative screenshot of the **Todo / In Progress / Done** columns at the end of each sprint. _(Sprint 0 onward.)_
 
 ### Sprint 0
-- *to be updated w/ screenshots*
 <img width="893" height="766" alt="image" src="https://github.com/user-attachments/assets/bf381c2b-5e6a-4d07-ae08-3686ff8843d8" />
 <img width="897" height="787" alt="image" src="https://github.com/user-attachments/assets/73d3d3f1-18f4-4a7a-af56-4a09edd1e7e7" />
 
@@ -141,7 +138,7 @@ The current sprint architecture follows a client-server model split into three d
 
 For each use case in §Use Cases, describe how it is realized in code: which modules, endpoints, and database collections participate. **Sequence diagrams** are encouraged for non-trivial flows (e.g., authentication, message send/receive). _(Sprint 1 onward.)_
 
-  #Acceptance Criterias
+# Acceptance Criteria
   
 - AC-01.1: Given that I am in chat window, When I tap the 'send' button, Then the app shows my message as sent in the chat window.
 - AC-01.2: Given that I sent a non-empty message to the chat window, When connected user(s) are in the chat window, Then the app should display the message to them instantly without needing to refresh page.
@@ -151,30 +148,30 @@ For each use case in §Use Cases, describe how it is realized in code: which mod
 - AC-01.6: Given that I am viewing my own sent message, When the display showing which users has seen the sent message, Then the system should exclude the sent user from the display.
 - AC-01.7: Given that a connected user is currently typing to the chat window, When they press any key, Then the typing indicator must appear at the bottom of the chat window.
 - AC-01.8: Given that a typing user's typing indicator is visible on other users' screen, When the typing user stops typing for more than a certain seconds or delete all texts, Then the typing indicator must disappear from other users' screen.
-
+  
 - AC-02.01: Given that I am actively viewing a chat window, When a connected user sends a message, Then the app must immediately display the message in the chat area without needing to manual refresh page.
 - AC-02.02: Given that a user joins or leaves the group chat, When that event happens, Then the system must display a status message in chat area (ex. " joined the chat")
 - AC-02.03: Given that I am in the chat window, When a new message arrives from a connected user(s), Then the chat screen must auto scroll down to show the latest message visible.
 - AC-02.04: Given that I receive a message from a connected user(s) in a different time zone, When the timestamp displays, Then the system must convert and display the time using my phone's current location time zone setting.
 - AC-02.05: Given that the messenger app is running in the background, When a new message arrives, Then the system must trigger a visual push notification displaying the sender's name and a message preview.
-
+  
 - AC-03.1: each message sent by the connected user, and only messages from that connected user, displays a triple dots button with available modification options (edit and delete).
 - AC-03.2: when the connected user selects the edit option, the current message text becomes editable.
 - AC-03.3: when the connected user submits a non-empty edited message, the updated message appears in the chat window of all connected users immediately, otherwise if the edited message is empty the message does not send.
 - AC-03.4: when a message is edited, the displayed message shows an edited indicator.
 - AC-03.5: when the connected user selects the delete option, the message is removed from that channel for all users in the channel
 - AC-03.6: when the connected user deletes a message, a system status message will be sent to that channel informing the channel members that the connected user deleted a message
-
+  
 - AC-04.1: Given that I am in the main channel, when I tap the "Create Channel" button, then a new channel should be created
 - AC-04.2: Given that I press the "Create Channel" button, then I should be prompted with connected users I wish to add to the channel
 - AC-04.3: Given that I am in a channels view, when I press the "Leave Channel" button, I should exit the channel with access no longer allowed
 - AC-04.4: Given that I create a channel, I should see the channel title, all active group members, and all chats in the channel.
 - AC-04.5: Given that I am in a channel view, I should be able to send and receive messages to all other members in the channel
-
+  
 - AC-05.01: Given that I am logged into the messenger app, When a connected user recieves a message from a specific channel, Then the app must immediately show a visually distinct and informative notification in the channel organization list/pannel.
 - AC-05.02: Given that I am actively viewing a chat window, When a connected user switches to another channel, Then the app must immediately display the messages in that channel into the chat area without needing to manually refresh page.
 - AC-05.03: Given that I am logged into the messenger app, When a connected user wants to swap channel through a button, Then the app must immediately open a navigation panel that allows user to change channels.
-
+  
 - AC-06.1: Given that I looked at the online user list, When the list renders, Then the system must display only connected user(s) that are active and exclude all offline user(s).
 - AC-06.2: Given that I am viewing the online list, When I check the roster, Then the system must display my own username and beside the username marked "(You)".
 - AC-06.3: Given that I log into the webpage, When the homepage loads, Then the online users list must display as an expanded sidebar panel on the far right side of the screen.
@@ -182,7 +179,7 @@ For each use case in §Use Cases, describe how it is realized in code: which mod
 - AC-06.5: Given that the online users list is hidden, when I clicked the '+' button, Then the right sidebar must reappear, and the main chat area must shrink back to its original screen space.
 - AC-06.6: Given that I am viewing the online list panel, When connected user(s) logs into the webpage, Then their username must auto appear in online list immediately without needing to manual refresh page.
 - AC-06.7: Given that I am actively viewing the online list, When connected user(s) went offline, Then their username must immediately be gone from the online list without needing to manual refresh page.
-
+  
 - AC-07.1: When the connected user opens the webpage, they will be prompted to log in
 - AC-07.2: After the connected user fills out the username and clicks Log-In, the client ensures that all required login fields are filled before continuing validation.
 - AC-07.3: The client validates the inputted username (alpha-numeric characters only, not already in use) before forwarding it to the server
@@ -290,8 +287,8 @@ For each sprint, add a subsection that summarizes new implementation work. Inclu
 
 ```bash
 # Clone
-git clone git@github.com:TODO/TODO.git
-cd TODO
+git clone git@github.com:uc-se-sm26-team23/scrum-project.git
+cd scrum-project
 
 # Configure pull strategy (Rebase is recommended for a clean history)
 git config pull.rebase true
@@ -353,11 +350,20 @@ Per the course academic integrity policy, the team must document all AI-assisted
 
 _Start in Sprint 0; keep updating._
 
-Describe how your team applies **Scrum**: roles, ceremonies (sprint planning, daily stand-ups, review, retrospective), and tools (GitHub Projects board, GitHub Issues, pull requests).
+_Describe how your team applies **Scrum**: roles, ceremonies (sprint planning, daily stand-ups, review, retrospective), and tools (GitHub Projects board, GitHub Issues, pull requests)._
 
-Include:
-- A screenshot of the **GitHub Projects board** (Todo / In Progress / Done) at the end of each sprint.
-- A **Roadmap view** screenshot from GitHub Projects, or a timeline produced from issue milestones. _(Note: GitHub Projects has a Roadmap view rather than a true Gantt chart; a Roadmap screenshot satisfies this requirement.)_
+_Include:_
+_- A screenshot of the **GitHub Projects board** (Todo / In Progress / Done) at the end of each sprint._
+_- A **Roadmap view** screenshot from GitHub Projects, or a timeline produced from issue milestones. (Note: GitHub Projects has a Roadmap view rather than a true Gantt chart; a Roadmap screenshot satisfies this requirement.)_
+
+### Scrum Application
+Our team applies scrum extensively through the development of this application, but with a handful of modifications to account for the some of the challenges we face as students. For example, we don't strictly implement scrum roles, which means everyone in the team shares product owner, scrum master, and normal development responsibilities. This gives everyone the ability to gain a little bit of experience with each responsibility, and also allows flexibility for people to focus on what they feel is most important at a given point of time. If there's a point that one of us feels needs discussed, it will be shared via a Discord server that we're all members of, then everyone will contribute their thoughts on the point and a decision will be reached. As for ceremonies, we decided to modify how we participate in the ceremonies to take everyone's different schedules into account. Most ceremonies happen asynchronously on our Discord server, including sprint planning, daily stand-ups, review, and retrospective. Sprint planning will occur before each sprint starts where we use the course requirements and the use cases of our application designed in Sprint 0 to decide what the goals for the upcoming sprint are. Instead of strict daily stand-ups, our team members will send a message in the Discord server whenever they're about to work on something, and a quick summarizing message at the end when they've finished, including any issues they may have run into. Although not everyone participates in these every day (again, due to the varying schedules), this serves the same purpose as daily stand-ups due in an ordinary application of scrum. Sprint reviews are conducted as required, and usually in tandem with retrospectives where in total we accumulate all of our contributions to the repositories and project boards, and reflect on what went well, what could've been better, and what we want to improve for next sprint. These also occur asynchronously, where we require each member of the team to submit their information and reflections before recording final thoughts. Regardless of asynchronous meetings, we all meet regularly at lab time on Thursdays and often use the time to discuss trajectory, obstacles, and other important points that would be usually discusses in one of these ceremonies. 
+
+### Tools used
+Our team uses a variety of tools to manage the project and organize our code changes. Git and GitHub are used or version control. We use a GitHub Projects Board to organize our project management. We started with several tickets modeling our Personas and Scenarios, and used those to develop Use Cases which we turn into PBIs. Within each Use Case, we develop Acceptance Criteria and Sequence Diagrams, and we assign one Use Case per developer / team member to be completed (usually in whole, sometimes in part) in a sprint (with the option of assisting others). And GitHub pull requests are also utilized at the end of each sprint for merging changes and performing code reviews. 
+
+### Roadmap view
+<img width="1646" height="383" alt="image" src="https://github.com/user-attachments/assets/f897cb3e-e411-414c-b4a2-2a503522e0bb" />
 
 ## Scrum Process
 
@@ -458,6 +464,46 @@ Working through the sprints is a continuous-improvement process. The retrospecti
 - **How we will improve next sprint** — concrete, owned actions.
 
 Keep it under an hour. The output is bullet points in the table above and any new PBIs created on the board.
+
+
+### Sprint 2
+
+**Duration:** YYYY-MM-DD to YYYY-MM-DD
+
+#### Sprint Goal
+TODO — one sentence.
+
+#### Completed PBIs / Tasks
+1. TODO
+2. TODO
+3. TODO
+
+#### Contributions
+
+| Member | Hours | Contribution Summary |
+|--------|-------|----------------------|
+| Member 1 | X | TODO |
+| Member 2 | X | TODO |
+| Member 3 | X | TODO |
+| Member 4 | X | TODO |
+| Member 5 | X | TODO |
+
+#### Sprint Retrospective
+
+| Good | Could have been better | How to improve |
+|------|------------------------|----------------|
+|      |                        |                |
+|      |                        |                |
+
+
+Working through the sprints is a continuous-improvement process. The retrospective happens at the end of a sprint, before planning the next one. Cover three things briefly:
+
+- **What went well** — celebrate and reinforce.
+- **What could have been better** — be specific (e.g., "we underestimated authentication" not "things were hard").
+- **How we will improve next sprint** — concrete, owned actions.
+
+Keep it under an hour. The output is bullet points in the table above and any new PBIs created on the board.
+
 
 ---
 
