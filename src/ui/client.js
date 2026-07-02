@@ -334,16 +334,6 @@ function displayMessage(data) { // server sends data as string
 
 
 
-
-
-
-
-
-
-
-
-
-
 // Handles sending private messages to a user
 function sendPrivateMessage() {
 
