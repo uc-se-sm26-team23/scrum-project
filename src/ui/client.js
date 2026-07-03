@@ -439,7 +439,7 @@ function displayPrivateMessage(socketId){
 
         // Displays the timestamp
         const timestampSpan = document.createElement("span");
-        timestampSpan.style.color = "#2431e5";
+        timestampSpan.classList.add("timestamp");
         timestampSpan.textContent = `[${msg.timestamp}] `;
         privMessageDiv.appendChild(timestampSpan);
     
@@ -466,7 +466,8 @@ socket.on('status', function(data) {
     var statusElm = document.getElementById('status');
     // Show timestamp
     var timestamp = new Date().toLocaleTimeString(); //changed to Date from datatransfer as this was registered as an error in console
-    statusElm.innerHTML = statusElm.innerHTML + '<br><span style="color: #2ee524">[' + timestamp + ']</span> ' + DOMPurify.sanitize(data);
+    // statusElm.innerHTML = statusElm.innerHTML + '<br><span style="color: #2ee524">[' + timestamp + ']</span> ' + DOMPurify.sanitize(data);
+    statusElm.innerHTML += '<br><span class="status-timestamp">[' + timestamp + ']</span> ' + DOMPurify.sanitize(data);
 
     // Auto-scroll to latest message
     statusElm.scrollTop = statusElm.scrollHeight;
@@ -659,7 +660,8 @@ function createMessageTextElement(id, textContent, isEdited, isPrivate) {
     
     // AC-02.04 - Timestamps display in brower's local system clock
     const timestampSpan = document.createElement("span");
-    timestampSpan.style.color = "#2431e5";
+    // timestampSpan.style.color = "#2431e5";
+    timestampSpan.classList.add("timestamp");
     if (!isPrivate) {
         var timestamp = new Date().toLocaleTimeString();
         timestampSpan.textContent = `[${timestamp}] `;
@@ -823,7 +825,7 @@ socket.on('userList', function(users) {
     users.forEach(user => {
     const li = document.createElement("li");
 
-    li.style.cursor = "pointer";
+    // li.style.cursor = "pointer";
 
     // Show "(You)" only for the current user
     if (user.socketId === socket.id) {
