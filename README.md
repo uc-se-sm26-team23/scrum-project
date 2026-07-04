@@ -240,7 +240,7 @@ _Start in Sprint 0; **mandatory** updates at the Sprint 1–2 SSDLC checkpoint a
 
 This section documents how your team applies the **Secure Software Development Lifecycle** across every phase. Do **not** treat security as an afterthought — it is graded across all sprints.
 
-Security must be implemented using a cross cutting concern principle and applied across all layers in software/architecture to prevent vulnerable points across the system. As such security must be a priorty throughout development.
+Our team applies the Secure Software Development Lifecycle by treating security as a cross-cutting concern throughout the messenger application’s design, implementation, testing, and deployment. Since the app supports real-time public and private messaging, we focus on protecting user-generated content, preventing XSS, and enforcing secure server headers such as Content-Security-Policy. Security requirements are documented alongside functional requirements, and each sprint will include review of potential threats, code-level mitigations, and testing to make sure security is built into the application rather than added at the end.
 
 ## Security Requirements
 
