@@ -174,10 +174,13 @@ io.on('connection', (socket) => {
   // AC-02.2: all connected clients are notified when a user leaves
   // ---------------------------------------------------------------------------
   socket.on('disconnect', () => {
-    const username = userlist.get(socket.id);
+    
+    const username = userlist.get(socket.id); // get username
     socket.broadcast.emit('stopTyping', username); // If a user is disconnected while typing, their indicator is removed from all other connected users
-    userlist.delete(socket.id);
+    
+    userlist.delete(socket.id); // remove user from userlist
     console.log('Client disconnected - socket ID: ' + socket.id);
+    
     // AC-02.2: Code to broadcast the status
     io.emit('status', username + ' left the chat. Number of connected clients: ' + userlist.size);
 
@@ -189,6 +192,6 @@ io.on('connection', (socket) => {
       });
     }
 
-    io.emit('userList', users);
+    io.emit('userList', users); // broadcasts updated userList
   });
 });

@@ -11,6 +11,29 @@ var socket = io(); //connect to the Socket.io Server
 socket.on("connect", () => { //connected to the server
     console.log(`Connected to Socket.io server: 
     ${socket.io.opts.hostname}, port: ${socket.io.opts.port}`);
+
+    // Temporary session restore using localStorage on reload page
+    // Since localStorage is used, so to test, have different users on different domain to test. Else multiple users on same domain will get over-write.
+
+    // Get rid of the below when proper user authentication is implemented (password + database)
+
+    // use to check if username was saved from previous session
+    var savedUsername = localStorage.getItem('username');
+
+    // if exist emit to server who the reconnected yser is
+    if (savedUsername) {
+        socket.emit("set username", savedUsername)
+
+        // skin login page
+        $('#loginUI').hide()
+        // proceed to chat page
+        $('#chatUI').show()
+
+        console.log('Debug>Session restored for:', savedUsername); // UI testing only
+
+    }
+    // If doesnt exist, show login page and hide chat page (which executes by default)
+
 });
 
 var privateChats = {};
@@ -78,6 +101,9 @@ document.body.addEventListener("click", (e) => {
 // Notification Prompt w/ User click Yes Button
 $('#notify-yes').on('click', yesNotification);
 $('#notify-no').on('click', noNotification);
+
+// LogOut button
+$('#logout-btn').on('click', logout);
 
 // gets incremented with each new message
 var messageId = 1;
@@ -703,6 +729,7 @@ function encodeHTML(string) {
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&apos;');
   }
+  
   /*
   ==============================
   // Function: showNotification
@@ -830,4 +857,39 @@ function noNotification() {
 
     notificationEnable =  false;
     $("#notify-prompt").hide();
+}
+
+function logout() {
+
+    /* Assuming only one person per domain
+    When log out:
+    1. Remove saved username from localStorage
+
+    2. Disconnect the socket -> to remove user from userlist and broadcast status
+
+    3. clear chat messages 
+    4. clear status log
+    5. clear private chat messages
+    6. hide chat page
+    7. show login page
+    8. clear username input field
+    */
+
+    localStorage.removeItem('username');
+
+    // disable auto-reconnect before disconnecting
+    socket.io.opts.reconnection = false;
+    socket.disconnect();
+
+    $('#message').empty();
+    $('#status').empty();
+    $('#private-messages').empty();
+
+    $('#chatUI').hide();
+    $('#loginUI').show();
+
+    $('#username').val('');
+
+    console.log('Debug>User logged out'); // UI testing only
+
 }
