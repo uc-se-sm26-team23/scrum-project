@@ -262,10 +262,10 @@ Identify assets, trust boundaries, and threats. STRIDE or attack-tree format is 
 >* Repudiation (a user denying they performed an action)
 >* Information Disclosure (exposing private data)
 >* Denial of Service (crashing or flooding the system to block real users)
+>* Elevation of Privilege (a normal user tricking the system into giving them admin access)
 
-Elevation of Privilege (a normal user tricking the system into giving them admin access)
 | Asset | Threat (Specific Attack) | STRIDE Category | Mitigation |
-|-------|--------|------------|
+|-------|--------|-------|-----|
 | User credentials | Credential stuffing | Spoofing | Rate limiting + bcrypt hashing |
 | Web artifacts  | Cross-Site Scripting (XSS) | Tampering | CSP, input validation and output encoding     |
 | Whole Application | DoS Tracffic Flooding | Denial of Service | Rate limiting (on our eventual server) to an appropriate amount of traffic (e.g. 50) for the Messenger application | 
