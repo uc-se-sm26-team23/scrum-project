@@ -345,6 +345,8 @@ Describe the GitHub Actions workflow(s) under `.github/workflows/`. _(Sprint 1 o
 
 Describe how to deploy and the URL of the live application. Include a note on environment variables (set in Azure App Services Configuration, never in source). _(Sprint 1 onward.)_
 
+To deploy, we create an App Service in Azure and establish a relationship between that app and our GitHub Branches. Main is tied to the Prod deployment, and the most recent sprint will be tied to our Test deployment. The runtime stack is Node 24-lts, and uses the Linux operating system. We are using our Student subscriptions. 
+
 ---
 
 # Testing & Quality Assurance
