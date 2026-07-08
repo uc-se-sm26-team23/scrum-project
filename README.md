@@ -342,7 +342,7 @@ Describe: `.github/workflows/` includes a set of isntructions that tells what to
 Describe how to deploy and the URL of the live application. Include a note on environment variables (set in Azure App Services Configuration, never in source). _(Sprint 1 onward.)_
 
 ### Process
-The application itlitizes an automated CD pipeline managed by Gihub Axtions, The deploymnet workflow is triggered whenever new code is merged or pushed to branches. During this process, the Github Actions runner completes by authenticating securely with Azure using the set Publish Profile secret, download the pre-built and tested code artifact generated during CI phase, then deploys the packaged application directly to Azure App Services.
+The application itlitizes an automated CD pipeline managed by Gihub Actions, The deploymnet workflow is triggered whenever new code is merged or pushed to branches. During this process, the Github Actions runner completes by authenticating securely with Azure using the set Publish Profile secret, download the pre-built and tested code artifact generated during CI phase, then deploys the packaged application directly to Azure App Services.
 
 ### Live Application URL:
 https://team23-uc-se-messenger.azurewebsites.net/
@@ -406,7 +406,7 @@ Our team uses a variety of tools to manage the project and organize our code cha
 
 ### Sprint 0
 
-**Duration:** 2026-06-18 to 2026-07-15
+**Duration:** 2026-05-27 to 2026-06-16
 
 #### Sprint Goal
 Get comfortable with environment and tools, learn agile and scrum process and documentation procedures, create UC, Sequence diagrams, user stories etc to guide rest of messenger app project
@@ -446,9 +446,6 @@ Get comfortable with environment and tools, learn agile and scrum process and do
 |------|------------------------|----------------|
 |   Task completion   |       Communication               |        Using Discord, frequent meetings and updates      |
 |   Team Dynamics   |        Organizing our goals and requirements                |     Spend time to discuss clear guidelines/expectations           |
-|      |                        |                |
-
-
 
 Working through the sprints is a continuous-improvement process. The retrospective happens at the end of a sprint, before planning the next one. Cover three things briefly:
 
@@ -464,7 +461,7 @@ Keep it under an hour. The output is bullet points in the table above and any ne
 
 ## Sprint 1
 
-**Duration:** 2026-06-25 to 2026-07-09
+**Duration:** 2026-06-17 to 2026-07-08
 
 ### Requirements Engineering
 
@@ -515,19 +512,23 @@ Instructor is chilling at home during weekend, but then he receive an email on m
 Complete the functional requirements and use-case acceptance criteria to implement a working prototype of the web-based messenger application.
 
 #### Completed PBIs / Tasks
-1. TODO
-2. TODO
-3. TODO
+1. UC-01: Send Message
+2. UC-02: Receive Message
+3. UC-03: Modify Message
+4. UC-04: Communicate Privately
+5. UC-06: Show Online Users
+6. UC-07: Login/Logout User
 
 #### Contributions
 
 | Member | Hours | Contribution Summary |
 |--------|-------|----------------------|
-| Member 1 | X | TODO |
-| Member 2 | X | TODO |
-| Member 3 | X | TODO |
-| Member 4 | X | TODO |
-| Member 5 | X | TODO |
+| Marcus Nguyen | 14 | TODO |
+| Luke Falanga | 14 | TODO |
+| Connor Slutsky | 14 | I completed all the development for UC-03 Modify Message, added paragraphs for scrum applications, tools used, and post a picture of the GitHub roadmap. Added images of the Project Board for Sprint 1, a quick blurb of how testing in Sprint 1 worked, and an update for our Implementation in our README as well.  |
+| Akul Jha | 14 | TODO |
+| Ong Jai Sheng | 14 | I keep our homepage up-to-date w/ requirements, set up Azure App deployment, implement notification feature and making sure User-Case 02: Receive Message is fully implemented, include Bootstrap’s CSS and JS and allow CSP to laod Bootstrap and jQuery, fix error on different user but same username display (You), modify Typing Indicator w/ reference introduced in lecture video, disconnect testing branch Azure deployment and testing branch from github to avoid confusion., included Missing STRIDE category for each threat model on report where we got deducted points, add temporary session restore when reload page when log in.  |
+
 
 #### Sprint Retrospective
 
@@ -560,7 +561,7 @@ Keep it under an hour. The output is bullet points in the table above and any ne
 
 ### Sprint 2
 
-**Duration:** YYYY-MM-DD to YYYY-MM-DD
+**Duration:** 2026-07-10 to 2026-07-31
 
 #### Sprint Goal
 TODO — one sentence.
