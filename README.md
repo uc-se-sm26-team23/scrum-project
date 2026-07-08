@@ -406,7 +406,7 @@ Our team uses a variety of tools to manage the project and organize our code cha
 
 ### Sprint 0
 
-**Duration:** 2026-06-18 to 2026-07-15
+**Duration:** 2026-05-27 to 2026-06-16
 
 #### Sprint Goal
 Get comfortable with environment and tools, learn agile and scrum process and documentation procedures, create UC, Sequence diagrams, user stories etc to guide rest of messenger app project
@@ -464,37 +464,54 @@ Keep it under an hour. The output is bullet points in the table above and any ne
 
 ### Sprint 1
 
-**Duration:** 2026-06-25 to 2026-07-09
+**Duration:** 2026-06-17 to 2026-07-08
 
 ### Requirements Engineering
 
-## Persona (name):
-**Scenario (name):**
-**User Stories:**
+## Persona (name): Student - Bob
+**Scenario (name):** Sick Student
+- As a user, I want to send a text message to the public chat room so that I can communicate with the entire class in real time.
+- As a user, I want my name to be attached to my message so all other users know who sent it.
+- As a user, I want to receive text messages from connected users so that I can communicate with them in real time.
+- As a user, I want the new message and to be highlighted to the recipient (compared with previous messages), so that it's less likely for them to miss the messages
+- As a user, I want each message to show timestamp so that I can see when the message was received.
+- As a user, I want the application to prevent injected scripts in chat messages from executing in my browser, so that my session and data cannot be stolen by other users.
 
-## Persona (name):
-**Scenario (name):**
-**User Stories:**
+## Persona (name): Bob (Student User)
+**Scenario (name):** 1 on 1 Chat
+- As a connected user, I want to be able to easily access private 1-on-1 messages with another user.
+- As a connected user, I want to be able to send and receive messages in private chats the same way as in public chat.
+- As a connected user, I want 1-on-1 chats to be visually separated from the public chat.
+- As a connected user, I want my private chats with another user to persist, even if I switch to private chat with another user before coming back.
+- As a connected user, I want to be able to private chat with myself in case I want to keep notes in the messenger. (AC-04.3)
 
-## Persona (name):
-**Scenario (name):**
+## Persona (name): Team Leader Michael
+**Scenario (name):** Modify Announcement/Message
 **User Stories:**
+- As a connected user, I want to change the content of a message I already sent so that I can correct mistakes or update my message.
+- As a connected user, I want to delete a message I already sent so that I can remove it from a channel.
+- As a connected user, I want modification options to appear only on my own messages so that I cannot edit, or delete another user's message.
 
 #### Sprint Goal
 Complete the functional requirements and use-case acceptance criteria to implement a working prototype of the web-based messenger application.
 
 #### Completed PBIs / Tasks
-1. UC-03 Modify Message
+1. UC-01: Send Message
+2. UC-02: Receive Message
+3. UC-03: Modify Message
+4. UC-04: Communicate Privately
+5. UC-06: Show Online Users
+6. UC-07: Login/Logout User
 
 #### Contributions
 
 | Member | Hours | Contribution Summary |
 |--------|-------|----------------------|
-| Marcus Nguyen | X | TODO |
-| Luke Falanga | X | TODO |
-| Connor Slutsky | X | I completed all the development for UC-03 Modify Message, added paragraphs for scrum applications, tools used, and post a picture of the GitHub roadmap. Added images of the Project Board for Sprint 1, a quick blurb of how testing in Sprint 1 worked, and an update for our Implementation in our README as well.  |
-| Akul Jha | X | TODO |
-| Ong Jai Sheng | X | TODO |
+| Marcus Nguyen | 14 | TODO |
+| Luke Falanga | 14 | TODO |
+| Connor Slutsky | 14 | I completed all the development for UC-03 Modify Message, added paragraphs for scrum applications, tools used, and post a picture of the GitHub roadmap. Added images of the Project Board for Sprint 1, a quick blurb of how testing in Sprint 1 worked, and an update for our Implementation in our README as well.  |
+| Akul Jha | 14 | TODO |
+| Ong Jai Sheng | 14 | I keep our homepage up-to-date w/ requirements, set up Azure App deployment, implement notification feature and making sure User-Case 02: Receive Message is fully implemented, include Bootstrap’s CSS and JS and allow CSP to laod Bootstrap and jQuery, fix error on different user but same username display (You), modify Typing Indicator w/ reference introduced in lecture video, disconnect testing branch Azure deployment and testing branch from github to avoid confusion., included Missing STRIDE category for each threat model on report where we got deducted points, add temporary session restore when reload page when log in.  |
 
 #### Sprint Retrospective
 
@@ -525,7 +542,7 @@ Keep it under an hour. The output is bullet points in the table above and any ne
 
 ### Sprint 2
 
-**Duration:** YYYY-MM-DD to YYYY-MM-DD
+**Duration:** 2026-07-10 to 2026-07-31
 
 #### Sprint Goal
 TODO — one sentence.
