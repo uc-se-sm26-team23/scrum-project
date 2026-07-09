@@ -94,7 +94,9 @@ Link to your **GitHub Projects board** (above) and include a representative scre
 
 
 ### Sprint 1
-- *to be updated w/ screenshots*
+<img width="1918" height="903" alt="image" src="https://github.com/user-attachments/assets/54a7667b-1937-4b53-af37-eed06de04691" />
+<img width="1907" height="947" alt="image" src="https://github.com/user-attachments/assets/7fbebb09-b032-4e9e-85b1-7462ca9087b3" />
+
 
 ### Sprint 2
 - *to be updated w/ screenshots*
@@ -283,10 +285,28 @@ _Start in Sprint 1; keep updating._
 
 Specify your development approach, languages, frameworks, and runtime. Default stack for this course:
 
+
+### Sprint 1
+
 | Layer            | Technology                                      |
 |------------------|-------------------------------------------------|
 | Runtime          | Node.js (Azure Cloud Shell for development)     |
-| Server framework | TODO _(e.g., Express)_                          |
+| Server framework | Express                         |
+| Database         | None                                  |
+| Client           | HTML / CSS / JavaScript / Bootstrap / jQuery  |
+| Version control  | git + GitHub (branches + pull requests + code review) |
+| Project mgmt     | GitHub Projects                                 |
+| Hosting          | Azure App Services                              |
+| CI/CD            | GitHub Actions                                  |
+
+
+
+### End Result:
+
+| Layer            | Technology                                      |
+|------------------|-------------------------------------------------|
+| Runtime          | Node.js (Azure Cloud Shell for development)     |
+| Server framework | Express                         |
 | Database         | MongoDB Atlas                                   |
 | Client           | HTML / CSS / JavaScript _(framework optional)_  |
 | Version control  | git + GitHub (branches + pull requests + code review) |
@@ -356,6 +376,8 @@ https://team23-uc-se-messenger.azurewebsites.net/
 # Testing & Quality Assurance
 
 Our testing and quality assurance was based on individual task completion. Before any commits were pushed to the sprint1 branch, each team member would test the functionality of the messenger locally to ensure that nothing had been broken by the new code. Then, upon push, we would alert all other members in the Discord to what had been added/changed, as well as other things that they may have noticed regarding another member's code. This would allow us to review eachothers changes and be aware of what exactly they do, as well as find bugs or code that may cause problems down the line. (_**major** focus in Sprint 3._)
+
+In Sprint 1 we would test our changes as we were making them, then test the core functionality of the rest of the app before pushing changes.  
 
 ## Test Plan
 
@@ -533,12 +555,11 @@ Complete the functional requirements and use-case acceptance criteria to impleme
 
 | Member | Hours | Contribution Summary |
 |--------|-------|----------------------|
-| Marcus Nguyen | 14 | TODO |
-| Luke Falanga | 14 | I implemented sockets and typing indicators to complete the Send Message Use-Case. I also implemented private chat, which will persist if you switch to a different private chat, that way you can remember all private conversations. Added accessibility to this feature via clicking a name in the user list. I also reviewed other members' code and gave suggestions for implementation. I updated the Private Chat use-case and Send Message use-caase for completion as well. |
+| Marcus Nguyen | 14 | I implemented the login page (without the credentials) and connected it to the message UI. Add security layers and constraints to the username input. Created "Joint chat" and "Authorize User" UCs for sprint 2. Fix duplicate and disable type indicator for my-self private chat. I also updated the Security (SSDL) under README. |
+| Luke Falanga | 14 | I implemented sockets and typing indicators to complete the Send Message Use-Case. I also implemented private chat, which will persist if you switch to a different private chat, that way you can remember all private conversations. Added accessibility to this feature via clicking a name in the user list. I also reviewed other members' code and gave suggestions for implementation. I updated the Private Chat use-case and Send Message use-caase for completion as well.  |
 | Connor Slutsky | 14 | I completed all the development for UC-03 Modify Message, added paragraphs for scrum applications, tools used, and post a picture of the GitHub roadmap. Added images of the Project Board for Sprint 1, a quick blurb of how testing in Sprint 1 worked, and an update for our Implementation in our README as well.  |
-| Akul Jha | 14 | TODO |
+| Akul Jha | 14 | I reorganized and structured files so that server points to correct directory; made all files within same folder so they can access each other as designed; removed files that are duplicates to maintain spa and 1 css file. ALso did some UI for side collapsable panel that shows the curent online users and appends (You) in front of currentuser (UC show online users). I made 3 color palletes to try different chat UI looks and themes. |
 | Ong Jai Sheng | 14 | I keep our homepage up-to-date w/ requirements, set up Azure App deployment, implement notification feature and making sure User-Case 02: Receive Message is fully implemented, include Bootstrap’s CSS and JS and allow CSP to laod Bootstrap and jQuery, fix error on different user but same username display (You), modify Typing Indicator w/ reference introduced in lecture video, disconnect testing branch Azure deployment and testing branch from github to avoid confusion., included Missing STRIDE category for each threat model on report where we got deducted points, add temporary session restore when reload page when log in.  |
-
 
 #### Sprint Retrospective
 
@@ -615,6 +636,10 @@ Keep it under an hour. The output is bullet points in the table above and any ne
 _Start in Sprint 1; finalize in Sprint 3._
 
 Write this section as both a **demo** (with screenshots of the running application) and a **how-to** for a first-time user. Cover sign-up, login, and the main user flows.
+
+Enter a unique username and click Join to access the public chat. Enter messages into the textbox and click Send to send a message to every logged-in user. Click the User List button to view a list of currently logged-in users, and click any of their names to start a private chat with them. Press the allow notifications popup to allow notifications to appear for new messages when the Messenger application is minimized. Hover over your messages in the public chat and press the message options button (three dots) to open a menu to edit or delete past messages. 
+
+Refer to demo video on [homepage](https://uc-se-sm26-team23.github.io/)
 
 ---
 
