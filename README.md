@@ -525,7 +525,7 @@ Complete the functional requirements and use-case acceptance criteria to impleme
 
 | Member | Hours | Contribution Summary |
 |--------|-------|----------------------|
-| Marcus Nguyen | 14 | TODO |
+| Marcus Nguyen | 14 | I implemented the login page (without the credentials) and connected it to the message UI. Add security layers and constraints to the username input. Created "Joint chat" and "Authorize User" UCs for sprint 2. Fix duplicate and disable type indicator for my-self private chat. I also updated the Security (SSDL) under README. |
 | Luke Falanga | 14 | TODO |
 | Connor Slutsky | 14 | I completed all the development for UC-03 Modify Message, added paragraphs for scrum applications, tools used, and post a picture of the GitHub roadmap. Added images of the Project Board for Sprint 1, a quick blurb of how testing in Sprint 1 worked, and an update for our Implementation in our README as well.  |
 | Akul Jha | 14 | TODO |
