@@ -33,7 +33,7 @@ _Teams are 3–5 students (per syllabus). Solo teams are not permitted._
 | Item | URL |
 |---|---|
 | Team homepage / landing page | [https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/tree/main](https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/tree/main) |
-| Live prototype (Azure App Services) | https://TODO.azurewebsites.net |
+| Live prototype (Azure App Services) | https://team23-uc-se-messenger.azurewebsites.net/ |
 | GitHub Projects board (private) | [https://github.com/orgs/uc-se-sm26-team23/projects/1](https://github.com/orgs/uc-se-sm26-team23/projects/1) |
 | Source code repository (private) | [https://github.com/uc-se-sm26-team23/scrum-project](https://github.com/uc-se-sm26-team23/scrum-project) |
 | MongoDB Atlas cluster (configuration only — no credentials) | _e.g., cluster name, region_ |
@@ -45,6 +45,8 @@ _Teams are 3–5 students (per syllabus). Solo teams are not permitted._
 |------------|---------|--------------------------------------|--------|
 | 05/28/2026 | 0.1     | Initial draft (Sprint 0)             | ALL   |
 | 06/04/2026 | 0.2     | Added use cases and architecture     | ALL   |
+| 07/09/2026 | 0.3     | implemented CI/CD/join chat/onlineuser/modify message and other basic core features | ALL   |
+
 
 ---
 
@@ -242,7 +244,7 @@ _Start in Sprint 0; **mandatory** updates at the Sprint 1–2 SSDLC checkpoint a
 
 This section documents how your team applies the **Secure Software Development Lifecycle** across every phase. Do **not** treat security as an afterthought — it is graded across all sprints.
 
-Security must be implemented using a cross cutting concern principle and applied across all layers in software/architecture to prevent vulnerable points across the system. As such security must be a priorty throughout development.
+Our team applies the Secure Software Development Lifecycle by treating security as a cross-cutting concern throughout the messenger application’s design, implementation, testing, and deployment. Since the app supports real-time public and private messaging, we focus on protecting user-generated content, preventing XSS, and enforcing secure server headers such as Content-Security-Policy. Security requirements are documented alongside functional requirements, and each sprint will include review of potential threats, code-level mitigations, and testing to make sure security is built into the application rather than added at the end.
 
 ## Security Requirements
 
@@ -256,6 +258,7 @@ List security requirements alongside functional requirements. _(Sprint 0.)_
 ## Threat Model
 
 Identify assets, trust boundaries, and threats. STRIDE or attack-tree format is acceptable. _(Sprint 0–1.)_
+
 >STRIDE Categories
 >* Spoofing (pretending to be someone else)
 >* Tampering (modifying data or code)
@@ -341,17 +344,38 @@ Describe the GitHub Actions workflow(s) under `.github/workflows/`. _(Sprint 1 o
 - **Build & test:** triggered on every push and pull request.
 - **Deploy:** triggered on merge to `main`; deploys to Azure App Services.
 
+### Sprint 1
+
+Describe: `.github/workflows/` includes a set of isntructions that tells what to do when an event triggers. Once triggered, Github Actions look inside `.github/workflows/` folder to find out what to do when a specific event triggers. 
+
+- **Build & test:** triggered on every push and pull request.
+  * Whenever a team memebr pushes code to 'sprint1' branch or any branches, to merge their code/work. Github's server recognize the action happend, then look into `.github/workflows/` folder to see if any left instructions for what to do to react to the action. After Github finds the  `.yml` file, opens it and starts reading it line by line from top to bottom. After finding the specific section to handle the action, it type  `npm` commands like  `npm install` and npm `npm run test` .
+  * If this phase fails, Github Actions will report back with the any problem exist in the push code.
+
+- **Deploy:** triggered on merge to `main`; deploys to Azure App Services.
+  * In the `.yml` file, defined by `deploy` as a separate job that has its own set of roles, when **Deply** action is triggered.
+  * A specific instruction is configed into  `.github/workflows/` to trigger when code is pushed or merged specifically into `main` branch, so this job configured to use Publish Profile that is set up in Azure Deployment Center which allows the Github Action log into Azure securely without needing to type a password every time. So when the trigger is met, the worrkflow perform:
+      * It downloads `"node-app"` artifact that the `build` job created. during "Build & testing" phase.
+      * It then executes command to upload code directly to the Azure APp Service.
+  *  This result in our live website is instantly updated with new and merged code.
+
 ## Deployment
 
 Describe how to deploy and the URL of the live application. Include a note on environment variables (set in Azure App Services Configuration, never in source). _(Sprint 1 onward.)_
 
-To deploy, we create an App Service in Azure and establish a relationship between that app and our GitHub Branches. Main is tied to the Prod deployment, and the most recent sprint will be tied to our Test deployment. The runtime stack is Node 24-lts, and uses the Linux operating system. We are using our Student subscriptions. 
+### Process
+The application itlitizes an automated CD pipeline managed by Gihub Actions, The deploymnet workflow is triggered whenever new code is merged or pushed to branches. During this process, the Github Actions runner completes by authenticating securely with Azure using the set Publish Profile secret, download the pre-built and tested code artifact generated during CI phase, then deploys the packaged application directly to Azure App Services.
+
+### Live Application URL:
+https://team23-uc-se-messenger.azurewebsites.net/
+
+> Note: Environment variables are set securely within the **Azure App Services Configuration** panel. To maintain a secure software development practies, since storing sensitive environment variables into source code repository is illegal and should be publicly executed.
 
 ---
 
 # Testing & Quality Assurance
 
-_Start in Sprint 1; **major** focus in Sprint 3._
+Our testing and quality assurance was based on individual task completion. Before any commits were pushed to the sprint1 branch, each team member would test the functionality of the messenger locally to ensure that nothing had been broken by the new code. Then, upon push, we would alert all other members in the Discord to what had been added/changed, as well as other things that they may have noticed regarding another member's code. This would allow us to review eachothers changes and be aware of what exactly they do, as well as find bugs or code that may cause problems down the line. (_**major** focus in Sprint 3._)
 
 In Sprint 1 we would test our changes as we were making them, then test the core functionality of the rest of the app before pushing changes.  
 
@@ -447,8 +471,6 @@ Get comfortable with environment and tools, learn agile and scrum process and do
 |   Task completion   |       Communication               |        Using Discord, frequent meetings and updates      |
 |   Team Dynamics   |        Organizing our goals and requirements                |     Spend time to discuss clear guidelines/expectations           |
 
-
-
 Working through the sprints is a continuous-improvement process. The retrospective happens at the end of a sprint, before planning the next one. Cover three things briefly:
 
 - **What went well** — celebrate and reinforce.
@@ -461,7 +483,7 @@ Working through the sprints is a continuous-improvement process. The retrospecti
 
 Keep it under an hour. The output is bullet points in the table above and any new PBIs created on the board.
 
-### Sprint 1
+## Sprint 1
 
 **Duration:** 2026-06-17 to 2026-07-08
 
@@ -510,6 +532,14 @@ Instructor is chilling at home during weekend, but then he receive an email on m
  - Tech Level: Intermediate - but different people at the company have different levels of technical experience
  - Suggested features: public messaging, private messaging, ability to edit/delete existing messages, notifications
 
+**Scenario:**
+Michael is sending an announcement about an important meeting that he wants the entire team to go to. He enters the meeting details and sends it in the public chat that everyone in his team has access to. Right as he presses Enter, he notices that he mistyped the date! But it's too late, and everyone has received the notification of a new message. He quickly navigates to the message options, selects the option to edit the message, and retypes the meeting information to the correct date before clicking submit. The edited message is broadcast to the other team members, and as they are logging on to read the new message, they see the correct date, not the originally mistyped-date.
+
+**User Stories:**
+- As a connected user, I want to change the content of a message I already sent so that I can correct mistakes or update my message. 
+- As a connected user, I want to delete a message I already sent so that I can remove it from a channel.
+- As a connected user, I want modification options to appear only on my own messages so that I cannot edit, or delete another user's message. 
+
 #### Sprint Goal
 Complete the functional requirements and use-case acceptance criteria to implement a working prototype of the web-based messenger application.
 
@@ -526,7 +556,7 @@ Complete the functional requirements and use-case acceptance criteria to impleme
 | Member | Hours | Contribution Summary |
 |--------|-------|----------------------|
 | Marcus Nguyen | 14 | I implemented the login page (without the credentials) and connected it to the message UI. Add security layers and constraints to the username input. Created "Joint chat" and "Authorize User" UCs for sprint 2. Fix duplicate and disable type indicator for my-self private chat. I also updated the Security (SSDL) under README. |
-| Luke Falanga | 14 | TODO |
+| Luke Falanga | 14 | I implemented sockets and typing indicators to complete the Send Message Use-Case. I also implemented private chat, which will persist if you switch to a different private chat, that way you can remember all private conversations. Added accessibility to this feature via clicking a name in the user list. I also reviewed other members' code and gave suggestions for implementation. I updated the Private Chat use-case and Send Message use-caase for completion as well.  |
 | Connor Slutsky | 14 | I completed all the development for UC-03 Modify Message, added paragraphs for scrum applications, tools used, and post a picture of the GitHub roadmap. Added images of the Project Board for Sprint 1, a quick blurb of how testing in Sprint 1 worked, and an update for our Implementation in our README as well.  |
 | Akul Jha | 14 | I reorganized and structured files so that server points to correct directory; made all files within same folder so they can access each other as designed; removed files that are duplicates to maintain spa and 1 css file. ALso did some UI for side collapsable panel that shows the curent online users and appends (You) in front of currentuser (UC show online users). I made 3 color palletes to try different chat UI looks and themes. |
 | Ong Jai Sheng | 14 | I keep our homepage up-to-date w/ requirements, set up Azure App deployment, implement notification feature and making sure User-Case 02: Receive Message is fully implemented, include Bootstrap’s CSS and JS and allow CSP to laod Bootstrap and jQuery, fix error on different user but same username display (You), modify Typing Indicator w/ reference introduced in lecture video, disconnect testing branch Azure deployment and testing branch from github to avoid confusion., included Missing STRIDE category for each threat model on report where we got deducted points, add temporary session restore when reload page when log in.  |
@@ -545,10 +575,12 @@ Complete the functional requirements and use-case acceptance criteria to impleme
   - All tasks were completed as designated on the PBI board
   - All members contributed as expected
   - Bugs were noticed and fixed before any other major implementation
+
 **What could have been better**
   - There were a few times that merge conflicts that arose when pushing changes were not resolved correctly and then not tested, which broke some aspect of the code
   - Code is somewhat messy as each member worked on different implementations, so some values (such as username) are assigned to different local variables instead of every function using the same global variable
   - UI visuals were not discussed very well since we prioritized understanding functionality, so there were moments where team members were unclear of what to expect from different visual implementation. This led to members having the desire to modify UI that was already implemented to be more up to what they had in mind, when the original member working on the UI could have easily implemented an agreed upon visual expectation while they were working on it.
+
 **How we will improve next sprint**
   - Test changes on the web preview after every single change before pushing to make sure no code breaks any functionality already implemented
   - When working on code, we will analyze other functions and existing variables to see if we could use them in the implementation we are currently working on (this will help clean up the code and condense everything to be far more readable)
@@ -605,6 +637,10 @@ _Start in Sprint 1; finalize in Sprint 3._
 
 Write this section as both a **demo** (with screenshots of the running application) and a **how-to** for a first-time user. Cover sign-up, login, and the main user flows.
 
+Enter a unique username and click Join to access the public chat. Enter messages into the textbox and click Send to send a message to every logged-in user. Click the User List button to view a list of currently logged-in users, and click any of their names to start a private chat with them. Press the allow notifications popup to allow notifications to appear for new messages when the Messenger application is minimized. Hover over your messages in the public chat and press the message options button (three dots) to open a menu to edit or delete past messages. 
+
+Refer to demo video on [homepage](https://uc-se-sm26-team23.github.io/)
+
 ---
 
 # License & Code of Conduct
@@ -615,4 +651,4 @@ If your team chooses to publish the repository after the course, add an explicit
 
 ---
 
-_End of template. Last template revision: 2026-06-04._
+_End of template. Last template revision: 2026-07-09._
