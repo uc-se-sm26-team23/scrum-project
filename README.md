@@ -353,7 +353,7 @@ https://team23-uc-se-messenger.azurewebsites.net/
 
 # Testing & Quality Assurance
 
-_Start in Sprint 1; **major** focus in Sprint 3._
+Our testing and quality assurance was based on individual task completion. Before any commits were pushed to the sprint1 branch, each team member would test the functionality of the messenger locally to ensure that nothing had been broken by the new code. Then, upon push, we would alert all other members in the Discord to what had been added/changed, as well as other things that they may have noticed regarding another member's code. This would allow us to review eachothers changes and be aware of what exactly they do, as well as find bugs or code that may cause problems down the line. (_**major** focus in Sprint 3._)
 
 ## Test Plan
 
@@ -508,6 +508,14 @@ Instructor is chilling at home during weekend, but then he receive an email on m
  - Tech Level: Intermediate - but different people at the company have different levels of technical experience
  - Suggested features: public messaging, private messaging, ability to edit/delete existing messages, notifications
 
+**Scenario:**
+Michael is sending an announcement about an important meeting that he wants the entire team to go to. He enters the meeting details and sends it in the public chat that everyone in his team has access to. Right as he presses Enter, he notices that he mistyped the date! But it's too late, and everyone has received the notification of a new message. He quickly navigates to the message options, selects the option to edit the message, and retypes the meeting information to the correct date before clicking submit. The edited message is broadcast to the other team members, and as they are logging on to read the new message, they see the correct date, not the originally mistyped-date.
+
+**User Stories:**
+- As a connected user, I want to change the content of a message I already sent so that I can correct mistakes or update my message. 
+- As a connected user, I want to delete a message I already sent so that I can remove it from a channel.
+- As a connected user, I want modification options to appear only on my own messages so that I cannot edit, or delete another user's message. 
+
 #### Sprint Goal
 Complete the functional requirements and use-case acceptance criteria to implement a working prototype of the web-based messenger application.
 
@@ -524,7 +532,7 @@ Complete the functional requirements and use-case acceptance criteria to impleme
 | Member | Hours | Contribution Summary |
 |--------|-------|----------------------|
 | Marcus Nguyen | 14 | TODO |
-| Luke Falanga | 14 | TODO |
+| Luke Falanga | 14 | I implemented sockets and typing indicators to complete the Send Message Use-Case. I also implemented private chat, which will persist if you switch to a different private chat, that way you can remember all private conversations. Added accessibility to this feature via clicking a name in the user list. I also reviewed other members' code and gave suggestions for implementation. I updated the Private Chat use-case and Send Message use-caase for completion as well. |
 | Connor Slutsky | 14 | I completed all the development for UC-03 Modify Message, added paragraphs for scrum applications, tools used, and post a picture of the GitHub roadmap. Added images of the Project Board for Sprint 1, a quick blurb of how testing in Sprint 1 worked, and an update for our Implementation in our README as well.  |
 | Akul Jha | 14 | TODO |
 | Ong Jai Sheng | 14 | I keep our homepage up-to-date w/ requirements, set up Azure App deployment, implement notification feature and making sure User-Case 02: Receive Message is fully implemented, include Bootstrap’s CSS and JS and allow CSP to laod Bootstrap and jQuery, fix error on different user but same username display (You), modify Typing Indicator w/ reference introduced in lecture video, disconnect testing branch Azure deployment and testing branch from github to avoid confusion., included Missing STRIDE category for each threat model on report where we got deducted points, add temporary session restore when reload page when log in.  |
