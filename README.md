@@ -626,4 +626,4 @@ If your team chooses to publish the repository after the course, add an explicit
 
 ---
 
-_End of template. Last template revision: 2026-06-04._
+_End of template. Last template revision: 2026-07-09._
