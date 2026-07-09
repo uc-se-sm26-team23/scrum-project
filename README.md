@@ -45,6 +45,8 @@ _Teams are 3–5 students (per syllabus). Solo teams are not permitted._
 |------------|---------|--------------------------------------|--------|
 | 05/28/2026 | 0.1     | Initial draft (Sprint 0)             | ALL   |
 | 06/04/2026 | 0.2     | Added use cases and architecture     | ALL   |
+| 07/09/2026 | 0.3     | implemented CI/CD/join chat/onlineuser/modify message and other basic core features | ALL   |
+
 
 ---
 
