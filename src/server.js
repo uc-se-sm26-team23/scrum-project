@@ -10,8 +10,9 @@ const path       = require('path');
 const app    = express();
 const server = http.createServer(app);
 const io     = new Server(server);
+const messengerdb = require('./messengerdb');
 
-// CSP Header
+// CSP Header - Browser Level Defense-In-Depth
 app.use((req, res, next) => {
   res.setHeader(
       'Content-Security-Policy',
