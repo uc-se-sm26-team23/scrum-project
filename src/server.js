@@ -27,7 +27,21 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'ui')));
 
 const PORT = process.env.PORT || 8080;
+
+/*
+(async () => {
+  try {
+    await messengerdb.connect();
+    server.listen(PORT, () =>
+    console.log('Server running on port ' + PORT));
+  } catch (err) {
+    console.log('Error>server.js: failed to start - database connection error', err);
+    process.exit(1); //fail fast - avoid running server that cant authenticate users
+  }
+}) ();
+*/
 server.listen(PORT, () => console.log('Server running on port ' + PORT));
+
 
 // In-memory store: socketId → username
 const userlist = new Map();
