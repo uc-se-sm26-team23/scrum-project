@@ -142,7 +142,7 @@ function joinChat() {
     // AC-02.05 - Request Notification on message
     $("#notify-prompt").css("display", "block"); // show the prompt we made after joining
 
-    document.getElementById('loginUI').style.left = '100%';
+    $('#loginUI').hide();
     document.getElementById('chatUI').style.display = '';
 }
 
@@ -948,9 +948,9 @@ function logout() {
 
     localStorage.removeItem('username');
 
-    // disable auto-reconnect before disconnecting
-    socket.io.opts.reconnection = false;
-    socket.disconnect();
+    // // disable auto-reconnect before disconnecting
+    // socket.io.opts.reconnection = false;
+    // socket.disconnect();
 
     $('#message').empty();
     $('#status').empty();
