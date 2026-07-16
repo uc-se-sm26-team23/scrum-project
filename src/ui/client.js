@@ -934,23 +934,16 @@ function logout() {
 
     /* Assuming only one person per domain
     When log out:
-    1. Remove saved username from localStorage
-
-    2. Disconnect the socket -> to remove user from userlist and broadcast status
-
-    3. clear chat messages 
-    4. clear status log
-    5. clear private chat messages
-    6. hide chat page
-    7. show login page
-    8. clear username input field
+    -Remove saved username from localStorage
+    - clear chat messages 
+    - clear status log
+    - clear private chat messages
+    - hide chat page
+    - show login page
+    - clear username input field
     */
 
     localStorage.removeItem('username');
-
-    // // disable auto-reconnect before disconnecting
-    // socket.io.opts.reconnection = false;
-    // socket.disconnect();
 
     $('#message').empty();
     $('#status').empty();
