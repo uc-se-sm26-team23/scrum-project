@@ -27,10 +27,10 @@
     <div id="loginUI">
         <div class="login-container">
             <h1>Messenger</h1>
-            <p>Enter your username to start chatting</p>
+            <p>Enter your account to start chatting</p>
 
             <div class="input-group">
-                <label for="username">Username</label>
+                <label for="Username">Username</label>
                 <input type="text" id="username" placeholder="Username" pattern="\w{3,20}" required title="Username must be between 3–20 characters"/>
                 <label for="Password">Password</label>
                 <input type="password" id="password" placeholder="Type your password here"
@@ -43,7 +43,26 @@
             <button id="joinBtn">Join Chat</button>
             <p class="register-text">
                 Don't have an account?
-                <a href="#" id="registerBtn">Register Here</a>
+                <a href="#" id="showRegisterForm">Register Here</a>
+            </p>
+        </div>
+    </div>
+
+    <div id="registerUI" style="display:none">
+        <div class="login-container">
+            <h1>Get Started on Messenger</h1>
+            <p>Create an account to start chatting</p>
+
+            <div class="input-group">
+                <label for="reg-username">Username: </label> 
+                <input type="text" id="reg-username" placeholder="Username (3-20 characters)" maxlength="20">
+                <label for="reg-password">Password: </label>
+                <input type="password" id="reg-password" placeholder="Password (min 6 chars, letters + numbers)" maxlength="72">
+                <p id="register-error" style="color: red;"></p>
+            </div>
+            <button id="registerBtn">Register</button>
+            <p class="login-text">
+                Already have an account? <a href="#" id="showLoginForm">Log in here</a>
             </p>
         </div>
     </div>
