@@ -302,35 +302,28 @@ function sendMessage() {
 
 // AC-02.01 & AC-02.05
 // get message from server
-socket.on('message', function(data) { // data (object) - { message: "Alice: hello", id: 1 }
+socket.on('message', function({message, id}) { // data (object) - { message: "Alice: hello", id: 1 }
     
     // get senderName
-    var senderName = data.message.split(':')[0];
+    var senderName = message.split(':')[0];
 
     // get current user's username from browser storage
     var currUsername = document.getElementById("username").value;
 
     /*if senderName equal currentUsername then 
     dont show notification to the current user 
-    
     else show notification because senderName isnt the current Username */
-
     if (senderName !== currUsername) {
-
         showNotification(senderName + ' says:', data.message);
-
     }
 
     // Else Always display message
-    displayMessage(data);
+    displayMessage({message, id});
 });
 
 
-// data
-function displayMessage(data) { // server sends data as string
-    var msgText = data.message;
-    var messageId = data.id;
-
+// display message to public chat
+function displayMessage({msgText, messageId}) { // server sends data as string
     // create message div
     const msg = document.createElement("div");
     // msg.innerHTML = '<span style="color: #2431e5">[' + timestamp + ']</span> ' 
@@ -706,7 +699,7 @@ function createMessageTextElement(id, textContent, isEdited, isPrivate) {
     // turn input into a text element
     const msgText = document.createElement("p");
     if (isPrivate) {
-        textContent = textContent.message;
+        textContent = textContent.message; //private chats supposedly pass a struct?
     }
     var encodedText = encodeHTML(textContent);
     if (!isEdited) { // AC-02.06 - Output-Encoding strings coming from server

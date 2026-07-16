@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'ui')));
 
 const PORT = process.env.PORT || 8080;
 
-/*
+// connect to db
 (async () => {
   try {
     await messengerdb.connect();
@@ -39,8 +39,8 @@ const PORT = process.env.PORT || 8080;
     process.exit(1); //fail fast - avoid running server that cant authenticate users
   }
 }) ();
-*/
-server.listen(PORT, () => console.log('Server running on port ' + PORT));
+
+// server.listen(PORT, () => console.log('Server running on port ' + PORT));
 
 
 // In-memory store: socketId → username
@@ -48,6 +48,36 @@ const userlist = new Map();
 
 // variable to hold the message id
 var messageId = 0;
+
+
+
+
+
+// =============================================================
+// Use-Case-04: Authorize User
+// returns true if this connections was authenticated by Join Chat
+// =============================================================
+function isUserAuthorized(socket) {
+  if (!socket || !socket.authenticated) {
+    console.log('Connection has not been authenticated');
+  }
+  return socket.authenticated === true;
+}
+
+// =============================================================
+// Helper: send an event only to authenticated connections
+// =============================================================
+function sendToAuthenticatedClients(event, data) {
+  userlist.forEach((_, sid) => {
+    const s = io.sockets.sockets.get(sid);
+    if (s && isUserAuthorized(s)) {
+      s.emit(event, data);
+    }
+  })
+}
+
+
+
 
 io.on('connection', (socket) => {
 
@@ -85,14 +115,14 @@ io.on('connection', (socket) => {
   // AC-01.8: Given that a typing user's typing indicator is visible on other users' screen, When the typing user stops typing for more than a certain seconds or delete all texts, Then the typing indicator must disappear from other users' screen.
   // ---------------------------------------------------------------------------
   //Todo: code to implement the above use case and AC items
-  socket.on('message', (data) => {
+  socket.on('message', (message_text) => {
     // AC-01.2: ignore empty messages
-    if (!data || data.trim() === '') return;
+    if (!message_text || message_text.trim() === '') return;
     // AC-01.2 + AC-01.5: Broadcast to all clients with sender username
     const sender = userlist.get(socket.id);
     messageId += 1;
-    console.log(`Debug> "${sender}" sent: ${data}, id: ${messageId}`);
-    io.emit('message', {message: sender + ': ' + data.trim(), id: messageId});
+    console.log(`Debug> "${sender}" sent: ${message_text}, id: ${messageId}`);
+    io.emit('message', {message: sender + ': ' + message_text.trim(), id: messageId});
   });
 
   // Handles private messages
