@@ -310,7 +310,7 @@ body {
   background-color: var(--bg-messages); 
 }
 
-.message, .priv-message { 
+.message { 
   background: var(--bg-bubble); 
   color: var(--text-body);
   border: 1px solid var(--border-color);

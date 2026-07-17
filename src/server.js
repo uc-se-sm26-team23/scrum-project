@@ -19,7 +19,7 @@ app.use((req, res, next) => {
       "default-src 'self'; \
       script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com; \
       style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; \
-      connect-src 'self';"
+      connect-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com;"
   );
   next();
 });
@@ -129,6 +129,8 @@ io.on('connection', (socket) => {
   socket.on('privateMessage', (data) => {
     const sender = userlist.get(socket.id);
 
+    messageId += 1;
+
     // If user is private-chatting with themselves, emit only once
     if (data.to === socket.id) {
       socket.emit('privateMessage', {
@@ -136,7 +138,8 @@ io.on('connection', (socket) => {
         fromSocket: socket.id,
         toSocket: socket.id,
         message: data.message,
-        self: true
+        self: true,
+        id: messageId
       });
       return;
     }
@@ -145,7 +148,8 @@ io.on('connection', (socket) => {
     io.to(data.to).emit('privateMessage', {
       from: sender,
       fromSocket: socket.id,
-      message: data.message
+      message: data.message,
+      id: messageId
     });
 
     // Sends a copy back to the sender
@@ -153,7 +157,8 @@ io.on('connection', (socket) => {
       from: sender,
       toSocket: data.to,
       message: data.message,
-      self: true
+      self: true,
+      id: messageId
     });
   });
 
