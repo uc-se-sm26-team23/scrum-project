@@ -125,7 +125,6 @@ if (loginUsernameInput) {
     });
 }
 
-
 function joinChat() {
     const username = document.getElementById('username').value;
     const pattern = /^\w{3,20}$/;
@@ -146,7 +145,19 @@ function joinChat() {
     document.getElementById('chatUI').style.display = '';
 }
 
+// Toggle: Login -> Register
+document.getElementById('showRegisterForm').addEventListener('click', function() {
+    document.getElementById('loginUI').style.display = 'none';
+    document.getElementById('registerUI').style.display = '';
+    document.getElementById('login-error').textContent = '';
+});
 
+// Toggle: Register -> Login
+document.getElementById('showLoginForm').addEventListener('click', () => {
+    document.getElementById('registerUI').style.display = 'none';
+    document.getElementById('loginUI').style.display = '';
+    document.getElementById('register-error').textContent = '';
+});
 
 
 // =============================================================================
