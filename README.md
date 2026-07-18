@@ -36,7 +36,7 @@ _Teams are 3–5 students (per syllabus). Solo teams are not permitted._
 | Live prototype (Azure App Services) | https://team23-uc-se-messenger.azurewebsites.net/ |
 | GitHub Projects board (private) | [https://github.com/orgs/uc-se-sm26-team23/projects/1](https://github.com/orgs/uc-se-sm26-team23/projects/1) |
 | Source code repository (private) | [https://github.com/uc-se-sm26-team23/scrum-project](https://github.com/uc-se-sm26-team23/scrum-project) |
-| MongoDB Atlas cluster (configuration only — no credentials) | _e.g., cluster name, region_ |
+| MongoDB Atlas cluster (configuration only — no credentials) | • Cluster Name: MessengerDB<br>• Regions:<br>&nbsp;&nbsp;&nbsp;&nbsp;• ac-z35urdl-shard-00-02.qbjrnkt.mongodb.net:27017 (Primary)<br>&nbsp;&nbsp;&nbsp;&nbsp;• ac-z35urdl-shard-00-01.qbjrnkt.mongodb.net:27017 (Secondary) <br>&nbsp;&nbsp;&nbsp;&nbsp;• ac-z35urdl-shard-00-00.qbjrnkt.mongodb.net:27017 (Secondary) |
 
 
 ## Revision History
