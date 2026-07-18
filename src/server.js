@@ -65,13 +65,17 @@ function isUserAuthorized(socket) {
 }
 
 // =============================================================
-// Helper: send an event only to authenticated connections
+// Helper(s): send an event only to authenticated connections
 // =============================================================
 function sendToAuthenticatedClients(event, data) {
   userlist.forEach((_, sid) => {
     const s = io.sockets.sockets.get(sid);
     if (s && isUserAuthorized(s)) {
       s.emit(event, data);
+
+      if(event==="chat") { //New use case: store the chat message
+        messengerdb.storePublicChat(s.username, data);
+      }
     }
   })
 }

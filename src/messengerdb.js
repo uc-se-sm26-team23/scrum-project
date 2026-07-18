@@ -13,4 +13,22 @@ async function connect (){
   console.log('Debug>messengerdb.js: connected to MongoDB server!');
 }
 
+// ============================
+// Use-Case-11: Store Messages
+// ============================
+const storePublicChat = (sender, message)=>{
+  console.log("DEBUG> Storing Public message to MongoDB");
+
+  //TODO: validate the data
+  
+  let timestamp = Date.now();
+  let chat = {sender: sender, message: message, timestamp: timestamp};
+  try{
+      mongoclient.db("messenger").collection("public_chat").insertOne(chat);
+  }catch{
+      console.log("Debug>messengerdb.storePublicChat: error for adding '" + JSON.stringify(chat) + "'\n");
+  }
+}
+
+
 module.exports = { connect };
