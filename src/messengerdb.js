@@ -75,9 +75,9 @@ const register = async (username, password) => {
 
   // AC-10.6: Hash password before storing.
   const hashedPassword = await bcrypt.hash(password, 10)
-  await user.insertOne( {username: username, password: hashedPassword} )
+  await users.insertOne( {username: username, password: hashedPassword} )
 
-  return {sucess: true};
+  return {success: true};
 };
 
 // ============================

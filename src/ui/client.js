@@ -332,6 +332,20 @@ socket.on('privateStopTyping', (data) => {
     }
 });
 
+// Socket listerner for Register Account
+socket.on('register-success', function(username) {
+  document.getElementById('registerUI').style.display = 'none';
+  document.getElementById('register-error').textContent = '';
+  document.getElementById('reg-username').value = '';
+  document.getElementById('reg-password').value = '';
+  document.getElementById('loginUI').style.display = '';
+  document.getElementById('login-success').textContent = `Account '${username}' created! You can now Log In!`;
+});
+
+socket.on('register-error', function(message) {
+  document.getElementById('register-error').textContent = message;
+});
+
 /*
 if nobody typing: clear indictaor
 if one person is typing: Show user typing...
