@@ -174,6 +174,9 @@ document.getElementById('showRegisterForm').addEventListener('click', function()
     document.getElementById('loginUI').style.display = 'none';
     document.getElementById('registerUI').style.display = '';
     document.getElementById('login-error').textContent = '';
+
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
 });
 
 // Toggle: Register -> Login
@@ -181,14 +184,46 @@ document.getElementById('showLoginForm').addEventListener('click', () => {
     document.getElementById('registerUI').style.display = 'none';
     document.getElementById('loginUI').style.display = '';
     document.getElementById('register-error').textContent = '';
+
+    document.getElementById('reg-username').value = '';
+    document.getElementById('reg-password').value = '';
 });
+
+// ======================================================
+// Use Case 10: Register Account
+// ======================================================
+document.getElementById('registerBtn').addEventListener('click', registerAccount);
+
+function registerAccount() {
+
+  // AC-10.2 Client-side format validation before submission
+  const usernameInput = document.getElementById('reg-username').value;
+  const pattern = /^\w{3,20}$/;
+
+  if (!usernameInput || !pattern.test(usernameInput)) {
+    document.getElementById('register-error').textContent = "Error: Username cannot be empty and must be between 3-20 characters!";
+    return;
+  }
+
+  const passwordInput = document.getElementById('reg-password').value;
+  const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+  if (!passwordInput || !passwordPattern.test(passwordInput)) {
+    document.getElementById('register-error').textContent = "Error: Password must be at least 6 characters long and contains both numbers and letters!";
+    return;
+  }
+
+  // Clear input boxes then emit to server
+  document.getElementById('register-error').textContent='';
+  document.getElementById('reg-username').value = '';
+  document.getElementById('reg-password').value = '';
+  socket.emit('register', {username: usernameInput, password: passwordInput});
+
+}
 
 
 // =============================================================================
 // Use-Case-07: Authenticate User
 // =============================================================================
-
-
 // is this used anywhere?
 function authenticateUser() {
     var username = usernameInput.value.trim();
@@ -810,7 +845,7 @@ function showNotification(sender, message_body) {
 
 
 // ==================================================
-// Use-Case-0X: Show online users
+// Use-Case-06: Show online users
 // ==================================================
 
 // show userlist panel

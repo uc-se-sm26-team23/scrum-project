@@ -262,6 +262,51 @@ io.on('connection', (socket) => {
     io.emit("delete", data);
   });
 
+  socket.on('register', async function ({username, password}) {
+
+    // AC-10.3: Server-side validation
+    if (!username ||typeof username !== 'string' 
+      || !password || typeof password !== 'string' 
+      || username.trim().length == 0 || password.length == 0) {
+
+      socket.emit('register-error', 'Invalid Request.');
+      return;
+    }
+
+    username = username.trim();
+
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+    const usernamePattern = /^\w{3,20}$/;
+    
+    // AC-10.4: Server-side re-validation Inputs Patterns
+    if (!usernamePattern.test(username)) {
+      socket.emit('register-error', 'Error: Username must be 3-20 characters (letters, numbers, underscore).');
+      return; 
+    }
+
+    if (!passwordPattern.test(password)) {
+      socket.emit('register-error', 'Error: Password must be at least 6 characters with letters and numbers.');
+      return;
+    }
+
+    let result;
+    try {
+      // connect to database and register user
+      result = await messengerdb.register(username, password)
+    } catch (err) {
+
+      socket.emit('register-error', 'Error: Server-side. Please Try Again.');
+      return;
+    }
+
+    if (!result.success) {
+      socket.emit('register-error', result.message);
+      return;
+    }
+
+    socket.emit('register-success', username);
+  });
+
   // ---------------------------------------------------------------------------
   // Use-Case-02: Receive message — disconnect notification
   //
