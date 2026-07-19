@@ -85,6 +85,44 @@ function sendToAuthenticatedClients(event, data) {
 
 io.on('connection', (socket) => {
 
+  // UC-09: authentication state per connection
+  socket.authenticated = false;
+  console.log('New client connected - socket ID: ' + socket.id )
+
+  // =============================================================
+  // Use-Case-08: Join Chat
+  // =============================================================
+  socket.on('join', async function({username, password}){
+    // AC-08.2: server-side structural validation
+    if (!username || typeof username !== 'string' ||
+        !password || typeof password !== 'string' ||
+        username.trim().length === 0              ||
+        password.length === 0){
+          socket.emit('join-error', 'Invalid request.');  // AC-08.4
+          return;
+        }
+    username = username.trim();
+    // AC-08.3: credential lookup - same result for unknown user or wrong password
+    const user = await messengerdb.find(username,password);
+    if (!user){
+      // AC-08.3: generic message - does not reveal which field failed
+      socket.emit('join-error', 'Invalid username or password.'); // AC-08.4
+      return;
+    }
+
+    // AC-08.5: mark connection as authenticated before any further response
+    socket.authenticated = true;
+    userlist.set(socket.id, username);
+
+    socket.emit('join-success', username); // AC-08.6
+    // AC-08.7: boardcast upadeted user list to authenticated connections only
+    sendToAuthenticatedClients('status', username + ' joined the chat. Number of connected clients: ' + userlist.size);
+    const authenticatedUsers = Array.from(new Set(userlist.values()));
+    sendToAuthenticatedClients('user-list', authenticatedUsers); // AC-08.7
+    console.log('UC-08: user joined -', username, 
+                '| authenticated connections: ', userlist.size);
+  });
+
   // AC-02.02 - Auto-assign a unique username from the socket ID
   socket.on("set username", (username) => {
     socket.username = username; // Store on the socket object

@@ -14,6 +14,24 @@ async function connect (){
 }
 
 // ============================
+// Use-Case-9: Authorize User
+// ============================
+const find = async (username,password)=>{
+  let user = null;
+  console.log(`Debug>messengerdb.js: find user '${username}’`); // password log is removed
+  // Data layer independently re-validates type — defense in depth,
+  // same NoSQL-injection guard as register(): reject non-string input
+  if (typeof username !== 'string' || typeof password !== 'string') return null;
+    // look up by username only — password is never queryable directly, it's hashed
+    user = await users.findOne({ username: username });
+  if (!user) return null;
+    // compare the plaintext attempt against the stored bcrypt hash
+    const passwordMatches = await bcrypt.compare(password, user.password);
+  if (!passwordMatches) return null;
+  return user;
+}
+
+// ============================
 // Use-Case-11: Store Messages
 // ============================
 const storePublicChat = (sender, message)=>{
@@ -31,4 +49,4 @@ const storePublicChat = (sender, message)=>{
 }
 
 
-module.exports = { connect };
+module.exports = { connect, find };
