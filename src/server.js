@@ -107,9 +107,11 @@ io.on('connection', (socket) => {
     console.log(`Debug> MongoDB Validation, user='${user}'`);
     if (!user){
       // AC-08.3: generic message - does not reveal which field failed
+      console.log(`Debug> Did NOT Pass MongoDB Validation`);
       socket.emit('join-error', 'Invalid username or password.'); // AC-08.4
       return;
     }
+    console.log(`Debug> Passed MongoDB Validation`);
 
     // AC-08.5: mark connection as authenticated before any further response
     socket.authenticated = true;

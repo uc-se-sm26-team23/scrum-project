@@ -24,10 +24,10 @@ socket.on("connect", () => { //connected to the server
     if (savedUsername) {
         socket.emit("set username", savedUsername)
 
-        // skin login page
+        /*// skin login page
         $('#loginUI').hide()
         // proceed to chat page
-        $('#chatUI').show()
+        $('#chatUI').show()*/
 
         console.log('Debug>Session restored for:', savedUsername); // UI testing only
 
@@ -153,20 +153,20 @@ function joinChat() {
     // console.log("Debug>sent login credentials to server: " + JSON.stringify(logincredentials));
 
     socket.on('join-success', function(username) {
+        console.log('Join Success');
         document.getElementById('loginUI').style.display = 'none';
         document.getElementById('chatUI').style.display = '';
         document.getElementById('display-name').textContent = username;
     });
 
     socket.on('join-error', function(message) {
+        console.log('Join Error');
         document.getElementById('login-error').textContent = message;
     });
 
     // AC-02.05 - Request Notification on message
     $("#notify-prompt").css("display", "block"); // show the prompt we made after joining
 
-    $('#loginUI').hide();
-    document.getElementById('chatUI').style.display = '';
 }
 
 // Toggle: Login -> Register
