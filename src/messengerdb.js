@@ -7,7 +7,7 @@ const { MongoClient } = require('mongodb');
 const bcrypt = require('bcrypt');
 const uri = "mongodb+srv://slutskcp_db_user:vP1tYvpoOIQcnOwo@cluster0.gsxkdyd.mongodb.net/?appName=Cluster0";
 const client = new MongoClient(uri);
-let users = client.db('messenger').collection('users');
+let users = client.db('Messenger').collection('user');
 
 async function connect (){
   await client.connect();
@@ -19,17 +19,25 @@ async function connect (){
 // ============================
 const find = async (username,password)=>{
   let user = null;
-  console.log(`Debug>messengerdb.js: find user '${username}'`); // password log is removed
+  console.log(`Debug>messengerdb.js: find username '${username}'`); // password log is removed
   // Data layer independently re-validates type — defense in depth,
   // same NoSQL-injection guard as register(): reject non-string input
   if (typeof username !== 'string' || typeof password !== 'string') return null;
   // look up by username only — password is never queryable directly, it's hashed
   user = await users.findOne({ username: username });
-  //console.log(`Debug>in messengerdb.js, user: '${user}'`);
-  if (!user) return null;
-    // compare the plaintext attempt against the stored bcrypt hash
-    const passwordMatches = await bcrypt.compare(password, user.password);
+  if (!user){
+    console.log(`Debug>in messengerdb.js, username: '${username}' NOT FOUND`);
+    return null;
+  };
+  console.log(`Debug>in messengerdb.js, username: '${username}' FOUND`);
+  // compare the plaintext attempt against the stored bcrypt hash
+  /* 
+  const passwordMatches = await bcrypt.compare(password, user.password);
   if (!passwordMatches) return null;
+  */
+
+  // Plain-text comparison (DELETE after Applying BCRYPT HASING PW)
+  if (user.password !== password) return null;
   return user;
 }
 

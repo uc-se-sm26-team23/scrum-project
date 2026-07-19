@@ -104,7 +104,6 @@ io.on('connection', (socket) => {
     username = username.trim();
     // AC-08.3: credential lookup - same result for unknown user or wrong password
     const user = await messengerdb.find(username,password);
-    console.log(`Debug> MongoDB Validation, user='${user}'`);
     if (!user){
       // AC-08.3: generic message - does not reveal which field failed
       console.log(`Debug> Did NOT Pass MongoDB Validation`);
