@@ -126,17 +126,41 @@ if (loginUsernameInput) {
 }
 
 function joinChat() {
+    //input validation here before sending to the server
     const username = document.getElementById('username').value;
     const pattern = /^\w{3,20}$/;
     
-
     if (!username || !pattern.test(username)) {
         alert("Username cannot be empty and must be between 3–20 characters!");
         return;
     }
     
+    // Need to be removed after switching to mongoDB
     localStorage.setItem("username", username);
     socket.emit("set username", username);
+
+    const password = document.getElementById('password').value;
+    const passwordpattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+    if (!password || !passwordpattern.test(password)){
+        document.getElementById('login-error').textContent="Password must be at least 6 characters long and contain at least one letter and one number";
+        return;
+    }
+
+    document.getElementById('login-error').textContent='';
+    // AC-08.1: send credentials (as JSON object) to server (UC-08)
+    const logincredentials = {username: username, password: password};
+    socket.emit('join', logincredentials);
+    // console.log("Debug>sent login credentials to server: " + JSON.stringify(logincredentials));
+
+    socket.on('join-success', function(username) {
+        document.getElementById('loginUI').style.display = 'none';
+        document.getElementById('chatUI').style.display = '';
+        document.getElementById('display-name').textContent = username;
+    });
+
+    socket.on('join-error', function(message) {
+        document.getElementById('login-error').textContent = message;
+    });
 
     // AC-02.05 - Request Notification on message
     $("#notify-prompt").css("display", "block"); // show the prompt we made after joining
