@@ -156,7 +156,7 @@ function joinChat() {
         console.log('Join Success');
         document.getElementById('loginUI').style.display = 'none';
         document.getElementById('chatUI').style.display = '';
-        document.getElementById('display-name').textContent = username;
+        // document.getElementById('display-name').textContent = username; - there's no 'display-name' element? - connor
     });
 
     socket.on('join-error', function(message) {
@@ -481,18 +481,20 @@ socket.on('privateMessage', (data) => {
         privateChats[chatId] = [];
     }
 
-    privateChats[chatId].push({
+    const msg = {
         from: data.from,
         message: data.message,
         timestamp: new Date().toLocaleTimeString(),
         id: data.id
-    });
+    };
+
+    privateChats[chatId].push(msg);
 
     if (
         currentPrivateUser && 
         currentPrivateUser.socketId === chatId
     ) {
-        displayPrivateMessage(chatId);
+        displayPrivateMessage(msg);
     }
     
     privateTypingIndicator.textContent = "";
@@ -500,39 +502,24 @@ socket.on('privateMessage', (data) => {
 });
 
 
-// Displays private messages
-function displayPrivateMessage(socketId){
+function loadPrivateMessages(socketId) {
     const messagesDiv = document.getElementById("private-messages");
     messagesDiv.innerHTML= "";
 
-    // Gets past conversation with current user or creates a new conversation
     const conversation = privateChats[socketId] || [];
-
     // Displays each past message
     conversation.forEach(msg=>{ 
-        console.log("client.js::displayPrivatemessage() msg: ", msg);
-
-        // // Creates div for each message
-        // const privMessageDiv=document.createElement("div");
-        // privMessageDiv.className = 'priv-message'
-
-        // // Displays the timestamp
-        // const timestampSpan = document.createElement("span");
-        // timestampSpan.classList.add("timestamp");
-        // timestampSpan.textContent = `[${msg.timestamp}] `;
-        // privMessageDiv.appendChild(timestampSpan);
-    
-        // // Displays the message content
-        // const messageSpan = document.createElement('span');
-        // messageSpan.textContent = `${msg.from}: ${msg.message}`;
-        // privMessageDiv.appendChild(messageSpan);
-        
-        //msg.from, msg.message, msg.timestamp 
         const privMsg = createMessage(msg.from + ": " + msg.message, msg.id, msg.timestamp);
-
         messagesDiv.appendChild(privMsg);
-        
     })
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+// Displays private messages
+function displayPrivateMessage({from, message, timestamp, id}){
+    const messagesDiv = document.getElementById("private-messages");
+    const privMsg = createMessage(from + ": " + message, id, timestamp);
+    messagesDiv.appendChild(privMsg);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
@@ -644,6 +631,8 @@ function submitEditMessage(e) {
 // data should be {id: id, message: message}
 socket.on("edit", handleEditMessage);
 function handleEditMessage(data) {
+    console.log("client.js::handleEditMessage socket.id", socket.id);
+
     var text = data.message;
     var id = data.id;
     // create message text again
@@ -899,7 +888,7 @@ socket.on('userList', function(users) {
 function openPrivateChat(user){
     currentPrivateUser = user;
 
-    displayPrivateMessage(user.socketId);
+    loadPrivateMessages(user.socketId);
 
     document.getElementById("private-chat").style.display = "block";
     document.getElementById("private-header").textContent = 
