@@ -73,8 +73,10 @@ function sendToAuthenticatedClients(event, data) {
     if (s && isUserAuthorized(s)) {
       s.emit(event, data);
 
-      if(event==="chat") { //New use case: store the chat message
-        messengerdb.storePublicChat(s.username, data);
+      if(event==='message') { //New use case: store the chat message
+        message_text = data.message.split(': ')[1];
+        messengerdb.storePublicChat(s.username, message_text);
+        console.log(`Debug> Chat '${s.username}': '${message_text}' stored in MongoDB.`);
       }
     }
   })
@@ -166,7 +168,8 @@ io.on('connection', (socket) => {
     const sender = userlist.get(socket.id);
     messageId += 1;
     console.log(`Debug> "${sender}" sent: ${message_text}, id: ${messageId}`);
-    io.emit('message', {message: sender + ': ' + message_text.trim(), id: messageId});
+    //io.emit('message', {message: sender + ': ' + message_text.trim(), id: messageId});
+    sendToAuthenticatedClients('message' , {message: sender + ': ' + message_text.trim(), id: messageId})
   });
 
   // Handles private messages

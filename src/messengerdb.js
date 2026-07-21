@@ -20,6 +20,12 @@ async function connect (){
 // ========================================================================
 let users = client.db('Messenger').collection('user');
 
+// ========================================================================
+// Database: 'Messenger'
+// Table (Collection): 'chat' (Note: For public chat, private chat implementation will likely be different)
+// ========================================================================
+
+let public_chat = client.db('Messenger').collection('chat');
 
 // ============================
 // Use-Case-9: Authorize User
@@ -91,11 +97,11 @@ const storePublicChat = (sender, message)=>{
   let timestamp = Date.now();
   let chat = {sender: sender, message: message, timestamp: timestamp};
   try{
-      mongoclient.db("messenger").collection("public_chat").insertOne(chat);
+      public_chat.insertOne(chat);
   }catch{
       console.log("Debug>messengerdb.storePublicChat: error for adding '" + JSON.stringify(chat) + "'\n");
   }
 };
 
 
-module.exports = { connect, find , register};
+module.exports = { connect, find , register, storePublicChat };
