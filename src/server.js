@@ -128,27 +128,26 @@ io.on('connection', (socket) => {
   });
 
   // AC-02.02 - Auto-assign a unique username from the socket ID
-  socket.on("set username", (username) => {
-    socket.username = username; // Store on the socket object
-    userlist.set(socket.id, username);
-    console.log(`Socket ${socket.id} updated username to: ${username}`);
-    io.emit(
-        "status",
-        username + " joined the chat. Number of connected clients: " + userlist.size
-    );
-    
-    const users = [];
-
-    for (const [socketId, username] of userlist) {
-      users.push({
-        socketId,
-        username
-      });
-    };
-
-    io.emit('userList', users);
-  });
-
+  //socket.on("set username", (username) => {
+  //  socket.username = username; // Store on the socket object
+  //  userlist.set(socket.id, username);
+  //  console.log(`Socket ${socket.id} updated username to: ${username}`);
+  //  io.emit(
+  //      "status",
+  //      username + " joined the chat. Number of connected clients: " + userlist.size
+  //  );
+  //  
+  //  const users = [];
+//
+  //  for (const [socketId, username] of userlist) {
+  //    users.push({
+  //      socketId,
+  //      username
+  //    });
+  //  };
+//
+  //  io.emit('userList', users);
+  //})
 
   // ---------------------------------------------------------------------------
   // Use-Case-01: Send message
