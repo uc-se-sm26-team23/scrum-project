@@ -417,7 +417,7 @@ function displayMessage({msgText, messageId}) { // server sends data as string
 }
 
 
-function createMessage(msgText, messageId, timestamp) {
+function createMessage(msgText, messageId, timestamp, isEdited=false, isDeleted=false) {
     // create message div
     const msg = document.createElement("div");
     msg.className = "message";
@@ -426,16 +426,18 @@ function createMessage(msgText, messageId, timestamp) {
     //                 + DOMPurify.sanitize(data);
 
     // element that contains the text of the message
-    const msgTextElm = createMessageTextElement(messageId, msgText, timestamp, false);
+    const msgTextElm = createMessageTextElement(messageId, msgText, timestamp, isEdited, isDeleted);
     msg.appendChild(msgTextElm);
 
-    // get username of data
-    var sender = msgText.split(":")[0];
-    var username = localStorage.getItem("username");
-    if (sender === username) { // only display options if they're your messages
-        // div that contains three dots and edit/delete buttonsconst 
-        const msgOptDiv = createMessageOptionsElement(messageId);
-        msg.appendChild(msgOptDiv);
+    // get username of data to create msg options
+    if (!isDeleted) {
+        var sender = msgText.split(":")[0];
+        var username = localStorage.getItem("username");
+        if (sender === username) { // only display options if they're your messages
+            // div that contains three dots and edit/delete buttonsconst 
+            const msgOptDiv = createMessageOptionsElement(messageId);
+            msg.appendChild(msgOptDiv);
+        }
     }
 
     return msg;
@@ -446,11 +448,12 @@ function createMessage(msgText, messageId, timestamp) {
 function sendPrivateMessage() {
 
     var input = privChatMessageInput.value.trim();
+    // curr private user is a struct {socketId, username}
     if (!input || !currentPrivateUser) return;
 
     // Sends the message only to the current connected user you clicked on
     socket.emit("privateMessage", {
-        to: currentPrivateUser.socketId,
+        to: currentPrivateUser,
         message: input
     });
 
@@ -465,8 +468,13 @@ function sendPrivateMessage() {
 }
 
 // Handles private message reception
+// data params are fromSocket, fromUser, toSocket, toUser, message, self, id
 socket.on('privateMessage', (data) => {
     const chatId = data.self ? data.toSocket : data.fromSocket;
+    const chatUser = data.self ? data.toUser : data.fromUser;
+    // admin sends message
+    // test should put it in privateChats[admin]
+    // admin should put it in privateChats[test]
 
     // if data.self is true == our own message else from someone else so notify
     if (!data.self) {
@@ -476,20 +484,21 @@ socket.on('privateMessage', (data) => {
         );
     }
     
-
-    if (!privateChats[chatId]) {
-        privateChats[chatId] = [];
+    // init array if not there
+    if (!privateChats[chatUser]) {
+        privateChats[chatUser] = [];
     }
 
+    // create msg and add it to pC array
     const msg = {
-        from: data.from,
+        from: data.fromUser,
         message: data.message,
         timestamp: new Date().toLocaleTimeString(),
         id: data.id
     };
+    privateChats[chatUser].push(msg);
 
-    privateChats[chatId].push(msg);
-
+    // display message
     if (
         currentPrivateUser && 
         currentPrivateUser.socketId === chatId
@@ -498,18 +507,21 @@ socket.on('privateMessage', (data) => {
     }
     
     privateTypingIndicator.textContent = "";
-
 });
 
 
-function loadPrivateMessages(socketId) {
+function loadPrivateMessages(toUser) {
     const messagesDiv = document.getElementById("private-messages");
     messagesDiv.innerHTML= "";
 
-    const conversation = privateChats[socketId] || [];
+    const conversation = privateChats[toUser] || [];
     // Displays each past message
     conversation.forEach(msg=>{ 
-        const privMsg = createMessage(msg.from + ": " + msg.message, msg.id, msg.timestamp);
+        let isEdited = false;
+        let isDeleted = false;
+        if (msg.edited) isEdited = true;
+        if (msg.deleted) isDeleted = true;
+        const privMsg = createMessage(msg.from + ": " + msg.message, msg.id, msg.timestamp, isEdited, isDeleted);
         messagesDiv.appendChild(privMsg);
     })
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -569,7 +581,6 @@ function editMessage(e) {
     // get placeholder text
     // (take the text content and remove the "username: ")
     var editPlaceholder = msgText.textContent.split(": ");
-
     editPlaceholder = editPlaceholder.splice(1); // remove username
     editPlaceholder = editPlaceholder.join(": "); // just in case there are any ": " in the message itself
 
@@ -631,8 +642,6 @@ function submitEditMessage(e) {
 // data should be {id: id, message: message}
 socket.on("edit", handleEditMessage);
 function handleEditMessage(data) {
-    console.log("client.js::handleEditMessage socket.id", socket.id);
-
     var text = data.message;
     var id = data.id;
     // create message text again
@@ -658,6 +667,26 @@ function handleEditMessage(data) {
         // replace the message normally if someone else edited theirs
         const oldMsgTextElm = document.getElementById("message-text-"+id);
         msgDiv.replaceChild(msgText, oldMsgTextElm);
+    }
+    
+    // if in private message update the privateChats
+    // get parent of msgDiv
+    if (!currentPrivateUser) return;
+    const gp = msgDiv.parentElement;
+    if (gp.id === "private-messages") {
+        // find the message based on the id
+        let index = -1;
+        for (let i = 0; i < privateChats[currentPrivateUser.username].length; i++) {
+          if (privateChats[currentPrivateUser.username][i].id == id) {
+                index = i;
+                break;
+            }
+        }
+        let newText = msgText.lastChild.innerHTML;
+        let newMessage = newText.split(": ").slice(1).join(": ");
+        privateChats[currentPrivateUser.username][index].timestamp = new Date().toLocaleTimeString();
+        privateChats[currentPrivateUser.username][index].message = newMessage;
+        privateChats[currentPrivateUser.username][index].edited = true;
     }
 
     return;
@@ -701,13 +730,29 @@ function handleDeleteMessage(data) {
         const msgOptDiv = document.getElementById("message-options-"+id);
         msgOptDiv.remove();
     }
+
+    // update privateChats if private
+    if (!currentPrivateUser) return;
+    const ggp = msgText.parentElement.parentElement.parentElement; // great grandparent
+    if (ggp.id === "private-messages") {
+        let index = -1;
+        for (let i = 0; i < privateChats[currentPrivateUser.username].length; i++) {
+          if (privateChats[currentPrivateUser.username][i].id == id) {
+                index = i;
+                break;
+            }
+        }
+        privateChats[currentPrivateUser.username][index].deleted = true;
+        privateChats[currentPrivateUser.username][index].message = ""; // clear message bc why not. it's deleted
+        privateChats[currentPrivateUser.username][index].timestamp = new Date().toLocaleTimeString();
+    }
     return;
 }
 
 // create the <p>message</p> element
 // it's bad code, i'm aware
 // text content has to include the sender (e.g. "sender: message")
-function createMessageTextElement(id, textContent, timestamp, isEdited) {
+function createMessageTextElement(id, textContent, timestamp, isEdited, isDeleted=false) {
 
     // `${msg.from}: ${msg.message}`
     const msgTextDiv = document.createElement("div");
@@ -728,7 +773,10 @@ function createMessageTextElement(id, textContent, timestamp, isEdited) {
     // turn input into a text element
     const msgText = document.createElement("p");
     var encodedText = encodeHTML(textContent);
-    if (!isEdited) { // AC-02.06 - Output-Encoding strings coming from server
+    if (isDeleted) {
+        let sender = encodedText.split(": ")[0];
+        msgText.innerHTML = "<i> deleted by " + sender + "</i>";
+    } else if (!isEdited) { // AC-02.06 - Output-Encoding strings coming from server
         msgText.innerHTML = encodedText;
     } else {
         //add (edited) next to username
@@ -888,7 +936,7 @@ socket.on('userList', function(users) {
 function openPrivateChat(user){
     currentPrivateUser = user;
 
-    loadPrivateMessages(user.socketId);
+    loadPrivateMessages(user.username);
 
     document.getElementById("private-chat").style.display = "block";
     document.getElementById("private-header").textContent = 

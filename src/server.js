@@ -170,18 +170,20 @@ io.on('connection', (socket) => {
   });
 
   // Handles private messages
-  socket.on('privateMessage', (data) => {
+  // to is {socketId, username}
+  socket.on('privateMessage', ({to, message}) => {
     const sender = userlist.get(socket.id);
 
     messageId += 1;
 
     // If user is private-chatting with themselves, emit only once
-    if (data.to === socket.id) {
+    if (to.socketId === socket.id) {
       socket.emit('privateMessage', {
-        from: sender,
         fromSocket: socket.id,
+        fromUser: sender,
         toSocket: socket.id,
-        message: data.message,
+        toUser: sender,
+        message: message,
         self: true,
         id: messageId
       });
@@ -189,18 +191,23 @@ io.on('connection', (socket) => {
     }
 
     // Sends the message to the recipient
-    io.to(data.to).emit('privateMessage', {
-      from: sender,
+    io.to(to.socketId).emit('privateMessage', {
       fromSocket: socket.id,
-      message: data.message,
+      fromUser: sender,
+      toSocket: to.socketid,
+      toUser: to.username,
+      message: message,
+      self: false,
       id: messageId
     });
 
     // Sends a copy back to the sender
     socket.emit("privateMessage", {
-      from: sender,
-      toSocket: data.to,
-      message: data.message,
+      fromSocket: socket.id,
+      fromUser: sender,
+      toSocket: to.socketId,
+      toUser: to.username,
+      message: message,
       self: true,
       id: messageId
     });
