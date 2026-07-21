@@ -190,6 +190,10 @@ io.on('connection', (socket) => {
         self: true,
         id: messageId
       });
+
+      messengerdb.storePrivChat(sender, sender, message);
+      console.log(`Debug> Private Chat stored in MongoDB.`);
+
       return;
     }
 
@@ -214,6 +218,10 @@ io.on('connection', (socket) => {
       self: true,
       id: messageId
     });
+
+      messengerdb.storePrivChat(sender, to.username, message);
+      console.log(`Debug> Private chat stored in MongoDB.`);
+
   });
 
   // AC-01.7: Typing indicator event is sent to connected users 

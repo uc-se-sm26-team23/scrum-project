@@ -27,6 +27,13 @@ let users = client.db('Messenger').collection('user');
 
 let public_chat = client.db('Messenger').collection('chat');
 
+// ========================================================================
+// Database: 'Messenger'
+// Table (Collection): 'privchat' 
+// ========================================================================
+
+let priv_chat = client.db('Messenger').collection('privchat');
+
 // ============================
 // Use-Case-9: Authorize User
 // ============================
@@ -103,5 +110,17 @@ const storePublicChat = (sender, message)=>{
   }
 };
 
+const storePrivChat = (sender, receiver, message)=>{
+  console.log("DEBUG> Storing Private Message to MongoDB");
+  //TODO: validate the data
 
-module.exports = { connect, find , register, storePublicChat };
+  let timestamp = Date.now();
+  let chat = {sender: sender, receiver: receiver, message: message, timestamp: timestamp};
+  try {
+    priv_chat.insertOne(chat);
+  } catch {
+    console.log("Debug>messengerdb.storePrivChat: error for adding '" + JSON.stringify(chat) + "'\n");
+  }
+};
+
+module.exports = { connect, find , register, storePublicChat, storePrivChat };
