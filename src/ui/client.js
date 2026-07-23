@@ -157,6 +157,9 @@ function joinChat() {
         document.getElementById('loginUI').style.display = 'none';
         document.getElementById('chatUI').style.display = '';
         // document.getElementById('display-name').textContent = username; - there's no 'display-name' element? - connor
+        
+    
+    
     });
 
     socket.on('join-error', function(message) {
@@ -905,7 +908,7 @@ document.getElementById('users-toggle-close').addEventListener('click', ShowUser
 
 socket.on('userList', function(users) {
     const userListElement = document.getElementById("user-list");
-    const currentUser = document.getElementById("username").value; // get logged in username
+   // const currentUser = document.getElementById("username").value; // get logged in username
     
     // Clear the current list
     userListElement.innerHTML = "";
@@ -916,12 +919,15 @@ socket.on('userList', function(users) {
 
     // li.style.cursor = "pointer";
 
+    const storedUsername = localStorage.getItem("username");
+    const isSelf = (user.socketId === socket.id) || (user.username === storedUsername);
+
     // Show "(You)" only for the current user
-    if (user.socketId === socket.id) {
-        li.textContent = `${user.username} (You)`;
-    } else {
-        li.textContent = user.username;
-    }
+    if (isSelf) {
+            li.textContent = `${user.username || user} (You)`;
+        } else {
+            li.textContent = user.username || user;
+        }
 
     userListElement.appendChild(li);
 

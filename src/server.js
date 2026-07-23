@@ -125,6 +125,21 @@ io.on('connection', (socket) => {
     sendToAuthenticatedClients('user-list', authenticatedUsers); // AC-08.7
     console.log('UC-08: user joined -', username, 
                 '| authenticated connections: ', userlist.size);
+
+    // Construct user array from the Map
+    const users = [];
+    userlist.forEach((uname, sid) => {
+        users.push({ socketId: sid, username: uname });
+    });
+
+    // Send the correct event and structure to authenticated clients
+    userlist.forEach((_, sid) => {
+        const s = io.sockets.sockets.get(sid);
+        if (s && isUserAuthorized(s)) {
+            s.emit('userList', users);
+        }
+    });
+    
   });
 
   // AC-02.02 - Auto-assign a unique username from the socket ID
