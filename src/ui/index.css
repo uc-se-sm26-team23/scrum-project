@@ -493,6 +493,32 @@ body {
     background:rgba(255,255,255,.15);
 
 }
+
+/* Status dot shown next to each username in the user list.
+   Uses semi-transparent white for offline so it works across
+   all three color themes (blue, emerald, midnight). */
+.user-status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+  
+.user-status-dot.online  { background-color: #22c55e; }           /* green — universally readable */
+.user-status-dot.offline { background-color: rgba(255,255,255,.3); } /* muted white on any panel color */
+  
+  /* Row alignment so dot + text sit on the same baseline */
+#user-list li {
+    display: flex;
+    align-items: center;
+}
+  
+  /* Dim offline rows so online users draw the eye first */
+#user-list li.user-offline {
+    opacity: 0.6;
+}
 /*
 ================================================== 
             4. Typing Indicator

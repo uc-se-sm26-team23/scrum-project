@@ -49,8 +49,68 @@ const userlist = new Map();
 // variable to hold the message id
 var messageId = 0;
 
+// =============================================================
+// Use-Case-06 v2: Show ALL Registered Users
+// =============================================================
+async function AllUserList() {
+  
+  const allUsernames = await messengerdb.getAllUsers() // allUsernames = ["admin", "test", ...]
 
+  /*
+  // reverse lookup Map to track if user(s) are online: username → socketId
+  // if a user has a socketId -> Online
+  // else -> Offline
+  
+  OnlineMap use to hold ONLY users that are connected/online
+  username1 → socketId1
+  username2 → socketId2
+  */
+  const onlineMap = new Map(); 
+  userlist.forEach((uname,sid) => onlineMap.set(uname, sid));
 
+  /*
+  if users in onlineMap -> true for Online Status & original 'socketId'
+  else -> false for Offline Status & 'null' socketId
+  */
+  // merge DB Users with online/offline status
+  const users = allUsernames.map(username => ({
+    username,
+    online: onlineMap.has(username), // true or false
+    socketId: onlineMap.get(username) || null
+  }));
+
+  /*
+  If both users status same -> Sort by alphabetically
+  If both users x status -> Online users top, Offline users bot
+  
+  return value: 
+    -1 -> user1 goes before user2
+    1 -> user2 goes before user1
+    0 -> stays the same
+  
+  */
+  users.sort((user1, user2) => {
+    
+    // different status, check alphabetically
+    if (user1.online === true  && user2.online === false) {
+      return -1; // user1 goes first
+    }
+
+    if (user1.online === false && user2.online === true) {
+      return 1;  // user2 goes first
+    }
+    // same status, check alphabetically
+    return user1.username.localeCompare(user2.username);
+  });
+
+    // Only Authenticated Users received the updated list
+    userlist.forEach((_, sid) => {
+      const s = io.sockets.sockets.get(sid);
+      if (s && isUserAuthorized(s)) {
+        s.emit('userList', users);
+    }
+  });
+}
 
 
 // =============================================================
@@ -121,24 +181,11 @@ io.on('connection', (socket) => {
     socket.emit('join-success', username); // AC-08.6
     // AC-08.7: boardcast upadeted user list to authenticated connections only
     sendToAuthenticatedClients('status', username + ' joined the chat. Number of connected clients: ' + userlist.size);
-    const authenticatedUsers = Array.from(new Set(userlist.values()));
-    sendToAuthenticatedClients('user-list', authenticatedUsers); // AC-08.7
+
     console.log('UC-08: user joined -', username, 
                 '| authenticated connections: ', userlist.size);
 
-    // Construct user array from the Map
-    const users = [];
-    userlist.forEach((uname, sid) => {
-        users.push({ socketId: sid, username: uname });
-    });
-
-    // Send the correct event and structure to authenticated clients
-    userlist.forEach((_, sid) => {
-        const s = io.sockets.sockets.get(sid);
-        if (s && isUserAuthorized(s)) {
-            s.emit('userList', users);
-        }
-    });
+    await AllUserList();
     
   });
 
@@ -344,7 +391,7 @@ io.on('connection', (socket) => {
   //
   // AC-02.2: all connected clients are notified when a user leaves
   // ---------------------------------------------------------------------------
-  socket.on('disconnect', () => {
+  socket.on('disconnect', async () => {
     
     const username = userlist.get(socket.id); // get username
     socket.broadcast.emit('stopTyping', username); // If a user is disconnected while typing, their indicator is removed from all other connected users
@@ -355,14 +402,7 @@ io.on('connection', (socket) => {
     // AC-02.2: Code to broadcast the status
     io.emit('status', username + ' left the chat. Number of connected clients: ' + userlist.size);
 
-    const users = [];
-    for (const [socketId, username] of userlist) {
-      users.push({
-        socketId,
-        username
-      });
-    }
+    await AllUserList();
 
-    io.emit('userList', users); // broadcasts updated userList
   });
 });

@@ -915,27 +915,37 @@ socket.on('userList', function(users) {
 
     // Add each user to the list
     users.forEach(user => {
-    const li = document.createElement("li");
 
-    // li.style.cursor = "pointer";
+        const li = document.createElement("li");
+        // Green dot for online, dim dot for offline
+        const dot = document.createElement("span");
+        dot.classList.add("user-status-dot", user.online ? "online" : "offline");
+        li.appendChild(dot);
 
-    const storedUsername = localStorage.getItem("username");
-    const isSelf = (user.socketId === socket.id) || (user.username === storedUsername);
 
-    // Show "(You)" only for the current user
-    if (isSelf) {
-            li.textContent = `${user.username || user} (You)`;
-        } else {
-            li.textContent = user.username || user;
+        const storedUsername = localStorage.getItem("username");
+        const isSelf = (user.socketId && user.socketId === socket.id) || (user.username === storedUsername);
+
+        // Show "(You)" only for the current user
+        if (isSelf) {
+                li.appendChild(document.createTextNode(`${user.username} (You)`));
+            } else {
+                li.appendChild(document.createTextNode(user.username || user));
+            }
+        
+        // Offline rows are visually dimmed via CSS class
+        if (!user.online) {
+            li.classList.add("user-offline");
         }
 
-    userListElement.appendChild(li);
+        // Opens the private chat UI when clicking a user on the userlist
+        li.addEventListener("click", () => {
+            openPrivateChat(user);
+        });
 
-    // Opens the private chat UI when clicking a user on the userlist
-    li.addEventListener("click", () => {
-        openPrivateChat(user);
+        userListElement.appendChild(li);
+
     });
-});
 });
 
 // Opens the private chat UI on the webpage

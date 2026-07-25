@@ -94,6 +94,22 @@ const register = async (username, password) => {
 };
 
 // ============================
+// Use-Case-06 v2: Show ALL Users (including Online & Offline)
+// ============================
+const getAllUsers = async () =>{
+
+  // fetches every registered username from database in below structure:
+  // [
+  // {username: "test"}, ...
+  // ]
+  const result = await users.find({}, {projection: {username: 1, _id: 0} }).toArray();
+
+  // loops over each document object and return array that consist registered usernames
+  return result.map(u => u.username); // [test, admin, ...]
+
+}
+
+// ============================
 // Use-Case-11: Store Messages
 // ============================
 const storePublicChat = (sender, message)=>{
@@ -123,4 +139,4 @@ const storePrivChat = (sender, receiver, message)=>{
   }
 };
 
-module.exports = { connect, find , register, storePublicChat, storePrivChat };
+module.exports = { connect, find , register, storePublicChat, storePrivChat , getAllUsers};
