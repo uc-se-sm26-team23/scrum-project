@@ -132,18 +132,9 @@ function sendToAuthenticatedClients(event, data) {
     const s = io.sockets.sockets.get(sid);
     if (s && isUserAuthorized(s)) {
       s.emit(event, data);
-
-      if(event==='message') { //New use case: store the chat message
-        message_text = data.message.split(': ')[1];
-        messengerdb.storePublicChat(s.username, message_text);
-        console.log(`Debug> Chat '${s.username}': '${message_text}' stored in MongoDB.`);
-      }
     }
-  })
+  });
 }
-
-
-
 
 io.on('connection', (socket) => {
 
@@ -186,7 +177,26 @@ io.on('connection', (socket) => {
                 '| authenticated connections: ', userlist.size);
 
     await AllUserList();
-    
+
+    // retrieve public chat messages
+    let public_chat_history = await messengerdb.retrievePublicChat();
+    // message is {_id, message, timestamp, sender}
+    public_chat_history.forEach( (message) => { // TODO idk if this is efficient to send each message repeatedly instead of all at once?
+      messageId++;
+      socket.emit("message", {message: message.sender + ": " + message.message, id: messageId, timestamp: message.timestamp});
+    });
+    console.log("Debug> Retrieved public chat messages, size: ", public_chat_history.length);
+
+    // retrieve private chat messages
+    let private_chat_history = await messengerdb.retrievePrivateChat(username);
+    // emit to current socket
+    private_chat_history.forEach( (message) => {
+      console.log("server.js::socket.on(join) msg in pch", message);
+      messageId++;
+      socket.emit("privateMessage", {fromUser: message.sender, toUser: message.receiver, 
+        message: message.message, self: true, id: messageId, timestamp: message.timestamp});
+      // self is always true so no notifications
+    });
   });
 
   // AC-02.02 - Auto-assign a unique username from the socket ID
@@ -221,16 +231,21 @@ io.on('connection', (socket) => {
   // AC-01.7: Given that a connected user is currently typing to the chat window, When they press any key, Then the typing indicator must appear at the bottom of the chat window.
   // AC-01.8: Given that a typing user's typing indicator is visible on other users' screen, When the typing user stops typing for more than a certain seconds or delete all texts, Then the typing indicator must disappear from other users' screen.
   // ---------------------------------------------------------------------------
-  //Todo: code to implement the above use case and AC items
-  socket.on('message', (message_text) => {
+  socket.on('message', async (message_text) => {
     // AC-01.2: ignore empty messages
     if (!message_text || message_text.trim() === '') return;
+    if (!isUserAuthorized(socket)) return;
     // AC-01.2 + AC-01.5: Broadcast to all clients with sender username
+    console.log("userlist", userlist);
     const sender = userlist.get(socket.id);
     messageId += 1;
     console.log(`Debug> "${sender}" sent: ${message_text}, id: ${messageId}`);
-    //io.emit('message', {message: sender + ': ' + message_text.trim(), id: messageId});
-    sendToAuthenticatedClients('message' , {message: sender + ': ' + message_text.trim(), id: messageId})
+    const message = {message: sender + ': ' + message_text.trim(), id: messageId, timestamp: Date.now()};
+    sendToAuthenticatedClients('message' , message);
+
+    // store public chats
+    messengerdb.storePublicChat(sender, message_text.trim());
+    console.log(`Debug> Chat '${sender}': '${message_text.trim()}' stored in MongoDB.`);
   });
 
   // Handles private messages
@@ -243,13 +258,12 @@ io.on('connection', (socket) => {
     // If user is private-chatting with themselves, emit only once
     if (to.socketId === socket.id) {
       socket.emit('privateMessage', {
-        fromSocket: socket.id,
         fromUser: sender,
-        toSocket: socket.id,
         toUser: sender,
         message: message,
         self: true,
-        id: messageId
+        id: messageId,
+        timestamp: Date.now()
       });
 
       messengerdb.storePrivChat(sender, sender, message);
@@ -260,28 +274,26 @@ io.on('connection', (socket) => {
 
     // Sends the message to the recipient
     io.to(to.socketId).emit('privateMessage', {
-      fromSocket: socket.id,
       fromUser: sender,
-      toSocket: to.socketid,
       toUser: to.username,
       message: message,
       self: false,
-      id: messageId
+      id: messageId,
+      timestamp: Date.now()
     });
 
     // Sends a copy back to the sender
     socket.emit("privateMessage", {
-      fromSocket: socket.id,
       fromUser: sender,
-      toSocket: to.socketId,
       toUser: to.username,
       message: message,
       self: true,
-      id: messageId
+      id: messageId,
+      timestamp: Date.now()
     });
 
-      messengerdb.storePrivChat(sender, to.username, message);
-      console.log(`Debug> Private chat stored in MongoDB.`);
+    messengerdb.storePrivChat(sender, to.username, message);
+    console.log(`Debug> Private chat stored in MongoDB.`);
 
   });
 

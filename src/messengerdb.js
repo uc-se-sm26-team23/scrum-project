@@ -180,7 +180,7 @@ const getAllUsers = async () =>{
 // Use-Case-11: Store Messages
 // ============================
 const storePublicChat = (sender, message)=>{
-  console.log("DEBUG> Storing Public message to MongoDB");
+  console.log("Debug> Storing Public message to MongoDB sender:", sender, " message: ", message);
 
   //TODO: validate the data
   
@@ -191,10 +191,10 @@ const storePublicChat = (sender, message)=>{
   }catch{
       console.log("Debug>messengerdb.storePublicChat: error for adding '" + JSON.stringify(chat) + "'\n");
   }
-};
+}
 
 const storePrivChat = (sender, receiver, message)=>{
-  console.log("DEBUG> Storing Private Message to MongoDB");
+  console.log("Debug> Storing Private Message to MongoDB sender: ", sender, " receiver: ", receiver, "message: ", message);
   //TODO: validate the data
 
   let timestamp = Date.now();
@@ -206,4 +206,21 @@ const storePrivChat = (sender, receiver, message)=>{
   }
 };
 
-module.exports = { connect, find , register, updateUsername, updatePassword, storePublicChat, storePrivChat , getAllUsers};
+// returns array of public chat objects [{_id, sender, message, timestamp},...]
+// [] if nothing
+// [] is not nullable
+const retrievePublicChat = async () => {
+  let public_chat_history = await public_chat.find({}).sort({timestamp:1}).limit(100).toArray();
+  if (!public_chat_history || public_chat_history.length === 0) return; 
+  return public_chat_history;
+}
+
+const retrievePrivateChat = async (username) => {
+  let private_chat_history = await priv_chat.find({$or: [{sender: username}, {receiver: username}]}).sort({timestamp:1}).limit(100).toArray();
+  if (!private_chat_history || private_chat_history === 0) return;
+  return private_chat_history;
+}
+
+module.exports = { connect, find , register, updateUsername, 
+  updatePassword, storePublicChat, storePrivChat , getAllUsers,
+  retrievePublicChat, retrievePrivateChat};

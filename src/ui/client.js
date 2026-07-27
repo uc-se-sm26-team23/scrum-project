@@ -394,7 +394,7 @@ function sendMessage() {
 
 // AC-02.01 & AC-02.05
 // get message from server
-socket.on('message', function({message, id}) { // data (object) - { message: "Alice: hello", id: 1 }
+socket.on('message', function({message, id, timestamp}) { // data (object) - { message: "Alice: hello", id: 1 }
     
     // get senderName
     var senderName = message.split(':')[0];
@@ -410,13 +410,12 @@ socket.on('message', function({message, id}) { // data (object) - { message: "Al
     }
 
     // Else Always display message
-    displayMessage({msgText: message, messageId: id});
+    displayMessage({msgText: message, messageId: id, timestamp: new Date(timestamp).toLocaleTimeString()});
 });
 
 
 // display message to public chat
-function displayMessage({msgText, messageId}) { // server sends data as string 
-    var timestamp = new Date().toLocaleTimeString();
+function displayMessage({msgText, messageId, timestamp}) { // server sends data as string 
     const msg = createMessage(msgText, messageId, timestamp);
 
     messageList.appendChild(msg);
@@ -476,19 +475,18 @@ function sendPrivateMessage() {
 }
 
 // Handles private message reception
-// data params are fromSocket, fromUser, toSocket, toUser, message, self, id
-socket.on('privateMessage', (data) => {
-    const chatId = data.self ? data.toSocket : data.fromSocket;
-    const chatUser = data.self ? data.toUser : data.fromUser;
+// data params are fromUser, toUser, message, self, id, timestamp
+socket.on('privateMessage', ({self, toUser, fromUser, message, id, timestamp}) => {
+    const chatUser = self ? toUser : fromUser; // i think this is the other user that you're talking to
     // admin sends message
     // test should put it in privateChats[admin]
     // admin should put it in privateChats[test]
 
     // if data.self is true == our own message else from someone else so notify
-    if (!data.self) {
+    if (!self) {
         showNotification(
             'Private Message from',
-            `${data.from}: ${data.message}`
+            `${fromUser}: ${message}`
         );
     }
     
@@ -499,18 +497,15 @@ socket.on('privateMessage', (data) => {
 
     // create msg and add it to pC array
     const msg = {
-        from: data.fromUser,
-        message: data.message,
-        timestamp: new Date().toLocaleTimeString(),
-        id: data.id
+        from: fromUser,
+        message: message,
+        timestamp: new Date(timestamp).toLocaleTimeString(),
+        id: id
     };
     privateChats[chatUser].push(msg);
 
     // display message
-    if (
-        currentPrivateUser && 
-        currentPrivateUser.socketId === chatId
-    ) {
+    if (currentPrivateUser) {
         displayPrivateMessage(msg);
     }
     
@@ -538,6 +533,7 @@ function loadPrivateMessages(toUser) {
 // Displays private messages
 function displayPrivateMessage({from, message, timestamp, id}){
     const messagesDiv = document.getElementById("private-messages");
+    console.log("client.js::displayPrivM timestamp: ", timestamp);
     const privMsg = createMessage(from + ": " + message, id, timestamp);
     messagesDiv.appendChild(privMsg);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
