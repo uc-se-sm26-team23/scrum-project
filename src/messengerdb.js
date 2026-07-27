@@ -93,6 +93,73 @@ const register = async (username, password) => {
   return {success: true};
 };
 
+
+// ============================
+// Use-Case-0x: Edit profile
+// ============================
+// ============================
+// Update Username
+// ============================
+const updateUsername = async (currentUsername, newUsername) => {
+  console.log(`Debug>messengerdb.js: updating username from '${currentUsername}' to '${newUsername}'`);
+
+  const usernamePattern = /^\w{3,20}$/;
+  if (typeof newUsername !== 'string' || !usernamePattern.test(newUsername)) {
+    return { success: false, message: 'Invalid new username format!' };
+  }
+
+  // Check if new username already exists
+  const existing = await users.findOne({ username: newUsername });
+  if (existing !== null) {
+    return { success: false, message: 'Username already taken!' };
+  }
+
+  const result = await users.updateOne(
+    { username: currentUsername },
+    { $set: { username: newUsername } }
+  );
+
+  if (result.modifiedCount === 0) {
+    return { success: false, message: 'User not found.' };
+  }
+
+  return { success: true };
+};
+
+// ============================
+// Update Password
+// ============================
+const updatePassword = async (username, oldPassword, newPassword) => {
+  console.log(`Debug>messengerdb.js: updating password for '${username}'`);
+
+  const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+  if (typeof newPassword !== 'string' || !passwordPattern.test(newPassword)) {
+    return { success: false, message: 'Invalid new password format!' };
+  }
+
+  // Find user by current username
+  const user = await users.findOne({ username: username });
+  if (!user) {
+    return { success: false, message: 'User not found.' };
+  }
+
+  // Verify old password using bcrypt
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) {
+    return { success: false, message: 'Incorrect old password.' };
+  }
+
+  // Hash new password and save
+  const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+  await users.updateOne(
+    { username: username },
+    { $set: { password: hashedNewPassword } }
+  );
+
+  return { success: true };
+};
+
+
 // ============================
 // Use-Case-06 v2: Show ALL Users (including Online & Offline)
 // ============================
@@ -139,4 +206,4 @@ const storePrivChat = (sender, receiver, message)=>{
   }
 };
 
-module.exports = { connect, find , register, storePublicChat, storePrivChat , getAllUsers};
+module.exports = { connect, find , register, updateUsername, updatePassword, storePublicChat, storePrivChat , getAllUsers};

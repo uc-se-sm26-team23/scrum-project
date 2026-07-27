@@ -12,6 +12,11 @@ socket.on("connect", () => { //connected to the server
     console.log(`Connected to Socket.io server: 
     ${socket.io.opts.hostname}, port: ${socket.io.opts.port}`);
 
+    const savedTheme = localStorage.getItem("chat-theme");
+    if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
     // Temporary session restore using localStorage on reload page
     // Since localStorage is used, so to test, have different users on different domain to test. Else multiple users on same domain will get over-write.
 
@@ -973,6 +978,102 @@ function ShowUsers(){
 
 }
 
+
+// ---------------------------
+// EDIT Profile
+// ---------------------------
+document.getElementById('Edit_profile_btn').addEventListener('click', () => {
+    const profileModal = document.getElementById('edit-profile-modal');
+    profileModal.style.display = 'flex';
+    document.getElementById('profile-feedback').textContent = '';
+    document.getElementById('edit-profile-form').reset();
+
+    const currentTheme = localStorage.getItem("chat-theme") || "modern-blue";
+    const themeSelector = document.getElementById('theme-selector');
+    if (themeSelector) {
+        themeSelector.value = currentTheme;
+    }
+});
+
+document.getElementById('close-profile-btn').addEventListener('click', () => {
+    document.getElementById('edit-profile-modal').style.display = 'none';
+});
+
+// Handle profile form submission
+document.getElementById('edit-profile-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const currentUsername = localStorage.getItem("username");
+    const newUsername = document.getElementById("new-username").value.trim();
+    const oldPassword = document.getElementById("old-password").value;
+    const newPassword = document.getElementById("new-password").value;
+    const feedback = document.getElementById("profile-feedback");
+    const selectedTheme = document.getElementById("theme-selector").value; 
+
+    if (selectedTheme) {
+        document.documentElement.setAttribute('data-theme', selectedTheme);
+        localStorage.setItem("chat-theme", selectedTheme);
+    }
+
+    // Client-side validation for username
+    if (newUsername) {
+        const pattern = /^\w{3,20}$/;
+        if (!pattern.test(newUsername)) {
+            feedback.style.color = "red";
+            feedback.textContent = "New username must be between 3–20 characters!";
+            return;
+        }
+    }
+
+    // Client-side validation for password
+    if (newPassword) {
+        if (!oldPassword) {
+            feedback.style.color = "red";
+            feedback.textContent = "Old password is required to change password!";
+            return;
+        }
+        const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+        if (!passwordPattern.test(newPassword)) {
+            feedback.style.color = "red";
+            feedback.textContent = "New password must be at least 6 characters with letters and numbers!";
+            return;
+        }
+    }
+
+    // Emit update request to server
+    socket.emit("update-profile", {
+        currentUsername,
+        newUsername,
+        oldPassword,
+        newPassword
+    });
+});
+
+// Socket listeners for profile update responses
+socket.on("update-profile-success", (data) => {
+    const feedback = document.getElementById("profile-feedback");
+    feedback.style.color = "green";
+    feedback.textContent = data.message;
+
+    if (data.newUsername) {
+        localStorage.setItem("username", data.newUsername);
+        document.getElementById("username").value = data.newUsername;
+    }
+
+    setTimeout(() => {
+        document.getElementById("edit-profile-modal").style.display = "none";
+    }, 1500);
+});
+
+socket.on("update-profile-error", (message) => {
+    const feedback = document.getElementById("profile-feedback");
+    feedback.style.color = "red";
+    feedback.textContent = message;
+});
+
+
+
+
 function yesNotification() {
     // prompt user for permission
     Notification.requestPermission().then(function(permission) {
@@ -1035,3 +1136,6 @@ function logout() {
     console.log('Debug>User logged out'); // UI testing only
 
 }
+
+
+

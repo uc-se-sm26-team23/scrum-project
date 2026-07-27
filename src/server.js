@@ -386,6 +386,80 @@ io.on('connection', (socket) => {
     socket.emit('register-success', username);
   });
 
+
+    
+// =============================================================
+// Use-Case-0x: Edit Profile
+// =============================================================
+// =============================================================
+  // Use-Case: Update Profile (Username / Password)
+  // =============================================================
+  socket.on("update-profile", async ({ currentUsername, newUsername, oldPassword, newPassword }) => {
+    // 1. Ensure user is authorized
+    if (!isUserAuthorized(socket)) {
+      socket.emit("update-profile-error", "Unauthorized request.");
+      return;
+    }
+
+    try {
+      let updatedUsername = currentUsername;
+
+      // 2. Handle Username Update
+      if (newUsername && newUsername !== currentUsername) {
+        const usernamePattern = /^\w{3,20}$/;
+        if (!usernamePattern.test(newUsername)) {
+          socket.emit("update-profile-error", "Invalid username format (3–20 characters: letters, numbers, underscores).");
+          return;
+        }
+
+        const usernameResult = await messengerdb.updateUsername(currentUsername, newUsername);
+        if (!usernameResult.success) {
+          socket.emit("update-profile-error", usernameResult.message);
+          return;
+        }
+        updatedUsername = newUsername;
+
+        // Update in-memory userlist and broadcast refreshed user list
+        for (let [sid, uname] of userlist.entries()) {
+          if (uname === currentUsername) {
+            userlist.set(sid, newUsername);
+          }
+        }
+        await AllUserList();
+      }
+
+      // 3. Handle Password Update
+      if (newPassword) {
+        if (!oldPassword) {
+          socket.emit("update-profile-error", "Old password is required to change password.");
+          return;
+        }
+
+        const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+        if (!passwordPattern.test(newPassword)) {
+          socket.emit("update-profile-error", "Invalid password format (at least 6 characters with letters and numbers).");
+          return;
+        }
+
+        const passwordResult = await messengerdb.updatePassword(updatedUsername, oldPassword, newPassword);
+        if (!passwordResult.success) {
+          socket.emit("update-profile-error", passwordResult.message);
+          return;
+        }
+      }
+
+      // 4. Success Response
+      socket.emit("update-profile-success", {
+        message: "Profile updated successfully!",
+        newUsername: updatedUsername !== currentUsername ? updatedUsername : null
+      });
+
+    } catch (err) {
+      console.log("Error>server.js: profile update failed", err);
+      socket.emit("update-profile-error", "Server error updating profile.");
+    }
+  });
+
   // ---------------------------------------------------------------------------
   // Use-Case-02: Receive message — disconnect notification
   //

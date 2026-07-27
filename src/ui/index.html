@@ -98,6 +98,53 @@
 
 
         <button id="users-toggle-main">☰ Users</button>
+
+         <!-- ------------------------------
+        EDIT PROFILE starts
+        ------------------------------ -->
+        <button id="Edit_profile_btn"> Edit Profile</button>
+
+        <!-- Edit Profile Modal / Container -->
+<div id="edit-profile-modal" class="profile-modal" style="display: none;">
+    <div class="profile-modal-content">
+        <h3>Edit Profile</h3>
+        <form id="edit-profile-form">
+            <!-- Username Update -->
+            <div class="form-group">
+                <label for="new-username">New Username</label>
+                <input type="text" id="new-username" placeholder="Leave blank to keep current">
+            </div>
+
+            <!-- Password Update -->
+            <div class="form-group">
+                <label for="old-password">Old Password (required if changing password)</label>
+                <input type="password" id="old-password" placeholder="Enter old password">
+            </div>
+            <div class="form-group">
+                <label for="new-password">New Password</label>
+                <input type="password" id="new-password" placeholder="Enter new password">
+            </div>
+            
+                        <div class="form-group">
+                <label for="theme-selector">Theme Mode:</label>
+                <select id="theme-selector" class="form-control">
+                    <option value="modern-blue">Modern Tech Blue</option>
+                    <option value="emerald">Emerald Forest</option>
+                    <option value="midnight">Midnight Cyber</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-save">Save Changes</button>
+                <button type="button" id="close-profile-btn" class="btn-cancel">Cancel</button>
+            </div>
+        </form>
+        <div id="profile-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+        <!-- ------------------------------
+        EDIT PROFILE ENDS
+        ------------------------------ -->
         <button id ="logout-btn">Logout</button>
         <br><b>System status: </b><br>
         <div id="status" style="width:625px; height:75px; overflow-y:scroll;"></div>
