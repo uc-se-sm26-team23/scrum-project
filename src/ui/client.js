@@ -164,6 +164,7 @@ function joinChat() {
         // document.getElementById('display-name').textContent = username; - there's no 'display-name' element? - connor
         
     
+
     
     });
 
@@ -1074,14 +1075,14 @@ function yesNotification() {
     // prompt user for permission
     Notification.requestPermission().then(function(permission) {
 
-        // hide yellow warning
+        // hide notification warning
         $("#notify-prompt").hide();
 
         // if allow notification
         if (permission == "granted") {
             notificationEnable = true;
 
-            // show the blue confirmation
+            // show the blue notification allow confirmation
             $("#notify-confirmed").show();
 
             // hide confirmation pop up after 3 second
