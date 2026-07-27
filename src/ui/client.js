@@ -1128,6 +1128,7 @@ function logout() {
     $('#loginUI').show();
 
     $('#username').val('');
+    $('#password').val('');
 
     console.log('Debug>User logged out'); // UI testing only
 
