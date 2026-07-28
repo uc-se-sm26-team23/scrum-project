@@ -179,12 +179,11 @@ const getAllUsers = async () =>{
 // ============================
 // Use-Case-11: Store Messages
 // ============================
-const storePublicChat = (sender, message)=>{
+const storePublicChat = (sender, message, timestamp)=>{
   console.log("Debug> Storing Public message to MongoDB sender:", sender, " message: ", message);
 
   //TODO: validate the data
   
-  let timestamp = Date.now();
   let chat = {sender: sender, message: message, timestamp: timestamp};
   try{
       public_chat.insertOne(chat);
@@ -193,11 +192,10 @@ const storePublicChat = (sender, message)=>{
   }
 }
 
-const storePrivChat = (sender, receiver, message)=>{
+const storePrivChat = (sender, receiver, message, timestamp)=>{
   console.log("Debug> Storing Private Message to MongoDB sender: ", sender, " receiver: ", receiver, "message: ", message);
   //TODO: validate the data
 
-  let timestamp = Date.now();
   let chat = {sender: sender, receiver: receiver, message: message, timestamp: timestamp};
   try {
     priv_chat.insertOne(chat);
@@ -224,17 +222,25 @@ const retrievePrivateChat = async (username) => {
 
 // returns true if successful, false if error
 // if it didn't find any document to edit, it'll say 0 documents matched the file and return false
+// make sure receiver is null if public chat
 const editChat = async (isPublic, {sender, receiver, message, timestamp}, newMessage) => {
-  //TODO
   //TODO add an edited field
   let curr_chat = isPublic ? public_chat : priv_chat;
+  if (typeof(timestamp) === "string") timestamp = Number(timestamp)
 
   try {
-    const result = await curr_chat.updateOne({sender: sender, receiver: receiver, message: message, timestamp: timestamp},
+    msg = {
+      sender: sender,
+      receiver: receiver,
+      message: message, 
+      timestamp: timestamp
+    }
+    console.log(`Debug> messengerdb.js editChat: looking up: ${JSON.stringify(msg)} in ${curr_chat.collectionName}`)
+    const result = await curr_chat.updateOne(msg,
       {$set: {message: newMessage, timestamp: Date.now()}}
     );
     console.log(
-      `Debug> messengerdb.js: editChat: ${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`,
+      `Debug> messengerdb.js: editChat: updated ${result.modifiedCount} document(s)`,
     );
     if (!result.modifiedCount) return false;
   } catch (error) {
@@ -244,6 +250,31 @@ const editChat = async (isPublic, {sender, receiver, message, timestamp}, newMes
   return true;
 }
 
+const deleteChat = async (isPublic, {sender, receiver, message, timestamp}) => {
+  //TODO add an edited field
+  let curr_chat = isPublic ? public_chat : priv_chat;
+  if (typeof(timestamp) === "string") timestamp = Number(timestamp)
+
+  try {
+    msg = {
+      sender: sender,
+      receiver: receiver,
+      message: message, 
+      timestamp: timestamp
+    }
+    console.log(`Debug> messengerdb.js deleteChat: looking up: ${JSON.stringify(msg)} in ${curr_chat.collectionName}`)
+    const result = await curr_chat.deleteOne(msg);
+    console.log(
+      `Debug> messengerdb.js: deleteChat: deleted ${result.deletedCount} document(s)`,
+    );
+    if (!result.deletedCount) return false;
+  } catch (error) {
+    console.log("ERROR: messengerdb.js deleteChat: ", error);
+    return false;
+  }
+  return true;
+}
+
 module.exports = { connect, find , register, updateUsername, 
   updatePassword, storePublicChat, storePrivChat , getAllUsers,
-  retrievePublicChat, retrievePrivateChat, editChat};
+  retrievePublicChat, retrievePrivateChat, editChat, deleteChat};

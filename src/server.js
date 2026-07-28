@@ -248,12 +248,13 @@ io.on('connection', (socket) => {
     const sender = userlist.get(socket.id);
     messageId += 1;
     console.log(`Debug> "${sender}" sent: ${message_text}, id: ${messageId}`);
-    const message = {message: sender + ': ' + message_text.trim(), id: messageId, timestamp: Date.now()};
+    let timestamp = Date.now()
+    const message = {message: sender + ': ' + message_text.trim(), id: messageId, timestamp: timestamp};
     sendToAuthenticatedClients('message' , message);
 
     // store public chats
-    messengerdb.storePublicChat(sender, message_text.trim());
-    console.log(`Debug> Chat '${sender}': '${message_text.trim()}' stored in MongoDB.`);
+    messengerdb.storePublicChat(sender, message_text.trim(), timestamp);
+    console.log(`Debug> Chat '${sender}': '${message_text.trim()}' stored in MongoDB at ${timestamp}.`);
   });
 
   // Handles private messages
@@ -262,6 +263,7 @@ io.on('connection', (socket) => {
     const sender = userlist.get(socket.id);
 
     messageId += 1;
+    let timestamp = Date.now();
 
     // If user is private-chatting with themselves, emit only once
     if (to.socketId === socket.id) {
@@ -271,11 +273,11 @@ io.on('connection', (socket) => {
         message: message,
         self: true,
         id: messageId,
-        timestamp: Date.now()
+        timestamp: timestamp
       });
 
-      messengerdb.storePrivChat(sender, sender, message);
-      console.log(`Debug> Private Chat stored in MongoDB.`);
+      messengerdb.storePrivChat(sender, sender, message, timestamp);
+      console.log(`Debug> Private Chat from ${sender} to self containing ${message} at ${timestamp} stored in MongoDB.`);
 
       return;
     }
@@ -287,7 +289,7 @@ io.on('connection', (socket) => {
       message: message,
       self: false,
       id: messageId,
-      timestamp: Date.now()
+      timestamp: timestamp
     });
 
     // Sends a copy back to the sender
@@ -297,11 +299,11 @@ io.on('connection', (socket) => {
       message: message,
       self: true,
       id: messageId,
-      timestamp: Date.now()
+      timestamp: timestamp
     });
 
-    messengerdb.storePrivChat(sender, to.username, message);
-    console.log(`Debug> Private chat stored in MongoDB.`);
+    messengerdb.storePrivChat(sender, to.username, message, timestamp);
+    console.log(`Debug> Private chat stored in MongoDB. from ${sender} to ${to.username} containing ${message} at ${timestamp}`);
 
   });
 
@@ -349,18 +351,33 @@ io.on('connection', (socket) => {
 
   // edit message
   // data is {id: id, message: message}
-  socket.on("edit", ({id, message}) => {
-    console.log(`Debug> "${userlist.get(socket.id)}" edited to: ${message}, id: ${id}`);
-    // messengerdb.editChat()
-    // TODO get proper input from client to edit the message in the db
-    io.emit("edit", data);
+  socket.on("edit", async ({id, message, newMessage, timestamp, isPublic, sender, receiver}) => {
+    console.log(`Debug> "${userlist.get(socket.id)}" edited '${message}' to: ${newMessage}, id: ${id}, 
+      time: ${timestamp} (${new Date(timestamp).toLocaleTimeString()}), isPublic: ${isPublic}`);
+    msg = {
+      sender: sender, 
+      receiver: receiver,
+      message: message,
+      timestamp: timestamp,
+    }
+    const result = await messengerdb.editChat(isPublic, msg, newMessage)
+    console.log(`Debug> messengerdb.editChat success: ${result}`);
+    io.emit("edit", {id: id, message: sender + ": " + newMessage});
   });
 
   // delete message
   // data is {id: id, username: username}
-  socket.on("delete", (data) => {
-    console.log(`Debug> "${data.username}" deleted, id: ${data.id}`);
-    io.emit("delete", data);
+  socket.on("delete", async ({isPublic, sender, receiver, message, timestamp, id}) => {
+    console.log(`Debug> "${sender}" deleted, id: ${id}, timestamp: ${timestamp} / ${new Date(timestamp).toLocaleString()}`);
+    let msg = {
+      sender: sender,
+      receiver: receiver,
+      message: message,
+      timestamp: timestamp
+    };
+    let result = await messengerdb.deleteChat(isPublic, msg);
+    console.log("Debug> server.js deleteChat messengerdb success: ", result);
+    io.emit("delete", {id: id, sender: sender});
   });
 
   socket.on('register', async function ({username, password}) {

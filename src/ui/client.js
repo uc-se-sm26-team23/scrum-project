@@ -411,7 +411,7 @@ socket.on('message', function({message, id, timestamp}) { // data (object) - { m
     }
 
     // Else Always display message
-    displayMessage({msgText: message, messageId: id, timestamp: new Date(timestamp).toLocaleTimeString()});
+    displayMessage({msgText: message, messageId: id, timestamp: timestamp});
 });
 
 
@@ -501,7 +501,7 @@ socket.on('privateMessage', ({self, toUser, fromUser, message, id, timestamp}) =
     const msg = {
         from: fromUser,
         message: message,
-        timestamp: new Date(timestamp).toLocaleTimeString(),
+        timestamp: timestamp,
         id: id
     };
     privateChats[chatUser].push(msg);
@@ -565,8 +565,8 @@ function editMessage(e) {
     var id = e.target.id.split("-"); // id is just a placeholder here
     id = id[id.length-1]; // get the real id (at the end of the array)
 
-    // get the message text
-    const msgText = document.getElementById("message-text-"+id);
+    // get the message content
+    const msgContent = document.getElementById("message-content-"+id);
 
     // create div "edit-message"
     const editMsgDiv = document.createElement("div");
@@ -585,7 +585,7 @@ function editMessage(e) {
 
     // get placeholder text
     // (take the text content and remove the "username: ")
-    var editPlaceholder = msgText.textContent.split(": ");
+    var editPlaceholder = msgContent.textContent.split(": ");
     editPlaceholder = editPlaceholder.splice(1); // remove username
     editPlaceholder = editPlaceholder.join(": "); // just in case there are any ": " in the message itself
 
@@ -613,8 +613,8 @@ function editMessage(e) {
     editMsgDiv.appendChild(submitEditBtn);
 
     // replace text with div
-    const msgDiv = document.getElementById("message-"+id);
-    msgDiv.replaceChild(editMsgDiv, msgText);
+    const msgText = document.getElementById("message-text-"+id);
+    msgText.replaceChild(editMsgDiv, msgContent);
     
     // hide other buttons
     const msgOptDiv = document.getElementById("message-options-"+id);
@@ -640,37 +640,48 @@ function submitEditMessage(e) {
         return;
     }
 
-    // TODO get if public
-    // great grandparent is 'messages' not 'private-messages'
-    // TODO get timestamp
-    // editMessage needs to replace message-content not message-text
-    // TODO get old message
-    // get it from editInput.placeholder
-
+    let sender = document.getElementById("username").value;
+    // get if public and receiver
+    // great great grandparent is 'messages' or 'private-messages'
+    let isPublic = true;
+    let receiver = null;
+    if (editInput.parentElement.parentElement.parentElement.parentElement.id === "private-messages") {
+        isPublic = false;
+        receiver = currentPrivateUser.username;
+    }
+    // get timestamp   
+    // title of timestamp includes the full epoch time
+    const timestampSpan = document.getElementById("timestamp-"+id);
+    let timestamp = timestampSpan.title;
+    // get old message
+    let oldMessage = editInput.placeholder;
 
     // send to server
-    socket.emit("edit", {id: id, message: document.getElementById("username").value + ": " + text});
+    socket.emit("edit", {id: id, newMessage: text, 
+        message: oldMessage, timestamp: timestamp, isPublic: isPublic, receiver: receiver, sender: sender});
     return;
 }
 
 // replace DOM elements with edited message
 // data should be {id: id, message: message}
 socket.on("edit", handleEditMessage);
-function handleEditMessage(data) {
-    var text = data.message;
-    var id = data.id;
+function handleEditMessage({id, message}) {
+    var text = message; // TODO replace this
     // create message text again
-    const msgText = createMessageTextElement(id, text, new Date().toLocaleTimeString(), true); // priv messages?
+    const msgText = createMessageTextElement(id, text, Date.now(), true); // priv messages?
     // get sender
     var sender = text.split(":")[0];
     var username = document.getElementById("username").value;
     const msgDiv = document.getElementById("message-"+id);
 
-    if (sender === username) {
-        // replace edit div with message text if it's your own
-        const editDiv = document.getElementById("edit-message-"+id);
-        msgDiv.replaceChild(msgText, editDiv);
+    const oldMsgTextElm = document.getElementById("message-text-"+id);
+    console.log("client.js::hEM id", id);
+    console.log("client.js::hEM msgDiv", msgDiv);
+    console.log("client.js::hEM oldMsg", oldMsgTextElm);
+    msgDiv.replaceChild(msgText, oldMsgTextElm);
+    
 
+    if (sender === username) {
         // show msgOptDiv (since it was hidden in editMessage) if it's your own
         const msgOptDiv = document.getElementById("message-options-"+id);
         msgOptDiv.style.display = "inline";
@@ -678,10 +689,6 @@ function handleEditMessage(data) {
         // hide the menu though
         const msgOptMenu = document.getElementById("message-options-menu-"+id);
         msgOptMenu.style.display = "none";
-    } else {
-        // replace the message normally if someone else edited theirs
-        const oldMsgTextElm = document.getElementById("message-text-"+id);
-        msgDiv.replaceChild(msgText, oldMsgTextElm);
     }
     
     // if in private message update the privateChats struct
@@ -721,17 +728,37 @@ function deleteMessage(e) {
     // get username
     username = document.getElementById("username").value;
 
+    // get isPublic and receiver
+    // great great grandparent is 'messages' or 'private-messages'
+    let isPublic = true;
+    let receiver = null;
+    const msgText = document.getElementById("message-"+id);
+    console.log("client.js::deleteMessage msgText", msgText);
+    console.log("client.js::deleteMessage gp", msgText.parentElement.id);
+    if (msgText.parentElement.id === "private-messages") {
+        isPublic = false;
+        receiver = currentPrivateUser.username;
+    }
+    // get timestamp   
+    // title of timestamp includes the full epoch time
+    const timestampSpan = document.getElementById("timestamp-"+id);
+    let timestamp = timestampSpan.title;
+    // get message
+    const msgContent = document.getElementById("message-content-"+id);
+    let message = msgContent.textContent.split(": ").slice(1).join(": ");
+
+    let data = {id: id, sender: username, receiver: receiver, isPublic: isPublic, message: message, timestamp: timestamp};
+    console.log("client.js::deleteMessage data", JSON.stringify(data));
+
     // emit to server
-    socket.emit("delete", {id: id, username: username});
+    socket.emit("delete", {id: id, sender: username, receiver: receiver, isPublic: isPublic, message: message, timestamp: timestamp});
 
     return;
 }
 
 // removes/alters DOM element
 socket.on("delete", handleDeleteMessage);
-function handleDeleteMessage(data) {
-    var id = data.id;
-    var sender = data.username;
+function handleDeleteMessage({id, sender}) {
     var username = document.getElementById("username").value;
 
     // replace text content and timestamp
@@ -768,6 +795,7 @@ function handleDeleteMessage(data) {
 // create the <p>message</p> element
 // it's bad code, i'm aware
 // text content has to include the sender (e.g. "sender: message")
+// timestamp is unix time
 function createMessageTextElement(id, textContent, timestamp, isEdited, isDeleted=false) {
 
     // `${msg.from}: ${msg.message}`
@@ -781,9 +809,10 @@ function createMessageTextElement(id, textContent, timestamp, isEdited, isDelete
     const timestampSpan = document.createElement("span");
     // timestampSpan.style.color = "#2431e5";
     timestampSpan.classList.add("timestamp");
-    timestampSpan.textContent = `[${timestamp}] `;
+    timestampSpan.textContent = `[${new Date(timestamp).toLocaleTimeString()}] `;
     timestampSpan.id = "timestamp-"+id;
     timestampSpan.className = "timestamp";
+    timestampSpan.title = timestamp; // this is the unix time
     msgTextDiv.appendChild(timestampSpan);
     
     // turn input into a text element
@@ -806,6 +835,7 @@ function createMessageTextElement(id, textContent, timestamp, isEdited, isDelete
     msgText.style.display = "inline";
     
     msgTextDiv.appendChild(msgText);
+    // console.log(`Debug> added message, id: ${id}, textContent: ${textContent}, timestamp: ${timestamp} / ${new Date(timestamp).toLocaleString()}`);
 
     return msgTextDiv;
 }
