@@ -216,11 +216,34 @@ const retrievePublicChat = async () => {
 }
 
 const retrievePrivateChat = async (username) => {
+  // TODO this is just 100 for all private chats, it should be 100 for each convo or something
   let private_chat_history = await priv_chat.find({$or: [{sender: username}, {receiver: username}]}).sort({timestamp:1}).limit(100).toArray();
   if (!private_chat_history || private_chat_history === 0) return;
   return private_chat_history;
 }
 
+// returns true if successful, false if error
+// if it didn't find any document to edit, it'll say 0 documents matched the file and return false
+const editChat = async (isPublic, {sender, receiver, message, timestamp}, newMessage) => {
+  //TODO
+  //TODO add an edited field
+  let curr_chat = isPublic ? public_chat : priv_chat;
+
+  try {
+    const result = await curr_chat.updateOne({sender: sender, receiver: receiver, message: message, timestamp: timestamp},
+      {$set: {message: newMessage, timestamp: Date.now()}}
+    );
+    console.log(
+      `Debug> messengerdb.js: editChat: ${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`,
+    );
+    if (!result.modifiedCount) return false;
+  } catch (error) {
+    console.log("ERROR: messengerdb.js editChat: ", error);
+    return false;
+  }
+  return true;
+}
+
 module.exports = { connect, find , register, updateUsername, 
   updatePassword, storePublicChat, storePrivChat , getAllUsers,
-  retrievePublicChat, retrievePrivateChat};
+  retrievePublicChat, retrievePrivateChat, editChat};

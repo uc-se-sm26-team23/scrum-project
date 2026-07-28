@@ -416,6 +416,7 @@ socket.on('message', function({message, id, timestamp}) { // data (object) - { m
 
 
 // display message to public chat
+// TODO should pass in isEdited/isDeleted
 function displayMessage({msgText, messageId, timestamp}) { // server sends data as string 
     const msg = createMessage(msgText, messageId, timestamp);
 
@@ -534,7 +535,6 @@ function loadPrivateMessages(toUser) {
 // Displays private messages
 function displayPrivateMessage({from, message, timestamp, id}){
     const messagesDiv = document.getElementById("private-messages");
-    console.log("client.js::displayPrivM timestamp: ", timestamp);
     const privMsg = createMessage(from + ": " + message, id, timestamp);
     messagesDiv.appendChild(privMsg);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -595,6 +595,7 @@ function editMessage(e) {
     editInput.id = "edit-input-" + id;
     editInput.name = editInput.id;
     editInput.value = editPlaceholder;
+    editInput.placeholder = editPlaceholder; // so that submitEditMessage has access to the old text
     // on Enter press, submit edited message
     editInput.addEventListener("keypress", (e) => {
         if (e.key === "Enter") {
@@ -625,6 +626,7 @@ function editMessage(e) {
     return;
 }
 
+// submit edited message to server
 function submitEditMessage(e) {
     // get id
     var id = e.target.id.split("-");
@@ -637,6 +639,14 @@ function submitEditMessage(e) {
     if (text === "") {
         return;
     }
+
+    // TODO get if public
+    // great grandparent is 'messages' not 'private-messages'
+    // TODO get timestamp
+    // editMessage needs to replace message-content not message-text
+    // TODO get old message
+    // get it from editInput.placeholder
+
 
     // send to server
     socket.emit("edit", {id: id, message: document.getElementById("username").value + ": " + text});
@@ -674,12 +684,13 @@ function handleEditMessage(data) {
         msgDiv.replaceChild(msgText, oldMsgTextElm);
     }
     
-    // if in private message update the privateChats
+    // if in private message update the privateChats struct
     // get parent of msgDiv
     if (!currentPrivateUser) return;
     const gp = msgDiv.parentElement;
-    if (gp.id === "private-messages") {
+    if (gp.id === "private-messages") { // TODO is this necessary if we already do the !currentPrivateUser?
         // find the message based on the id
+        // TODO the key for privateChats should be the id, not the username? perhaps?
         let index = -1;
         for (let i = 0; i < privateChats[currentPrivateUser.username].length; i++) {
           if (privateChats[currentPrivateUser.username][i].id == id) {

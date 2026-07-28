@@ -136,6 +136,9 @@ function sendToAuthenticatedClients(event, data) {
   });
 }
 
+
+
+
 io.on('connection', (socket) => {
 
   // UC-09: authentication state per connection
@@ -183,6 +186,7 @@ io.on('connection', (socket) => {
     // message is {_id, message, timestamp, sender}
     public_chat_history.forEach( (message) => { // TODO idk if this is efficient to send each message repeatedly instead of all at once?
       messageId++;
+      //TODO add an edited field
       socket.emit("message", {message: message.sender + ": " + message.message, id: messageId, timestamp: message.timestamp});
     });
     console.log("Debug> Retrieved public chat messages, size: ", public_chat_history.length);
@@ -191,12 +195,17 @@ io.on('connection', (socket) => {
     let private_chat_history = await messengerdb.retrievePrivateChat(username);
     // emit to current socket
     private_chat_history.forEach( (message) => {
-      console.log("server.js::socket.on(join) msg in pch", message);
       messageId++;
-      socket.emit("privateMessage", {fromUser: message.sender, toUser: message.receiver, 
-        message: message.message, self: true, id: messageId, timestamp: message.timestamp});
-      // self is always true so no notifications
+      // TODO add an edited field
+      if (message.sender === username) {
+        socket.emit("privateMessage", {fromUser: message.sender, toUser: message.receiver, 
+          message: message.message, self: true, id: messageId, timestamp: message.timestamp});
+      } else {
+        socket.emit("privateMessage", {fromUser: message.sender, toUser: message.receiver, 
+          message: message.message, self: false, id: messageId, timestamp: message.timestamp});
+      }
     });
+    console.log("Debug> Retrieved private chat messages, size: ", private_chat_history.length);
   });
 
   // AC-02.02 - Auto-assign a unique username from the socket ID
@@ -236,7 +245,6 @@ io.on('connection', (socket) => {
     if (!message_text || message_text.trim() === '') return;
     if (!isUserAuthorized(socket)) return;
     // AC-01.2 + AC-01.5: Broadcast to all clients with sender username
-    console.log("userlist", userlist);
     const sender = userlist.get(socket.id);
     messageId += 1;
     console.log(`Debug> "${sender}" sent: ${message_text}, id: ${messageId}`);
@@ -341,8 +349,10 @@ io.on('connection', (socket) => {
 
   // edit message
   // data is {id: id, message: message}
-  socket.on("edit", (data) => {
-    console.log(`Debug> "${userlist.get(socket.id)}" edited to: ${data.message}, id: ${data.id}`);
+  socket.on("edit", ({id, message}) => {
+    console.log(`Debug> "${userlist.get(socket.id)}" edited to: ${message}, id: ${id}`);
+    // messengerdb.editChat()
+    // TODO get proper input from client to edit the message in the db
     io.emit("edit", data);
   });
 
