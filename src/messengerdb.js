@@ -179,26 +179,30 @@ const getAllUsers = async () =>{
 // ============================
 // Use-Case-11: Store Messages
 // ============================
-const storePublicChat = (sender, message, timestamp)=>{
+const storePublicChat = async (sender, message, timestamp)=>{
   console.log("Debug> Storing Public message to MongoDB sender:", sender, " message: ", message);
 
   //TODO: validate the data
   
   let chat = {sender: sender, message: message, timestamp: timestamp};
   try{
-      public_chat.insertOne(chat);
-  }catch{
-      console.log("Debug>messengerdb.storePublicChat: error for adding '" + JSON.stringify(chat) + "'\n");
+      let result = await public_chat.insertOne(chat);
+      console.log(`Debug> messengerdb.storePublicChat: stored chat with id ${result.insertedId}`);
+      return result.insertedId;
+  } catch (error) {
+      console.log(`Debug>messengerdb.storePublicChat: error (${error}) for adding '${JSON.stringify(chat)}'`);
   }
 }
 
-const storePrivChat = (sender, receiver, message, timestamp)=>{
+const storePrivChat = async (sender, receiver, message, timestamp)=>{
   console.log("Debug> Storing Private Message to MongoDB sender: ", sender, " receiver: ", receiver, "message: ", message);
   //TODO: validate the data
 
   let chat = {sender: sender, receiver: receiver, message: message, timestamp: timestamp};
   try {
-    priv_chat.insertOne(chat);
+    let result = await priv_chat.insertOne(chat);
+    console.log(`Debug> messengerdb.storePrivChat: inserted chat with id ${result.insertedId}`);
+    return result.insertedId;
   } catch {
     console.log("Debug>messengerdb.storePrivChat: error for adding '" + JSON.stringify(chat) + "'\n");
   }
@@ -226,7 +230,7 @@ const retrievePrivateChat = async (username) => {
 const editChat = async (isPublic, {sender, receiver, message, timestamp}, newMessage) => {
   //TODO add an edited field
   let curr_chat = isPublic ? public_chat : priv_chat;
-  if (typeof(timestamp) === "string") timestamp = Number(timestamp)
+  if (typeof(timestamp) === "string") timestamp = Number(timestamp);
 
   try {
     msg = {
@@ -237,7 +241,7 @@ const editChat = async (isPublic, {sender, receiver, message, timestamp}, newMes
     }
     console.log(`Debug> messengerdb.js editChat: looking up: ${JSON.stringify(msg)} in ${curr_chat.collectionName}`)
     const result = await curr_chat.updateOne(msg,
-      {$set: {message: newMessage, timestamp: Date.now()}}
+      {$set: {message: newMessage, timestamp: timestamp, edited: true}}
     );
     console.log(
       `Debug> messengerdb.js: editChat: updated ${result.modifiedCount} document(s)`,

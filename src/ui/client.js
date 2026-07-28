@@ -110,9 +110,6 @@ $('#notify-no').on('click', noNotification);
 // LogOut button
 $('#logout-btn').on('click', logout);
 
-// gets incremented with each new message
-var messageId = 1;
-
 
 // ===============================
 // JOIN CHAT
@@ -129,6 +126,13 @@ if (loginUsernameInput) {
         if (e.key === 'Enter') joinChat();
     });
 }
+var passwordInput = document.getElementById('password');
+if (passwordInput) {
+    passwordInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') joinChat();
+    });
+}
+
 
 function joinChat() {
     //input validation here before sending to the server
@@ -395,8 +399,8 @@ function sendMessage() {
 
 // AC-02.01 & AC-02.05
 // get message from server
-socket.on('message', function({message, id, timestamp}) { // data (object) - { message: "Alice: hello", id: 1 }
-    
+socket.on('message', handleMessage)
+function handleMessage({message, id, timestamp, edited}) { // data (object) - { message: "Alice: hello", id: 1 }
     // get senderName
     var senderName = message.split(':')[0];
 
@@ -411,14 +415,14 @@ socket.on('message', function({message, id, timestamp}) { // data (object) - { m
     }
 
     // Else Always display message
-    displayMessage({msgText: message, messageId: id, timestamp: timestamp});
-});
+    displayMessage({msgText: message, messageId: id, timestamp: timestamp, edited: edited});
+};
 
 
 // display message to public chat
 // TODO should pass in isEdited/isDeleted
-function displayMessage({msgText, messageId, timestamp}) { // server sends data as string 
-    const msg = createMessage(msgText, messageId, timestamp);
+function displayMessage({msgText, messageId, timestamp, edited}) { // server sends data as string 
+    const msg = createMessage(msgText, messageId, timestamp, edited);
 
     messageList.appendChild(msg);
     // AC-02.03 - Auto-scroll to latest message.
@@ -431,11 +435,9 @@ function createMessage(msgText, messageId, timestamp, isEdited=false, isDeleted=
     const msg = document.createElement("div");
     msg.className = "message";
     msg.id = "message-" + messageId;
-    // msg.innerHTML = '<span style="color: #2431e5">[' + timestamp + ']</span> ' 
-    //                 + DOMPurify.sanitize(data);
 
     // element that contains the text of the message
-    const msgTextElm = createMessageTextElement(messageId, msgText, timestamp, isEdited, isDeleted);
+    const msgTextElm = createMessageTextElement(messageId, msgText, Number(timestamp), isEdited, isDeleted);
     msg.appendChild(msgTextElm);
 
     // get username of data to create msg options
@@ -478,7 +480,7 @@ function sendPrivateMessage() {
 
 // Handles private message reception
 // data params are fromUser, toUser, message, self, id, timestamp
-socket.on('privateMessage', ({self, toUser, fromUser, message, id, timestamp}) => {
+socket.on('privateMessage', ({self, toUser, fromUser, message, id, timestamp, edited}) => {
     const chatUser = self ? toUser : fromUser; // i think this is the other user that you're talking to
     // admin sends message
     // test should put it in privateChats[admin]
@@ -502,12 +504,13 @@ socket.on('privateMessage', ({self, toUser, fromUser, message, id, timestamp}) =
         from: fromUser,
         message: message,
         timestamp: timestamp,
-        id: id
+        id: id,
+        edited: edited
     };
     privateChats[chatUser].push(msg);
 
     // display message
-    if (currentPrivateUser) {
+    if (currentPrivateUser && currentPrivateUser.username == chatUser) {
         displayPrivateMessage(msg);
     }
     
@@ -533,9 +536,9 @@ function loadPrivateMessages(toUser) {
 }
 
 // Displays private messages
-function displayPrivateMessage({from, message, timestamp, id}){
+function displayPrivateMessage({from, message, timestamp, id, edited}){
     const messagesDiv = document.getElementById("private-messages");
-    const privMsg = createMessage(from + ": " + message, id, timestamp);
+    const privMsg = createMessage(from + ": " + message, id, timestamp, edited);
     messagesDiv.appendChild(privMsg);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
@@ -665,21 +668,17 @@ function submitEditMessage(e) {
 // replace DOM elements with edited message
 // data should be {id: id, message: message}
 socket.on("edit", handleEditMessage);
-function handleEditMessage({id, message}) {
+function handleEditMessage({id, message, timestamp}) {
     var text = message; // TODO replace this
     // create message text again
-    const msgText = createMessageTextElement(id, text, Date.now(), true); // priv messages?
+    const msgText = createMessageTextElement(id, text, timestamp, true); // priv messages?
     // get sender
-    var sender = text.split(":")[0];
+    var sender = text.split(": ")[0];
     var username = document.getElementById("username").value;
     const msgDiv = document.getElementById("message-"+id);
 
     const oldMsgTextElm = document.getElementById("message-text-"+id);
-    console.log("client.js::hEM id", id);
-    console.log("client.js::hEM msgDiv", msgDiv);
-    console.log("client.js::hEM oldMsg", oldMsgTextElm);
     msgDiv.replaceChild(msgText, oldMsgTextElm);
-    
 
     if (sender === username) {
         // show msgOptDiv (since it was hidden in editMessage) if it's your own
@@ -707,7 +706,7 @@ function handleEditMessage({id, message}) {
         }
         let newText = msgText.lastChild.innerHTML;
         let newMessage = newText.split(": ").slice(1).join(": ");
-        privateChats[currentPrivateUser.username][index].timestamp = new Date().toLocaleTimeString();
+        privateChats[currentPrivateUser.username][index].timestamp = timestamp;
         privateChats[currentPrivateUser.username][index].message = newMessage;
         privateChats[currentPrivateUser.username][index].edited = true;
     }
@@ -733,8 +732,6 @@ function deleteMessage(e) {
     let isPublic = true;
     let receiver = null;
     const msgText = document.getElementById("message-"+id);
-    console.log("client.js::deleteMessage msgText", msgText);
-    console.log("client.js::deleteMessage gp", msgText.parentElement.id);
     if (msgText.parentElement.id === "private-messages") {
         isPublic = false;
         receiver = currentPrivateUser.username;
@@ -748,7 +745,6 @@ function deleteMessage(e) {
     let message = msgContent.textContent.split(": ").slice(1).join(": ");
 
     let data = {id: id, sender: username, receiver: receiver, isPublic: isPublic, message: message, timestamp: timestamp};
-    console.log("client.js::deleteMessage data", JSON.stringify(data));
 
     // emit to server
     socket.emit("delete", {id: id, sender: username, receiver: receiver, isPublic: isPublic, message: message, timestamp: timestamp});
@@ -764,9 +760,7 @@ function handleDeleteMessage({id, sender}) {
     // replace text content and timestamp
     const msgText = document.getElementById("message-content-"+id);
     const timestampElm = document.getElementById("timestamp-"+id);
-    const newTimestamp = new Date().toLocaleTimeString();
     msgText.innerHTML = "<i> deleted by " + sender + "</i>";
-    timestampElm.textContent = "[" + newTimestamp + "]";
 
     if (username === sender) {
         // remove message options if you delete your own message
@@ -787,7 +781,8 @@ function handleDeleteMessage({id, sender}) {
         }
         privateChats[currentPrivateUser.username][index].deleted = true;
         privateChats[currentPrivateUser.username][index].message = ""; // clear message bc why not. it's deleted
-        privateChats[currentPrivateUser.username][index].timestamp = new Date().toLocaleTimeString();
+        privateChats[currentPrivateUser.username][index].timestamp = timestampElm.title
+        console.log("client.js::hDM title", timestampElm.title);
     }
     return;
 }
@@ -804,12 +799,11 @@ function createMessageTextElement(id, textContent, timestamp, isEdited, isDelete
     msgTextDiv.id = "message-text-" + id;
     msgTextDiv.style.display = "inline";
 
-    
     // AC-02.04 - Timestamps display in brower's local system clock
     const timestampSpan = document.createElement("span");
     // timestampSpan.style.color = "#2431e5";
     timestampSpan.classList.add("timestamp");
-    timestampSpan.textContent = `[${new Date(timestamp).toLocaleTimeString()}] `;
+    timestampSpan.textContent = `[${new Date(timestamp).toLocaleString()}] `;
     timestampSpan.id = "timestamp-"+id;
     timestampSpan.className = "timestamp";
     timestampSpan.title = timestamp; // this is the unix time
@@ -1162,7 +1156,7 @@ function logout() {
 
     localStorage.removeItem('username');
 
-    $('#message').empty();
+    $('#messages').empty();
     $('#status').empty();
     $('#private-messages').empty();
 
@@ -1171,6 +1165,8 @@ function logout() {
 
     $('#username').val('');
     $('#password').val('');
+
+    privateChats = {};
 
     console.log('Debug>User logged out'); // UI testing only
 

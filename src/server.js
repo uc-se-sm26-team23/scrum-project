@@ -11,6 +11,7 @@ const app    = express();
 const server = http.createServer(app);
 const io     = new Server(server);
 const messengerdb = require('./messengerdb');
+const { postMessageToThread } = require('worker_threads');
 
 // CSP Header - Browser Level Defense-In-Depth
 app.use((req, res, next) => {
@@ -45,9 +46,6 @@ const PORT = process.env.PORT || 8080;
 
 // In-memory store: socketId → username
 const userlist = new Map();
-
-// variable to hold the message id
-var messageId = 0;
 
 // =============================================================
 // Use-Case-06 v2: Show ALL Registered Users
@@ -183,11 +181,10 @@ io.on('connection', (socket) => {
 
     // retrieve public chat messages
     let public_chat_history = await messengerdb.retrievePublicChat();
-    // message is {_id, message, timestamp, sender}
+    // message is {_id, message, timestamp, sender, edited(optional)}
     public_chat_history.forEach( (message) => { // TODO idk if this is efficient to send each message repeatedly instead of all at once?
-      messageId++;
-      //TODO add an edited field
-      socket.emit("message", {message: message.sender + ": " + message.message, id: messageId, timestamp: message.timestamp});
+      socket.emit("message", {message: message.sender + ": " + message.message, id: message._id, 
+        timestamp: message.timestamp, edited: message.edited ? message.edited : null });
     });
     console.log("Debug> Retrieved public chat messages, size: ", public_chat_history.length);
 
@@ -195,15 +192,12 @@ io.on('connection', (socket) => {
     let private_chat_history = await messengerdb.retrievePrivateChat(username);
     // emit to current socket
     private_chat_history.forEach( (message) => {
-      messageId++;
-      // TODO add an edited field
-      if (message.sender === username) {
-        socket.emit("privateMessage", {fromUser: message.sender, toUser: message.receiver, 
-          message: message.message, self: true, id: messageId, timestamp: message.timestamp});
-      } else {
-        socket.emit("privateMessage", {fromUser: message.sender, toUser: message.receiver, 
-          message: message.message, self: false, id: messageId, timestamp: message.timestamp});
-      }
+      let self = false;
+      if (message.sender === username) self = true;
+
+      socket.emit("privateMessage", {fromUser: message.sender, toUser: message.receiver, 
+        message: message.message, self: self, id: message._id, timestamp: message.timestamp,
+        edited: message.edited ? message.edited : null});
     });
     console.log("Debug> Retrieved private chat messages, size: ", private_chat_history.length);
   });
@@ -246,41 +240,41 @@ io.on('connection', (socket) => {
     if (!isUserAuthorized(socket)) return;
     // AC-01.2 + AC-01.5: Broadcast to all clients with sender username
     const sender = userlist.get(socket.id);
-    messageId += 1;
-    console.log(`Debug> "${sender}" sent: ${message_text}, id: ${messageId}`);
     let timestamp = Date.now()
-    const message = {message: sender + ': ' + message_text.trim(), id: messageId, timestamp: timestamp};
-    sendToAuthenticatedClients('message' , message);
-
     // store public chats
-    messengerdb.storePublicChat(sender, message_text.trim(), timestamp);
+    let id = await messengerdb.storePublicChat(sender, message_text.trim(), timestamp);
     console.log(`Debug> Chat '${sender}': '${message_text.trim()}' stored in MongoDB at ${timestamp}.`);
+    const message = {message: sender + ': ' + message_text.trim(), id: id, timestamp: timestamp};
+    sendToAuthenticatedClients('message' , message);
+    console.log(`Debug> "${sender}" sent: ${message_text}, id: ${id}`);
   });
 
   // Handles private messages
   // to is {socketId, username}
-  socket.on('privateMessage', ({to, message}) => {
+  socket.on('privateMessage', async ({to, message}) => {
     const sender = userlist.get(socket.id);
 
-    messageId += 1;
     let timestamp = Date.now();
 
     // If user is private-chatting with themselves, emit only once
     if (to.socketId === socket.id) {
+      const id = await messengerdb.storePrivChat(sender, sender, message, timestamp);
+      console.log(`Debug> Private Chat from ${sender} to self containing ${message} at ${timestamp} with id ${id} stored in MongoDB.`);
+
       socket.emit('privateMessage', {
         fromUser: sender,
         toUser: sender,
         message: message,
         self: true,
-        id: messageId,
+        id: id,
         timestamp: timestamp
       });
 
-      messengerdb.storePrivChat(sender, sender, message, timestamp);
-      console.log(`Debug> Private Chat from ${sender} to self containing ${message} at ${timestamp} stored in MongoDB.`);
-
       return;
     }
+
+    const id = await messengerdb.storePrivChat(sender, to.username, message, timestamp);
+    console.log(`Debug> Private chat stored in MongoDB. from ${sender} to ${to.username} containing ${message} at ${timestamp} with id ${id}`);
 
     // Sends the message to the recipient
     io.to(to.socketId).emit('privateMessage', {
@@ -288,7 +282,7 @@ io.on('connection', (socket) => {
       toUser: to.username,
       message: message,
       self: false,
-      id: messageId,
+      id: id,
       timestamp: timestamp
     });
 
@@ -298,13 +292,11 @@ io.on('connection', (socket) => {
       toUser: to.username,
       message: message,
       self: true,
-      id: messageId,
+      id: id,
       timestamp: timestamp
     });
 
-    messengerdb.storePrivChat(sender, to.username, message, timestamp);
-    console.log(`Debug> Private chat stored in MongoDB. from ${sender} to ${to.username} containing ${message} at ${timestamp}`);
-
+    
   });
 
   // AC-01.7: Typing indicator event is sent to connected users 
@@ -353,7 +345,7 @@ io.on('connection', (socket) => {
   // data is {id: id, message: message}
   socket.on("edit", async ({id, message, newMessage, timestamp, isPublic, sender, receiver}) => {
     console.log(`Debug> "${userlist.get(socket.id)}" edited '${message}' to: ${newMessage}, id: ${id}, 
-      time: ${timestamp} (${new Date(timestamp).toLocaleTimeString()}), isPublic: ${isPublic}`);
+      time: ${timestamp} (${new Date(timestamp).toTimeString()}), isPublic: ${isPublic}`);
     msg = {
       sender: sender, 
       receiver: receiver,
@@ -362,13 +354,28 @@ io.on('connection', (socket) => {
     }
     const result = await messengerdb.editChat(isPublic, msg, newMessage)
     console.log(`Debug> messengerdb.editChat success: ${result}`);
-    io.emit("edit", {id: id, message: sender + ": " + newMessage});
+
+    
+    if (isPublic) {
+      sendToAuthenticatedClients("edit", {id: id, message: sender + ": " + newMessage, timestamp: Number(timestamp)});
+    } else {
+      if (sender !== receiver) {
+        let socketId = null;
+        // get socketid from receiver
+        for (let [key, value] of userlist.entries()) {
+          if (value === receiver)
+            socketId = key;
+        }
+        io.to(socketId).emit("edit", {id: id, message: sender + ": " + newMessage, timestamp: Number(timestamp)}); // to recipient
+      }
+      socket.emit("edit", {id: id, message: sender + ": " + newMessage, timestamp: Number(timestamp)}) // back to sender
+    }
   });
 
   // delete message
   // data is {id: id, username: username}
   socket.on("delete", async ({isPublic, sender, receiver, message, timestamp, id}) => {
-    console.log(`Debug> "${sender}" deleted, id: ${id}, timestamp: ${timestamp} / ${new Date(timestamp).toLocaleString()}`);
+    console.log(`Debug> "${sender}" deleted, id: ${id}, timestamp: ${timestamp} / ${new Date(timestamp).toTimeString()}`);
     let msg = {
       sender: sender,
       receiver: receiver,
@@ -377,7 +384,21 @@ io.on('connection', (socket) => {
     };
     let result = await messengerdb.deleteChat(isPublic, msg);
     console.log("Debug> server.js deleteChat messengerdb success: ", result);
-    io.emit("delete", {id: id, sender: sender});
+
+    if (isPublic) {
+      sendToAuthenticatedClients("delete", {id: id, sender: sender});
+    } else {
+      if (sender !== receiver) {
+        let socketId = null;
+        // get socketid from receiver
+        for (let [key, value] of userlist.entries()) {
+          if (value === receiver)
+            socketId = key;
+        }
+        io.to(socketId).emit("delete", {id: id, sender: sender}); // to recipient
+      }
+      socket.emit("delete", {id: id, sender: sender}) // back to sender
+    }
   });
 
   socket.on('register', async function ({username, password}) {
