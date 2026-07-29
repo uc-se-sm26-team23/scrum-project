@@ -66,7 +66,7 @@ const find = async (username,password)=>{
 // Use-Case-10: Register User
 // ============================
 
-const register = async (username, password) => {
+const register = async ({fullname, username, email, phone, password}) => {
   console.log(`Debug>messengerdb.js: register username '${username}'`);
 
   // AC-10.4: Data Layer Independently re-validates format - Don't trust the server
@@ -81,14 +81,20 @@ const register = async (username, password) => {
   // AC-10.5: Check if usernmae already exist before inserting into database
   // return document object if exist
   // return null if none
-  const existance = await users.findOne( {username: username} )
-  if (existance !== null) {
+  const existUsername = await users.findOne( {username: username} )
+  if (existUsername !== null) {
     return {success: false, message: 'Username Already Exists!'};
+  }
+
+  // Check email uniqueness — new requirement
+  const existEmail = await users.findOne({ email });
+  if (existEmail !== null) {
+      return { success: false, message: 'An Account with this Email Already Exists!' };
   }
 
   // AC-10.6: Hash password before storing.
   const hashedPassword = await bcrypt.hash(password, 10)
-  await users.insertOne( {username: username, password: hashedPassword} )
+  await users.insertOne( {fullname, username, email, phone, password: hashedPassword});
 
   return {success: true};
 };

@@ -194,12 +194,19 @@ document.getElementById('showRegisterForm').addEventListener('click', function()
 
 // Toggle: Register -> Login
 document.getElementById('showLoginForm').addEventListener('click', () => {
+
     document.getElementById('registerUI').style.display = 'none';
-    document.getElementById('loginUI').style.display = '';
     document.getElementById('register-error').textContent = '';
+
+    document.getElementById('loginUI').style.display = '';
 
     document.getElementById('reg-username').value = '';
     document.getElementById('reg-password').value = '';
+    document.getElementById('reg-fullname').value = '';
+    document.getElementById('reg-email').value = '';
+    document.getElementById('reg-phone').value = '';
+    document.getElementById('reg-confirm-password').value = '';
+
 });
 
 // ======================================================
@@ -210,26 +217,74 @@ document.getElementById('registerBtn').addEventListener('click', registerAccount
 function registerAccount() {
 
   // AC-10.2 Client-side format validation before submission
-  const usernameInput = document.getElementById('reg-username').value;
-  const pattern = /^\w{3,20}$/;
+  const fullName_Input = document.getElementById('reg-fullname').value.trim();
+  const username_Input = document.getElementById('reg-username').value.trim();
+  const email_Input = document.getElementById('reg-email').value.trim();
+  const phone_Input = document.getElementById('reg-phone').value.trim();
 
-  if (!usernameInput || !pattern.test(usernameInput)) {
-    document.getElementById('register-error').textContent = "Error: Username cannot be empty and must be between 3-20 characters!";
+  const password_Input = document.getElementById('reg-password').value;
+  const confirmpassword_Input = document.getElementById('reg-confirm-password').value;
+
+  // Full name: letters and spaces only, 2-60 chars
+  const fullNamePattern = /^[A-Za-z\s]{2,60}$/;
+  if (!fullName_Input || !fullNamePattern.test(fullName_Input)) {
+
+    document.getElementById('register-error').textContent = "ERROR: Full Name Must Be 2-60 Characters (letters, spaces only)!";
     return;
+
   }
 
-  const passwordInput = document.getElementById('reg-password').value;
+  // Username: 3-20 chars, letters/numbers/underscore
+  const usernamePattern = /^\w{3,20}$/;
+  if (!username_Input || !usernamePattern.test(username_Input)) {
+
+    document.getElementById('register-error').textContent = "ERROR: Username Must be between 3-20 characters (letters, numbers, underscore)!";
+    return;
+
+  }
+
+  // Email: standard format - follow format: string@string.string
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email_Input || !emailPattern.test(email_Input)) {
+
+      document.getElementById('register-error').textContent = "ERROR: Please Enter A Valid Email Address!";
+      return;
+  }
+
+  // Phone: Exact US format 10 digits phone number
+  const phonePattern = /^\d{10}$/;
+  if (!phone_Input || !phonePattern.test(phone_Input)) {
+    
+    document.getElementById('register-error').textContent = "ERROR: Phone Number Must Be Exactly 10 digits!";
+    return;
+
+  }
+
+  // Password: min 6 chars, at least one letter and one number
   const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
-  if (!passwordInput || !passwordPattern.test(passwordInput)) {
-    document.getElementById('register-error').textContent = "Error: Password must be at least 6 characters long and contains both numbers and letters!";
-    return;
-  }
+  if (!password_Input || !passwordPattern.test(password_Input)) {
 
-  // Clear input boxes then emit to server
+    document.getElementById('register-error').textContent = "ERROR: Password Must Be at least 6 characters w/ letters and numbers!";
+      return;
+
+  }
+  /// Confirm password must match
+  if (password_Input !== confirmpassword_Input) {
+
+    document.getElementById('register-error').textContent = "ERROR: Passwords Do Not Match!";
+    return;
+
+    }
+
+    // clear error message if none violates 
   document.getElementById('register-error').textContent='';
-  document.getElementById('reg-username').value = '';
-  document.getElementById('reg-password').value = '';
-  socket.emit('register', {username: usernameInput, password: passwordInput});
+  // emit to server
+  socket.emit('register', {
+    fullname: fullName_Input, 
+    username: username_Input, 
+    email: email_Input, 
+    phone: phone_Input, 
+    password: password_Input });
 
 }
 
@@ -347,10 +402,20 @@ socket.on('privateStopTyping', (data) => {
 
 // Socket listerner for Register Account
 socket.on('register-success', function(username) {
+
+    // hide register UI 
   document.getElementById('registerUI').style.display = 'none';
   document.getElementById('register-error').textContent = '';
+
+  // clear input boxes
   document.getElementById('reg-username').value = '';
   document.getElementById('reg-password').value = '';
+  document.getElementById('reg-email').value = '';
+  document.getElementById('reg-phone').value = '';
+  document.getElementById('reg-password').value = '';
+  document.getElementById('reg-confirm-password').value = '';
+
+  // display login UI for login
   document.getElementById('loginUI').style.display = '';
   document.getElementById('login-success').textContent = `Account '${username}' created! You can now Log In!`;
 });
@@ -1171,6 +1236,3 @@ function logout() {
     console.log('Debug>User logged out'); // UI testing only
 
 }
-
-
-

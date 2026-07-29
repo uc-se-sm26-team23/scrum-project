@@ -401,37 +401,63 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('register', async function ({username, password}) {
+  socket.on('register', async function ({fullname, username, email, phone, password}) {
 
     // AC-10.3: Server-side validation
-    if (!username ||typeof username !== 'string' 
-      || !password || typeof password !== 'string' 
-      || username.trim().length == 0 || password.length == 0) {
+    if ( !fullname   || typeof fullname !== 'string' ||
+         !username   || typeof username !== 'string' ||
+         !email      || typeof email !== 'string'  ||
+         !phone      || typeof phone !== 'string' ||
+         !password   || typeof password !== 'string') {
 
       socket.emit('register-error', 'Invalid Request.');
       return;
     }
 
+    fullname = fullname.trim();
     username = username.trim();
+    email = email.trim();
+    phone = phone.trim();
 
-    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+
+
     const usernamePattern = /^\w{3,20}$/;
-    
     // AC-10.4: Server-side re-validation Inputs Patterns
     if (!usernamePattern.test(username)) {
-      socket.emit('register-error', 'Error: Username must be 3-20 characters (letters, numbers, underscore).');
+      socket.emit('register-error', 'ERROR: Username must be 3-20 characters (letters, numbers, underscore).');
       return; 
     }
 
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
     if (!passwordPattern.test(password)) {
-      socket.emit('register-error', 'Error: Password must be at least 6 characters with letters and numbers.');
+      socket.emit('register-error', 'ERROR: Password must be at least 6 characters with letters and numbers.');
       return;
     }
+
+    const fullNamePattern = /^[A-Za-z\s]{2,60}$/;
+    if (!fullNamePattern.test(fullname)) {
+      socket.emit('register-error', 'ERROR: Invalid Full Name Format.');
+      return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      socket.emit('register-error', 'Error: Invalid Email Format.');
+      return;
+    }
+
+    const phonePattern = /^\d{10}$/;
+    if (!phonePattern.test(phone)) {
+      socket.emit('register-error', 'Error: Phone must be Exactly 10 digits.');
+      return;
+    }
+
 
     let result;
     try {
       // connect to database and register user
-      result = await messengerdb.register(username, password)
+      result = await messengerdb.register({fullname, username, email, phone, password});
+
     } catch (err) {
 
       socket.emit('register-error', 'Error: Server-side. Please Try Again.');
