@@ -480,7 +480,7 @@ io.on('connection', (socket) => {
 // =============================================================
   // Use-Case: Update Profile (Username / Password)
   // =============================================================
-  socket.on("update-profile", async ({ currentUsername, newUsername, oldPassword, newPassword }) => {
+  socket.on("update-profile", async ({ currentUsername, newUsername, fullName, email, oldPassword, newPassword }) => {
     // 1. Ensure user is authorized
     if (!isUserAuthorized(socket)) {
       socket.emit("update-profile-error", "Unauthorized request.");
@@ -530,6 +530,14 @@ io.on('connection', (socket) => {
         const passwordResult = await messengerdb.updatePassword(updatedUsername, oldPassword, newPassword);
         if (!passwordResult.success) {
           socket.emit("update-profile-error", passwordResult.message);
+          return;
+        }
+      }
+
+      if (fullName !== undefined || email !== undefined) {
+        const profileResult = await messengerdb.updateProfileInfo(updatedUsername, fullName, email);
+        if (!profileResult.success) {
+          socket.emit("update-profile-error", profileResult.message);
           return;
         }
       }

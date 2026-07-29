@@ -25,7 +25,7 @@ socket.on("connect", () => { //connected to the server
     // use to check if username was saved from previous session
     var savedUsername = localStorage.getItem('username');
 
-    // if exist emit to server who the reconnected yser is
+    // if exist emit to server who the reconnected user is
     if (savedUsername) {
         socket.emit("set username", savedUsername)
 
@@ -160,26 +160,31 @@ function joinChat() {
     const logincredentials = {username: username, password: password};
     socket.emit('join', logincredentials);
     // console.log("Debug>sent login credentials to server: " + JSON.stringify(logincredentials));
+    // AC-02.05 - Request Notification on message
 
-    socket.on('join-success', function(username) {
+    socket.on('join-success', function(data) {
         console.log('Join Success');
         document.getElementById('loginUI').style.display = 'none';
         document.getElementById('chatUI').style.display = '';
         // document.getElementById('display-name').textContent = username; - there's no 'display-name' element? - connor
         
-    
-
-    
+        const loggedInusername = typeof data === 'object' ? data.username : data;
+       
+        if (loggedInUsername) {
+            localStorage.setItem("username", loggedInUsername);
+        }
+       
+        if (typeof data === 'object') {
+            localStorage.setItem("fullName", data.fullName || "");
+            localStorage.setItem("email", data.email || "");
+        }
     });
 
     socket.on('join-error', function(message) {
         console.log('Join Error');
         document.getElementById('login-error').textContent = message;
     });
-
-    // AC-02.05 - Request Notification on message
-    $("#notify-prompt").css("display", "block"); // show the prompt we made after joining
-
+        $("#notify-prompt").css("display", "block"); // show the prompt we made after joining
 }
 
 // Toggle: Login -> Register
@@ -1092,6 +1097,9 @@ document.getElementById('Edit_profile_btn').addEventListener('click', () => {
     }
 });
 
+    document.getElementById('new-fullname').value = localStorage.getItem("fullName") || "";
+    document.getElementById('new-email').value = localStorage.getItem("email") || "";
+
 document.getElementById('close-profile-btn').addEventListener('click', () => {
     document.getElementById('edit-profile-modal').style.display = 'none';
 });
@@ -1100,12 +1108,14 @@ document.getElementById('close-profile-btn').addEventListener('click', () => {
 document.getElementById('edit-profile-form').addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const currentUsername = localStorage.getItem("username");
+  const currentUsername = localStorage.getItem("username");
     const newUsername = document.getElementById("new-username").value.trim();
+    const fullName = document.getElementById("new-fullname").value.trim(); // New field
+    const email = document.getElementById("new-email").value.trim();       // New field
     const oldPassword = document.getElementById("old-password").value;
     const newPassword = document.getElementById("new-password").value;
     const feedback = document.getElementById("profile-feedback");
-    const selectedTheme = document.getElementById("theme-selector").value; 
+    const selectedTheme = document.getElementById("theme-selector").value;
 
     if (selectedTheme) {
         document.documentElement.setAttribute('data-theme', selectedTheme);
@@ -1141,6 +1151,8 @@ document.getElementById('edit-profile-form').addEventListener('submit', (e) => {
     socket.emit("update-profile", {
         currentUsername,
         newUsername,
+        fullName,
+        email,
         oldPassword,
         newPassword
     });
@@ -1155,6 +1167,14 @@ socket.on("update-profile-success", (data) => {
     if (data.newUsername) {
         localStorage.setItem("username", data.newUsername);
         document.getElementById("username").value = data.newUsername;
+    }
+    const submittedFullName = document.getElementById("new-fullname").value.trim();
+    const submittedEmail = document.getElementById("new-email").value.trim();
+    if (submittedFullName !== "") {
+        localStorage.setItem("fullName", submittedFullName);
+    }
+    if (submittedEmail !== "") {
+        localStorage.setItem("email", submittedEmail);
     }
 
     setTimeout(() => {
