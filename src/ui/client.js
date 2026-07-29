@@ -285,7 +285,7 @@ function registerAccount() {
   document.getElementById('register-error').textContent='';
   // emit to server
   socket.emit('register', {
-    fullname: fullName_Input, 
+    fullName: fullName_Input, 
     username: username_Input, 
     email: email_Input, 
     phone: phone_Input, 

@@ -66,7 +66,7 @@ const find = async (username,password)=>{
 // Use-Case-10: Register User
 // ============================
 
-const register = async ({fullname, username, email, phone, password}) => {
+const register = async ({fullName, username, email, phone, password}) => {
   console.log(`Debug>messengerdb.js: register username '${username}'`);
 
   // AC-10.4: Data Layer Independently re-validates format - Don't trust the server
@@ -94,7 +94,7 @@ const register = async ({fullname, username, email, phone, password}) => {
 
   // AC-10.6: Hash password before storing.
   const hashedPassword = await bcrypt.hash(password, 10)
-  await users.insertOne( {fullname, username, email, phone, password: hashedPassword});
+  await users.insertOne( {fullName, username, email, phone, password: hashedPassword});
 
   return {success: true};
 };

@@ -401,10 +401,10 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('register', async function ({fullname, username, email, phone, password}) {
+  socket.on('register', async function ({fullName, username, email, phone, password}) {
 
     // AC-10.3: Server-side validation
-    if ( !fullname   || typeof fullname !== 'string' ||
+    if ( !fullName   || typeof fullName !== 'string' ||
          !username   || typeof username !== 'string' ||
          !email      || typeof email !== 'string'  ||
          !phone      || typeof phone !== 'string' ||
@@ -414,7 +414,7 @@ io.on('connection', (socket) => {
       return;
     }
 
-    fullname = fullname.trim();
+    fullName = fullName.trim();
     username = username.trim();
     email = email.trim();
     phone = phone.trim();
@@ -435,7 +435,7 @@ io.on('connection', (socket) => {
     }
 
     const fullNamePattern = /^[A-Za-z\s]{2,60}$/;
-    if (!fullNamePattern.test(fullname)) {
+    if (!fullNamePattern.test(fullName)) {
       socket.emit('register-error', 'ERROR: Invalid Full Name Format.');
       return;
     }
@@ -456,7 +456,7 @@ io.on('connection', (socket) => {
     let result;
     try {
       // connect to database and register user
-      result = await messengerdb.register({fullname, username, email, phone, password});
+      result = await messengerdb.register({fullName, username, email, phone, password});
 
     } catch (err) {
 
