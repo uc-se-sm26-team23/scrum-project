@@ -227,12 +227,29 @@ Embed UI mockups or screenshots and describe the interaction model. Wireframes a
 Describe your **MongoDB Atlas** schema: collections, fields, indexes, and relationships. Include a sample document for each collection. _(Sprint 2 onward; refine in Sprint 3.)_
 
 ```json
-// Example collection: users
+// collection: users
 {
-  "_id": "ObjectId",
-  "username": "string (unique, indexed)",
-  "passwordHash": "string (bcrypt)",
-  "createdAt": "ISODate"
+  "fullName": "Admin",
+  "username": "user",
+  "email": "user@mail.uc.edu",
+  "phone": "5131234567",
+  "password": "$2b..."
+}
+
+// collection: privchat
+{
+  "sender": "sender",
+  "receiver": "receiver",
+  "message": "...",
+  "timestamp": 17850...
+}
+
+// collection: chat
+{
+  "sender": "sender",
+  "receiver": "receiver",
+  "message": "...",
+  "timestamp": 17850...
 }
 ```
 
@@ -592,7 +609,7 @@ Keep it under an hour. The output is bullet points in the table above and any ne
 
 ### Sprint 2
 
-**Duration:** 2026-07-10 to 2026-07-31
+**Duration:** 2026-07-10 to 2026-07-30
 
 #### Sprint Goal
 TODO — one sentence.
