@@ -214,6 +214,23 @@ document.getElementById('showLoginForm').addEventListener('click', () => {
 
 });
 
+// Toggle: Login -> ForgotPassword
+document.getElementById('showForgotPasswordForm').addEventListener('click', function() {
+    document.getElementById('loginUI').style.display = 'none';
+    document.getElementById('forgotPasswordUI').style.display = '';
+    document.getElementById('login-error').textContent = '';
+
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+});
+
+// Toggle: ForgotPassword -> Login
+document.getElementById('showLoginFormFromForgot').addEventListener('click', function() {
+    document.getElementById('forgotPasswordUI').style.display = 'none';
+    document.getElementById('loginUI').style.display = '';
+    document.getElementById('login-error').textContent = '';
+});
+
 // ======================================================
 // Use Case 10: Register Account
 // ======================================================
