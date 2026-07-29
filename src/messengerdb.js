@@ -159,6 +159,45 @@ const updatePassword = async (username, oldPassword, newPassword) => {
   return { success: true };
 };
 
+// ============================
+// Update Profile Info (Full Name & Email)
+// ============================
+const updateProfileInfo = async (username, fullName, email) => {
+  console.log(`Debug>messengerdb.js: updating profile info for '${username}'`);
+
+  const updateFields = {};
+
+  if (fullName !== undefined && fullName.trim() !== '') {
+    if (typeof fullName !== 'string') {
+      return { success: false, message: 'Invalid full name format!' };
+    }
+    updateFields.fullName = fullName.trim();
+  }
+
+  if (email !== undefined && email.trim() !== '') {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (typeof email !== 'string' || !emailPattern.test(email)) {
+      return { success: false, message: 'Invalid email format!' };
+    }
+    updateFields.email = email.trim();
+  }
+
+  if (Object.keys(updateFields).length === 0) {
+    return { success: true }; // Nothing to update
+  }
+
+  const result = await users.updateOne(
+    { username: username },
+    { $set: updateFields }
+  );
+
+  if (result.matchedCount === 0) {
+    return { success: false, message: 'User not found.' };
+  }
+
+  return { success: true };
+};
+
 
 // ============================
 // Use-Case-06 v2: Show ALL Users (including Online & Offline)
@@ -281,4 +320,4 @@ const deleteChat = async (isPublic, {sender, receiver, message, timestamp}) => {
 
 module.exports = { connect, find , register, updateUsername, 
   updatePassword, storePublicChat, storePrivChat , getAllUsers,
-  retrievePublicChat, retrievePrivateChat, editChat, deleteChat};
+  retrievePublicChat, retrievePrivateChat, editChat, deleteChat, updateProfileInfo};
