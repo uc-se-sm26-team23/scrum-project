@@ -46,6 +46,8 @@ _Teams are 3–5 students (per syllabus). Solo teams are not permitted._
 | 05/28/2026 | 0.1     | Initial draft (Sprint 0)             | ALL   |
 | 06/04/2026 | 0.2     | Added use cases and architecture     | ALL   |
 | 07/09/2026 | 0.3     | implemented CI/CD/join chat/onlineuser/modify message and other basic core features | ALL   |
+| 07/30/2026 | 0.4    | Adding all UC updates since last sprint, sprint 2 retro and touch ups    | ALL   |
+
 
 
 ---
@@ -78,6 +80,8 @@ List the high-level functional and non-functional requirements. These will be re
 - **F1.7:** Public chat and private chat are visually distinct (separate views or panels)
 - **F1.8:** Real-time typing status indicator for public and private chat
 - **F1.9:** Logged-in users can modify (edit and delete) previously sent messages in public chat (private chat implementation later)
+- **F1.10:** Logged in users must undergo authentication and are able to add more profile info/edit profile info.
+
 - **NFR-1 (Performance):** Minimal load time to see chat app, with high chat character limit and high group member limit
 - **NFR-2 (Usability):** Chat login and viewing of unread messages is readily available with seamless UI
 - **NFR-3 (Security — see §Security):** As a User, I want to be able to login securely and maintain secure access to my chats
@@ -197,6 +201,16 @@ For each use case in §Use Cases, describe how it is realized in code: which mod
 - AC-06.5: Given that the online users list is hidden, when I clicked the '+' button, Then the right sidebar must reappear, and the main chat area must shrink back to its original screen space.
 - AC-06.6: Given that I am viewing the online list panel, When connected user(s) logs into the webpage, Then their username must auto appear in online list immediately without needing to manual refresh page.
 - AC-06.7: Given that I am actively viewing the online list, When connected user(s) went offline, Then their username must immediately be gone from the online list without needing to manual refresh page.
+
+- AC6v2
+- AC-06.1: Given that I view the users list, When the list renders, Then the system must display all **registered users** stored in the database, regardless of their current connection status.
+- AC-06.2: Given that I am viewing the online list, When I check the roster, Then the system must display my own username and beside the username marked "(You)".
+- AC-06.3: Given that I log into the webpage, When the homepage loads, Then the online users list must display as an expanded sidebar panel on the far left side of the screen.
+- AC-06.4: Given that the online users list panel is open, When I click the 'x' or similiar button on the panel, Then the sidebar must hide, and allow the main chat area use the remaining screen space.
+- AC-06.5: Given that the online users list is hidden, when I clicked the '+' or similiar button, Then the left sidebar must reappear, and the main chat area must shrink back to its original screen space.
+- AC-06.6: Given that I am viewing the online list panel, When connected user(s) logs into the webpage, Then their username must auto appear in **online** list immediately without needing to manual refresh page.
+- AC-06.7: Given that I am viewing the users list, When a connected user disconnects, Then their status must immediately update to **offline** in the list without a manual page refresh.
+- AC-06.8: Given that I am viewing the users list, When the list renders or updates, Then **online users must be sorted and grouped above offline users** so that active users are always easier to find.
   
 - AC-07.1: When the connected user opens the webpage, they will be prompted to log in
 - AC-07.2: After the connected user fills out the username and clicks Log-In, the client ensures that all required login fields are filled before continuing validation.
@@ -227,6 +241,25 @@ For each use case in §Use Cases, describe how it is realized in code: which mod
 
 - AC-11.1: Given the authenticated users log back in, When the authenticated user went to the private or public chat area , Then the system retrieve the stored messages from MongoDB and display to the user.
 - AC-11.2: Given the private messages between two authenticated users are saved in the database, only the sender and receiver should be able to see these messages on login.
+
+- AC-12.1: Given a user has successfully authenticated into the system, then the system must immediately send and display current public and private chat history to the user's interface.
+- AC-12.2: The system will only load up to 100 public and private chat messages at a time, if their histories extend beyond that, to prevent long loading times.
+- AC-12.3: When the user scrolls to the top of the chat message, up to 100 more chat message for that particular conversation will be loaded in addition.
+
+-  AC-13.01: Given that I am on the "Edit Profile" page, When I modify my personal informations and click "Save", Then the system must process the updates.
+- AC-13.02: Given that I input personal information data, When the name field is left blank, Then the system must reject the submission and display a specific validation error.
+- AC-13.03: Given that a profile update is successfully processed or encounters an error, When the server responds, Then the system must display a temporary toast notification indicating success or failure.
+- AC-13.04: Given that my profile is successfully updated, When I return to the chat or main dashboard, Then the system must display my new/latest profile info without requiring a re-login.
+- AC-13.05 (Security): Profile input data received by the server must be strictly sanitized and HTML-escaped before persistence, preventing stored Cross-Site Scripting (XSS) attacks.
+- AC-13.06 (Security): The server must enforce strict object-level authorization checking, ensuring that the authenticated session ID matches the target user profile being edited.
+
+- AC-14.1: A "Forgot Password?" link is present on the login screen; clicking it displays an email input field and a Send Code button.
+- AC-14.2: Submitting an empty or malformed email displays a client-side error and sends no request to the server.
+- AC-14.3: Whether or not the submitted email matches a registered account, the server returns the same generic "if that email is registered, a code has been sent" response — an unknown email produces no distinguishable result.
+- AC-14.4: When the email matches an account, the server generates a 6-digit numeric OTP, hashes it with bcrypt before storing it (same as password storage), and sets a short expiry (currently 1 minute) alongside it.
+- AC-14.5: The OTP is emailed to the address on file; the plaintext OTP is never sent to the client or logged anywhere except inside the outgoing email.
+- AC-14.6: Submitting the code and new password re-validates the new password format server-side; an incorrect code, an expired code, or a code for a non-existent request all produce the same generic "Invalid or expired code" message.
+- AC-14.7: On a successful reset, the server hashes and stores the new password and clears the stored OTP and its expiry from the user document, making the code single-use.
 
 
 
