@@ -612,7 +612,9 @@ Keep it under an hour. The output is bullet points in the table above and any ne
 **Duration:** 2026-07-10 to 2026-07-30
 
 #### Sprint Goal
-TODO — one sentence.
+Users need to log in with a username/password stored in a database. An invalid username/password cannot log in. Connected users can register for a new account with more fields (retype password, email, full name, etc.) in addition to username/password. (only logged in users can send/recieve messages, logout, change/edit profule, view chat history)
+
+Feature of our team's choice: Forgot password using OTP/Email, enable notifications.
 
 #### Completed PBIs / Tasks
 1. TODO
