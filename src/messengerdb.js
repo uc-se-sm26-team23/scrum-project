@@ -247,7 +247,7 @@ const storePublicChat = async (sender, message, timestamp)=>{
 }
 
 
-// Function to store private messages in MongoDB
+// Function to store private messages in MongoDB, taking both sender and receiver so that the messages load in the correct private chats.
 const storePrivChat = async (sender, receiver, message, timestamp)=>{
   console.log("Debug> Storing Private Message to MongoDB sender: ", sender, " receiver: ", receiver, "message: ", message);
   //TODO: validate the data

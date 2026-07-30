@@ -235,6 +235,8 @@ io.on('connection', (socket) => {
 
     // If user is private-chatting with themselves, emit only once
     if (to.socketId === socket.id) {
+
+      // Since the user is private-chatting with themself, storePrivChat takes sender as both sender and receiver
       const id = await messengerdb.storePrivChat(sender, sender, message, timestamp);
       console.log(`Debug> Private Chat from ${sender} to self containing ${message} at ${timestamp} with id ${id} stored in MongoDB.`);
 
@@ -250,6 +252,7 @@ io.on('connection', (socket) => {
       return;
     }
 
+    // If user is private-chatting with another user, storePrivChat takes sender as the sender and to.username as the receiver
     const id = await messengerdb.storePrivChat(sender, to.username, message, timestamp);
     console.log(`Debug> Private chat stored in MongoDB. from ${sender} to ${to.username} containing ${message} at ${timestamp} with id ${id}`);
 
