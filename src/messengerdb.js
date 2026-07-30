@@ -225,31 +225,43 @@ const getAllUsers = async () =>{
 // ============================
 // Use-Case-11: Store Messages
 // ============================
+
+// Function to store public chat messages in MongoDB
 const storePublicChat = async (sender, message, timestamp)=>{
   console.log("Debug> Storing Public message to MongoDB sender:", sender, " message: ", message);
 
   //TODO: validate the data
   
   let chat = {sender: sender, message: message, timestamp: timestamp};
+
+  // Atempts to store the public chat message in MongoDB
   try{
       let result = await public_chat.insertOne(chat);
       console.log(`Debug> messengerdb.storePublicChat: stored chat with id ${result.insertedId}`);
       return result.insertedId;
   } catch (error) {
+
+      // Debug error for messages not being added
       console.log(`Debug>messengerdb.storePublicChat: error (${error}) for adding '${JSON.stringify(chat)}'`);
   }
 }
 
+
+// Function to store private messages in MongoDB
 const storePrivChat = async (sender, receiver, message, timestamp)=>{
   console.log("Debug> Storing Private Message to MongoDB sender: ", sender, " receiver: ", receiver, "message: ", message);
   //TODO: validate the data
 
   let chat = {sender: sender, receiver: receiver, message: message, timestamp: timestamp};
+
+  // Attempts to store private messages in MongoDB's private chat database
   try {
     let result = await priv_chat.insertOne(chat);
     console.log(`Debug> messengerdb.storePrivChat: inserted chat with id ${result.insertedId}`);
     return result.insertedId;
   } catch {
+
+    // Debug error for messages that were not able to be added to the private chat database
     console.log("Debug>messengerdb.storePrivChat: error for adding '" + JSON.stringify(chat) + "'\n");
   }
 };
