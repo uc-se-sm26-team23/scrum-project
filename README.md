@@ -654,7 +654,7 @@ Feature of our team's choice: Forgot password using OTP/Email, enable notificati
 | Member | Hours | Contribution Summary |
 |--------|-------|----------------------|
 | Marcus Ngyuyen| 10 | TODO |
-| Luke Falanga | 10 | TODO |
+| Luke Falanga | 10 | Implemented store private chat and store public chat, cleaned up some code |
 | Connor Slutsky | 10 | TODO |
 | Akul Jha | 10 | TODO |
 | Jai Ong Sheng | 10 | TODO |
