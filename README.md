@@ -201,6 +201,30 @@ For each use case in §Use Cases, describe how it is realized in code: which mod
 - AC-07.6: The connected user can click a logout option while authenticated.
 - AC-07.7: The system ends the connected user session and returns the connected user to the login page after logout.
 
+- AC-08.1: A username field, a password field, and a Join button are present and usable on the login screen; submitting with an empty or malformed field displays an error and sends no request to the server.
+- AC-08.2: The server independently re-validates the structure of the received request; a structurally invalid request returns an error and no credential check is performed.
+- AC-08.3: The server checks the submitted credentials against the user list; an unknown username and a wrong password both produce the same generic invalid-user result.
+- AC-08.4: When the credentials are invalid, the login screen remains visible, the password field is cleared, and an invalid-user message is displayed.
+- AC-08.5: When the credentials are valid, the server marks the connection as authenticated before sending any further response.
+- AC-08.6: When the connection is authenticated, the client displays the chat screen.
+- AC-08.7: After a successful join, every currently authenticated client receives and displays the updated list of authenticated users.
+
+- AC-09.1: Given that the user is on the login screen, When they submit a valid, registered username and password, Then they are authenticated and redirected to their chat area.
+- AC-09.2: Given that the user is on the login screen, When they attempt to submit a blank or poorly formatted username/password string, Then the client-side system blocks submission and displays a validation alert.
+- AC-09.3: Given that a login request passes client formatting, When the server matches the credentials against the database and finds a mismatch, Then no session is created and the user receives a specific error message.
+
+-  AC-10.1: Given the user is on the login screen, When the user selects the registration option, Then the registration form (username, password) is present and reachable without a page reload.
+- AC-10.2: Given the user is on the registration screen, When the user submits the form with an invalid username or password format, Then the input is blocked from submitting and the user receives a specific, actionable error message.
+- AC-10.3: Given the user submits the registration form with client-side valid inputs, When the server detects an invalid format upon independent re-validation, Then no account is created and the user receives a specific, actionable error message.
+- AC-10.4: Given the user submits validly formatted input, When the data layer detects an invalid format during independent re-validation before querying, Then no account is created in the database and the user receives a specific, actionable error message.
+- AC-10.5: Given the user submits a registration form with valid credentials, When the system detects that the username already exists, Then no new account is created and the user receives a specific, actionable error message.
+- AC-10.6: Given the user submits a new, unique username and a valid password, When the system validates all layers, hashes the password, and creates the account, Then the user receives a clear confirmation message and is returned to the login view.
+
+- AC-11.1: Given the authenticated users log back in, When the authenticated user went to the private or public chat area , Then the system retrieve the stored messages from MongoDB and display to the user.
+- AC-11.2: Given the private messages between two authenticated users are saved in the database, only the sender and receiver should be able to see these messages on login.
+
+
+
 ##Sequence Diagrams:
 #Modify Messages:
 ![](https://www.plantuml.com/plantuml/png/XLJDSjCm4BxxANPwQcTgfgN0WGDJnd3Wq5F82JWeqgOMo9BHhXlozcWJMOuRGpKJUoRp_Npx8zyJgyX3vs1DM3SgFMvkwuTWx7PVFo2HUiIgKff3XEEvQ8Btg1cDKE85A89rrISLgsslF2U4i-Zv0l8HH3D7h30-OPmXLbMrXle3DF0UjBFw5t2qlKCmWGc21yB4x8wHuDl7fhwvUtNx8uLpqzyRTC4_4d00vGEt664WZ2TmSMj6dzOQX131M58RXz19tLOhjialzFAY2XtXae4UOfH8OZ3A9jrrqgKsxE2piPnI6FY43Xb7lTFemfBu0XqjAiYdT8CINsTG9hy-5hBWYWabjPJ4MulEJBm5-M7J9UMXDuhH51xZ7pucp2b5-XHW2R3hULymizP6_8bwL8KQJ00VM8POmjnDOQJ72_e--FeV7glaaSKpuJA_lvXhyBZxcl9VpQtAMOqAf9wmL2uLoy368CIAXpAlDsSIkT9D3CfeHMSjl9HYCPOqrrduwhkN_NGEzE6YK4bv3OjUquYDfTwf_TcmTfRRCRRrHbOun8NaAL1LbORdnNnfyJ8igxqjQjCW8luUa1WuW9bfmZQ63dIhl4Tthb06yPncFMFqohdzOI3R4ALVXwj6OFqBYZby8jAU6BjnaZxmTBsvLGowVCj4EgSmpxyoxsObpoVn7uSvMrell-e-FOVELNy1)
