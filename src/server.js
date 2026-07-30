@@ -603,33 +603,22 @@ io.on('connection', (socket) => {
 
 // =============================================================
 // Mailer setup — sends OTP emails for password reset
-// Using Ethereal (fake SMTP inbox) for testing — swap for a real
-// provider before shipping to real users
 // =============================================================
-let transporter;
-
-(async () => {
-  const testAccount = await nodemailer.createTestAccount();
-  transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    secure: false,
-    auth: {
-      user: testAccount.user,
-      pass: testAccount.pass,
-    },
-  });
-  console.log('Debug>server.js: Ethereal test account ready:', testAccount.user);
-})();
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 async function sendOtpEmail(toEmail, otp) {
   const info = await transporter.sendMail({
-    from: '"UC Messenger" <no-reply@ucmessenger.test>',
+    from: `"UC Messenger" <${process.env.EMAIL_USER}>`,
     to: toEmail,
     subject: 'Your Password Reset Code',
-    text: `Your one-time code is ${otp}. It expires in 1 minute.`,
-    html: `<p>Your one-time code is <b>${otp}</b>.</p><p>It expires in 1 minute.</p>`,
+    text: `Your one-time code is ${otp}. It expires in 1 minutes.`,
+    html: `<p>Your one-time code is <b>${otp}</b>.</p><p>It expires in 1 minutes.</p>`,
   });
   console.log('Debug>server.js: OTP email sent, id:', info.messageId);
-  console.log('Debug>server.js: Preview URL:', nodemailer.getTestMessageUrl(info));
 }
