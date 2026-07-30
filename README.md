@@ -611,19 +611,23 @@ Users need to log in with a username/password stored in a database. An invalid u
 Feature of our team's choice: Forgot password using OTP/Email, enable notifications.
 
 #### Completed PBIs / Tasks
-1. TODO
-2. TODO
-3. TODO
+1. Use-Case-8: Authenticated Join Chat
+2. Use-Case-9: Authorize User
+3. Use-Case-3: Modify Message
+4. Use-Case-12: Retrieve Messages
+5. Use-Case-13: Edit Profile Info
+6. Use-Case-14: Forgot Password
+
 
 #### Contributions
 
 | Member | Hours | Contribution Summary |
 |--------|-------|----------------------|
-| Member 1 | X | TODO |
-| Member 2 | X | TODO |
-| Member 3 | X | TODO |
-| Member 4 | X | TODO |
-| Member 5 | X | TODO |
+| Marcus Ngyuyen| X | TODO |
+| Luke Falanga | X | TODO |
+| Connor Slutsky | X | TODO |
+| Akul Jha | X | TODO |
+| Jai Ong Sheng | X | TODO |
 
 #### Sprint Retrospective
 
