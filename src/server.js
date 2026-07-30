@@ -11,6 +11,8 @@ const app    = express();
 const server = http.createServer(app);
 const io     = new Server(server);
 const messengerdb = require('./messengerdb');
+require('dotenv').config();
+const nodemailer = require('nodemailer');
 const { postMessageToThread } = require('worker_threads');
 
 // CSP Header - Browser Level Defense-In-Depth
@@ -573,4 +575,83 @@ io.on('connection', (socket) => {
     await AllUserList();
 
   });
+
+  // =============================================================
+  // Forgot Password — request OTP
+  // =============================================================
+  socket.on('forgot-password', async ({ email }) => {
+    if (!email || typeof email !== 'string') {
+      socket.emit('forgot-password-error', 'Invalid request.');
+      return;
+    }
+    email = email.trim();
+
+    try {
+      const result = await messengerdb.createPasswordResetOTP(email);
+      if (result.success) {
+        await sendOtpEmail(email, result.otp);
+      }
+      // AC: same response whether or not the email exists — don't leak account existence
+      socket.emit('forgot-password-success', 'If that email is registered, a code has been sent.');
+    } catch (err) {
+      console.log('Error>server.js: forgot-password failed', err);
+      socket.emit('forgot-password-error', 'Server error. Please try again.');
+    }
+  });
+
+  // =============================================================
+  // Forgot Password — verify OTP + set new password
+  // =============================================================
+  socket.on('reset-password', async ({ email, otp, newPassword }) => {
+    if (!email || !otp || !newPassword) {
+      socket.emit('reset-password-error', 'Invalid request.');
+      return;
+    }
+
+    try {
+      const result = await messengerdb.resetPassword(email.trim(), otp.trim(), newPassword);
+      if (!result.success) {
+        socket.emit('reset-password-error', result.message);
+        return;
+      }
+      socket.emit('reset-password-success', 'Password updated. You can now log in.');
+    } catch (err) {
+      console.log('Error>server.js: reset-password failed', err);
+      socket.emit('reset-password-error', 'Server error. Please try again.');
+    }
+  });
+
 });
+
+// =============================================================
+// Mailer setup — sends OTP emails for password reset
+// Using Ethereal (fake SMTP inbox) for testing — swap for a real
+// provider before shipping to real users
+// =============================================================
+let transporter;
+
+(async () => {
+  const testAccount = await nodemailer.createTestAccount();
+  transporter = nodemailer.createTransport({
+    host: 'smtp.ethereal.email',
+    port: 587,
+    secure: false,
+    auth: {
+      user: testAccount.user,
+      pass: testAccount.pass,
+    },
+  });
+  console.log('Debug>server.js: Ethereal test account ready:', testAccount.user);
+})();
+
+async function sendOtpEmail(toEmail, otp) {
+  const info = await transporter.sendMail({
+    from: '"UC Messenger" <no-reply@ucmessenger.test>',
+    to: toEmail,
+    subject: 'Your Password Reset Code',
+    text: `Your one-time code is ${otp}. It expires in 1 minute.`,
+    html: `<p>Your one-time code is <b>${otp}</b>.</p><p>It expires in 1 minute.</p>`,
+  });
+  console.log('Debug>server.js: OTP email sent, id:', info.messageId);
+  console.log('Debug>server.js: Preview URL:', nodemailer.getTestMessageUrl(info));
+}

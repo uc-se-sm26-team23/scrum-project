@@ -5,6 +5,7 @@
 // =============================================================================
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 const uri = "mongodb+srv://slutskcp_db_user:vP1tYvpoOIQcnOwo@cluster0.gsxkdyd.mongodb.net/?appName=Cluster0";
 const client = new MongoClient(uri);
@@ -324,6 +325,64 @@ const deleteChat = async (isPublic, {sender, receiver, message, timestamp}) => {
   return true;
 }
 
+// ============================
+// Forgot Password
+// ============================
+
+// generates a 6-digit OTP, hashes it, stores it with a 1-min expiry
+const createPasswordResetOTP = async (email) => {
+  console.log(`Debug>messengerdb.js: password reset requested for '${email}'`);
+
+  const user = await users.findOne({ email: email });
+  // AC: do not reveal whether the email exists — caller always returns generic success
+  if (!user) return { success: false };
+
+  const otp = crypto.randomInt(100000, 999999).toString(); // 6-digit numeric
+  const hashedOtp = await bcrypt.hash(otp, 10);
+  const expires = Date.now() + 1 * 60 * 1000; // 1 minute
+
+  await users.updateOne(
+    { email: email },
+    { $set: { resetOtp: hashedOtp, resetOtpExpires: expires } }
+  );
+
+  return { success: true, otp, username: user.username }; // plaintext otp returned ONLY to server, to email it
+};
+
+// verifies OTP and, if valid, sets the new password
+const resetPassword = async (email, otp, newPassword) => {
+  console.log(`Debug>messengerdb.js: attempting password reset for '${email}'`);
+
+  const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+  if (typeof newPassword !== 'string' || !passwordPattern.test(newPassword)) {
+    return { success: false, message: 'Invalid new password format!' };
+  }
+
+  const user = await users.findOne({ email: email });
+  if (!user || !user.resetOtp || !user.resetOtpExpires) {
+    return { success: false, message: 'Invalid or expired code.' };
+  }
+
+  if (Date.now() > user.resetOtpExpires) {
+    // clean up expired OTP
+    await users.updateOne({ email }, { $unset: { resetOtp: '', resetOtpExpires: '' } });
+    return { success: false, message: 'Invalid or expired code.' };
+  }
+
+  const otpMatches = await bcrypt.compare(otp, user.resetOtp);
+  if (!otpMatches) {
+    return { success: false, message: 'Invalid or expired code.' };
+  }
+
+  const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+  await users.updateOne(
+    { email: email },
+    { $set: { password: hashedNewPassword }, $unset: { resetOtp: '', resetOtpExpires: '' } }
+  );
+
+  return { success: true };
+};
+
 module.exports = { connect, find , register, updateUsername, 
   updatePassword, storePublicChat, storePrivChat , getAllUsers,
-  retrievePublicChat, retrievePrivateChat, editChat, deleteChat, updateProfileInfo};
+  retrievePublicChat, retrievePrivateChat, editChat, deleteChat, updateProfileInfo, createPasswordResetOTP, resetPassword};

@@ -224,11 +224,18 @@ document.getElementById('showForgotPasswordForm').addEventListener('click', func
     document.getElementById('password').value = '';
 });
 
-// Toggle: ForgotPassword -> Login
-document.getElementById('showLoginFormFromForgot').addEventListener('click', function() {
+// Toggle: Forgot Password -> Login
+document.getElementById('showLoginFormFromForgot').addEventListener('click', function(e) {
     document.getElementById('forgotPasswordUI').style.display = 'none';
     document.getElementById('loginUI').style.display = '';
-    document.getElementById('login-error').textContent = '';
+    document.getElementById('otp-section').style.display = 'none';
+
+    document.getElementById('fp-email').value = '';
+    document.getElementById('fp-otp').value = '';
+    document.getElementById('fp-new-password').value = '';
+    document.getElementById('forgot-password-error').textContent = '';
+    document.getElementById('forgot-password-success').textContent = '';
+    document.getElementById('reset-password-error').textContent = '';
 });
 
 // ======================================================
@@ -309,6 +316,63 @@ function registerAccount() {
     password: password_Input });
 
 }
+
+// ======================================================
+// Forgot Password — request OTP
+// ======================================================
+document.getElementById('sendOtpBtn').addEventListener('click', function() {
+    const email = document.getElementById('fp-email').value.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email || !emailPattern.test(email)) {
+        document.getElementById('forgot-password-error').textContent = 'Please enter a valid email.';
+        return;
+    }
+
+    document.getElementById('forgot-password-error').textContent = '';
+    socket.emit('forgot-password', { email });
+});
+
+socket.on('forgot-password-success', function(message) {
+    document.getElementById('forgot-password-success').textContent = message;
+    document.getElementById('otp-section').style.display = '';
+});
+
+socket.on('forgot-password-error', function(message) {
+    document.getElementById('forgot-password-error').textContent = message;
+});
+
+// ======================================================
+// Forgot Password — verify OTP + reset
+// ======================================================
+document.getElementById('resetPasswordBtn').addEventListener('click', function() {
+    const email = document.getElementById('fp-email').value.trim();
+    const otp = document.getElementById('fp-otp').value.trim();
+    const newPassword = document.getElementById('fp-new-password').value;
+
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+    if (!otp) {
+        document.getElementById('reset-password-error').textContent = 'Please enter the code.';
+        return;
+    }
+    if (!passwordPattern.test(newPassword)) {
+        document.getElementById('reset-password-error').textContent =
+            'Password must be at least 6 characters with letters and numbers.';
+        return;
+    }
+
+    document.getElementById('reset-password-error').textContent = '';
+    socket.emit('reset-password', { email, otp, newPassword });
+});
+
+socket.on('reset-password-success', function(message) {
+    alert(message);
+    document.getElementById('showLoginFormFromForgot').click();
+});
+
+socket.on('reset-password-error', function(message) {
+    document.getElementById('reset-password-error').textContent = message;
+});
 
 
 // =============================================================================
