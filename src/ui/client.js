@@ -168,7 +168,7 @@ function joinChat() {
         document.getElementById('chatUI').style.display = '';
         // document.getElementById('display-name').textContent = username; - there's no 'display-name' element? - connor
         
-        const loggedInusername = typeof data === 'object' ? data.username : data;
+        const loggedInUsername = typeof data === 'object' ? data.username : data;
        
         if (loggedInUsername) {
             localStorage.setItem("username", loggedInUsername);
