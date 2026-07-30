@@ -643,36 +643,32 @@ Feature of our team's choice: Forgot password using OTP/Email, enable notificati
 1. Use-Case-8: Authenticated Join Chat
 2. Use-Case-9: Authorize User
 3. Use-Case-3: Modify Message
-4. Use-Case-12: Retrieve Messages
-5. Use-Case-13: Edit Profile Info
-6. Use-Case-14: Forgot Password
+4. Use-Case-11: Store Messages
+5. Use-Case-12: Retrieve Messages
+6. Use-Case-13: Edit Profile Info
+7. Use-Case-14: Forgot Password
 
 
 #### Contributions
 
 | Member | Hours | Contribution Summary |
 |--------|-------|----------------------|
-| Marcus Ngyuyen| X | TODO |
-| Luke Falanga | X | TODO |
-| Connor Slutsky | X | TODO |
-| Akul Jha | X | TODO |
-| Jai Ong Sheng | X | TODO |
+| Marcus Ngyuyen| 10 | TODO |
+| Luke Falanga | 10 | TODO |
+| Connor Slutsky | 10 | TODO |
+| Akul Jha | 10 | TODO |
+| Jai Ong Sheng | 10 | TODO |
 
 #### Sprint Retrospective
 
 | Good | Could have been better | How to improve |
 |------|------------------------|----------------|
-|      |                        |                |
-|      |                        |                |
+|   Task completion   |   Time-management       |       Ask for help when needed     |
+|    Communication  |           in-person meetings             |       schedule time to work on project             |
 
-
-Working through the sprints is a continuous-improvement process. The retrospective happens at the end of a sprint, before planning the next one. Cover three things briefly:
-
-- **What went well** — celebrate and reinforce.
-- **What could have been better** — be specific (e.g., "we underestimated authentication" not "things were hard").
-- **How we will improve next sprint** — concrete, owned actions.
-
-Keep it under an hour. The output is bullet points in the table above and any new PBIs created on the board.
+- **What went well** - All members completed their assigned use-case tasks that were assigned at the beginning of the sprint, our team kept stable communication via Discord, and our team environment was positive and direct when it came to meetings (not much side-talk).
+- **What could have been better** — Time-management and in-person meetings. There were a few functional requirements that were not implemented until the last few days of the sprint. Though this is okay and partially a result of the end of semester meaning we had more coursework and projects due for other classes, improved time-management could ensure that everything is up to proper standards before sprint submissions. In-person meetings were fewer this sprint, also as a result of time mismanagement between all members.
+- **How we will improve next sprint** — Ask others for a helping hand if you are lacking in time to work on the project and they have already completed their sections, schedule time to work on the project.
 
 
 ---
