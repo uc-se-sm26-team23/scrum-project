@@ -4,8 +4,9 @@
 // complete implementation by Team23
 // =============================================================================
 const { MongoClient } = require('mongodb');
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 
 const uri = "mongodb+srv://slutskcp_db_user:vP1tYvpoOIQcnOwo@cluster0.gsxkdyd.mongodb.net/?appName=Cluster0";
 const client = new MongoClient(uri);
