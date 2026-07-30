@@ -7,6 +7,7 @@ const { MongoClient } = require('mongodb');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
+
 const uri = "mongodb+srv://slutskcp_db_user:vP1tYvpoOIQcnOwo@cluster0.gsxkdyd.mongodb.net/?appName=Cluster0";
 const client = new MongoClient(uri);
 
@@ -347,7 +348,7 @@ const createPasswordResetOTP = async (email) => {
 
   const user = await users.findOne({ email: email });
   // AC: do not reveal whether the email exists — caller always returns generic success
-  if (!user) return { success: false };
+  // if (!user) return { success: false };
 
   const otp = crypto.randomInt(100000, 999999).toString(); // 6-digit numeric
   const hashedOtp = await bcrypt.hash(otp, 10);
