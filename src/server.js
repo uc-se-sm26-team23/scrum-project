@@ -617,8 +617,8 @@ async function sendOtpEmail(toEmail, otp) {
     from: `"UC Messenger" <${process.env.EMAIL_USER}>`,
     to: toEmail,
     subject: 'Your Password Reset Code',
-    text: `Your one-time code is ${otp}. It expires in 1 minutes.`,
-    html: `<p>Your one-time code is <b>${otp}</b>.</p><p>It expires in 1 minutes.</p>`,
+    text: `Your one-time code is ${otp}. It expires in 10 minutes.`,
+    html: `<p>Your one-time code is <b>${otp}</b>.</p><p>It expires in 10 minutes.</p>`,
   });
   console.log('Debug>server.js: OTP email sent, id:', info.messageId);
 }

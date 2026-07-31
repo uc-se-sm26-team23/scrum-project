@@ -348,11 +348,11 @@ const createPasswordResetOTP = async (email) => {
 
   const user = await users.findOne({ email: email });
   // AC: do not reveal whether the email exists — caller always returns generic success
-  // if (!user) return { success: false };
+  if (!user) return { success: false };
 
   const otp = crypto.randomInt(100000, 999999).toString(); // 6-digit numeric
   const hashedOtp = await bcrypt.hash(otp, 10);
-  const expires = Date.now() + 1 * 60 * 1000; // 1 minute
+  const expires = Date.now() + 10 * 60 * 1000; // 10 minute
 
   await users.updateOne(
     { email: email },
