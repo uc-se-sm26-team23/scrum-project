@@ -664,10 +664,15 @@ Refer to demo video on [homepage](https://uc-se-sm26-team23.github.io/)
 
 # GenAI Usage Reflection
 
-* GitHub Copilot CLI
-Commit: https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/commit/f1836e1
+* GitHub Copilot CLI  
 
-Description: Added a CSS Style file for our `index.html` homepage
+Commit(s)
+------------------
+- https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/commit/f1836e1
+
+Description
+------------------
+- Added a CSS Style file for our `index.html` homepage
 
 Prompts (verbatim)
 ------------------
