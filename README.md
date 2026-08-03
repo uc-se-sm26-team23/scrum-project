@@ -700,7 +700,7 @@ Feature of our team's choice: Forgot password using OTP/Email, enable notificati
 |--------|-------|----------------------|
 | Marcus Ngyuyen| 10 | TODO |
 | Luke Falanga | 10 | Implemented store private chat and store public chat, cleaned up some code |
-| Connor Slutsky | 10 | TODO |
+| Connor Slutsky | 10 | Implemented Retrieve Messages, and got Modify Message to work and persist changes with the database. |
 | Akul Jha | 10 | TODO |
 | Jai Ong Sheng | 10 | TODO |
 
