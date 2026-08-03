@@ -125,8 +125,8 @@ Include the **use-case diagram** and a **brief description** (1–3 sentences) f
 
 | UC ID | Use Case            | Primary Actor | Brief Description |
 |-------|---------------------|---------------|-------------------|
-| UC-01 | Send Messege | Authorized User | Actor types a message and clicks Send; system receives the message and delivers it in real time to all connected users. |
-| UC-02 | Receive Messege | Authorized User | Users receive messages from the channels that they are in |
+| UC-01 | Send Message | Authorized User | Actor types a message and clicks Send; system receives the message and delivers it in real time to all connected users. |
+| UC-02 | Receive Message | Authorized User | Users receive messages from the channels that they are in |
 | UC-03 | Modify Message | Authorized User | Users can edit or delete messages that only they have already set to fix mistakes |
 | UC-04 | Create Channel | Authorized User | User create 1-on-1 or group channels so that they can send messages to individuals or groups  |
 | UC-05 | Navigate Channels | Authorized User | Users navigate to different channels  |
@@ -270,17 +270,18 @@ For each use case in §Use Cases, describe how it is realized in code: which mod
 
 
 
-##Sequence Diagrams:
-#Modify Messages:
-![](https://www.plantuml.com/plantuml/png/XLJDSjCm4BxxANPwQcTgfgN0WGDJnd3Wq5F82JWeqgOMo9BHhXlozcWJMOuRGpKJUoRp_Npx8zyJgyX3vs1DM3SgFMvkwuTWx7PVFo2HUiIgKff3XEEvQ8Btg1cDKE85A89rrISLgsslF2U4i-Zv0l8HH3D7h30-OPmXLbMrXle3DF0UjBFw5t2qlKCmWGc21yB4x8wHuDl7fhwvUtNx8uLpqzyRTC4_4d00vGEt664WZ2TmSMj6dzOQX131M58RXz19tLOhjialzFAY2XtXae4UOfH8OZ3A9jrrqgKsxE2piPnI6FY43Xb7lTFemfBu0XqjAiYdT8CINsTG9hy-5hBWYWabjPJ4MulEJBm5-M7J9UMXDuhH51xZ7pucp2b5-XHW2R3hULymizP6_8bwL8KQJ00VM8POmjnDOQJ72_e--FeV7glaaSKpuJA_lvXhyBZxcl9VpQtAMOqAf9wmL2uLoy368CIAXpAlDsSIkT9D3CfeHMSjl9HYCPOqrrduwhkN_NGEzE6YK4bv3OjUquYDfTwf_TcmTfRRCRRrHbOun8NaAL1LbORdnNnfyJ8igxqjQjCW8luUa1WuW9bfmZQ63dIhl4Tthb06yPncFMFqohdzOI3R4ALVXwj6OFqBYZby8jAU6BjnaZxmTBsvLGowVCj4EgSmpxyoxsObpoVn7uSvMrell-e-FOVELNy1)
+## Sequence Diagrams:
+# Modify Messages:
+![](https://www.plantuml.com/plantuml/png/XLJBRjim4BphAnOwLqNIj3q4HP10xJ4dmwUw1rfSHsoffKgkalhlozM3jXv5TM00SNPsPZJnOs3bkMiix0CMfOh7pMtnxBGvdOjd346zO9QfYfs7uScVEgwHs5IAKSkOpq45s6TjP3ALQHKnvAKr4PJ3-0YYd2Dsw5_Hpn2xBDj3yG0bt4FjuYtqHy28RmOnyFsfB6xktj_-YBBivVKHhQEN0En0aOiAFNHHsXLSTfI9tMY4w4cRe8uMeH77Oiau0jVAdv2X3RYreEgy5qcoOAADlFl86sht1knD6pcrux3O7zsD0Yfhgb_No0LH5DPQTGRKXa6H1eqM6PEsELk8bnMFb_sTPFDDcnHG_t8Sciq8Q5BvOL2vOKbaI50fZfD1gsTpI_hks4JchjNIapJ7-8UpX1QLaVeQO09Wq_8vOMRVpUDFh2PMA69oG8wb8KdCtKMCVC0DVd9K_6F73kv7yZImffLdDw63UiNaKjmTI96UjWPMtAKMV5nnZBQEtYbTgR3Awq1IQ6kbBqWSafftiABSBj2AyCrmFSapfANqpcyeHD9PbbByEjJlVsqQOIFRfyYsJDVZxmu30xknqWTAdVAkWQfMH6ZN52doSUxYo12ZfvZIUNCgAIGnV7A-wHDLrxzZ1ve2vbeD_za76lRePHC-BrpjUrSnx0fdDH-ZpYUQunc-236f1X_o1PkatIV-6C-kiNy1)
 
-#Login/Logout User:
+# Login/Logout User:
 ![](https://www.plantuml.com/plantuml/png/bLHVRzCm47_FfpZr2QG6mK1CwWDQbuud9D2Yye9uy9nhQosnm_coic_FEN6yrLI8-I5owz-VtrbtllAiY8UkXQt7ibBoUNjPhWS-e6MZ5MCf1rGKIhCZcDQYSjQYPcm2YnQWF6oBNf4mJAyi2w8r8h20UGcYEaNKI0z89uYwQ1IhEmankcpYZyKJOdDT55ieFq6rWgyzMZZYNQ_sM5JXp-qAlf7hUeRMxOsLq2t35xS7sGU1cNbZ6Ga6YMvLX_1ZNKdHRzujOTfS_1pHLKH_LwsHNFX4U8M_ZMU_1DNs1rNQeKCoUWdMiLW5tEjPz68MVJ-9XaItk1SwAJRE2dxdg8jx3m_1R4Ic2FKAQhGDq7CQuQy1FOjDKe-h3fpDzGgg0-fxC3jGMhl1idWJgkOHflGpzKEY2WlAoV0MUI2Rc9uL3pxXGX7hUDGuzA7mIJL2yYJYomWMZqanpvq7a0xR6UeINeyIJQulu2gbFRaWFsYDtfyt2XSxzKjzSCVS13eXIbETPtnsT5JK0Bk8CtOF_j4pTec0hKTOdxts_wy0YHoz97_cz5SPQ9iYfVjN4ngRjU69stYMHunZ4rr6Xp1uRk2JoQjQe-_3TCh1pFielBpN8oBhyii9MKVaZG1rUed2T8ANaYLOJiYkEQfdBHB1gTW8pXpOJOyBX6Vd6JMKNLp9T-ZQuWy0)
 
-#Show Online Users:
+# Show Online Users:
 ![](https://www.plantuml.com/plantuml/png/dP91ZzCm48Nl-HMZNXO4HR10At50Yt95ub3rW50FRZ99h7KyOJnkj_nw9Yb9b9G0meVKSjyRls_63q4CIwmTx0EkKwEVrvlr5--inxKUSLX_ja6In6H23DUrIibxp0HpQ2KhC07sIQE5R6ORuqKLpgAN5VHB5UbKiKC-8KyKkoJPm_eZfF0179LWlH3K60Bw4XdEU6nCYKdQQdQgOVmUCGXKL6Fx3nYV0tNP8RRPmRNPTwDUsE89GM6i_cG3nbMjrWjy-vHg2rwzERI-BandZEnlItSNPf5PMRjZiBuWherOyaEbbt3Tt1-I9EtvSXiQPoxJci7cU3GCQcPRLj8Tz7NU7aPtRVXnSh4tDSBPIWMhPryfFb_rhllEfRQzsa95vrkAsw3zHgzCZ9DPeo1p533yfjEWQvXWvcps27TFTt2C8cC_tXqwtS1IjOmZhl8lAV6fQHjU6-iXguo0OJGpyG0xT3WskMcZwvwYm2XFq0MSip5IW_vVuLxCuTvF8WyXPdmBOiOWn0YaQkkD6o7L-GFdjZdfycJLWJw_pj9uaWfvpkse361zLtby-AgrnMLGM0zuGZ_KtSm0J9wFhr5eET3cRyDQTlPpM-0e2GDGKRJsFyDGb2dDzcOSDPrm12gOwkLWs_z6slwQpeD-O-r-0W00)
 
-
+# Retrieve Messages:
+![](https://www.plantuml.com/plantuml/png/5SwnQiGm40JGVhzYS2z2KgO83bTVSq8Vi2Slze8j2-tQuBy_kPdYmJ0pcdFpOrkHJCA3Utp_X9TuKpa5Jp7ZMOo8i-yDm__XYnJNp2xJtMa3s92eSkkgbOiZNkQotHw94i8V8dwnxZEqW292bzIb7kzLyrTjUh8ByiAEHQqFNKIZbAd_-W00)
 
 
 ## User Interface
@@ -431,17 +432,17 @@ Describe the GitHub Actions workflow(s) under `.github/workflows/`. _(Sprint 1 o
 
 ### Sprint 1
 
-Describe: `.github/workflows/` includes a set of isntructions that tells what to do when an event triggers. Once triggered, Github Actions look inside `.github/workflows/` folder to find out what to do when a specific event triggers. 
+Describe: `.github/workflows/` includes a set of instructions that tells what to do when an event triggers. Once triggered, GitHub Actions look inside `.github/workflows/` folder to find out what to do when a specific event triggers. 
 
 - **Build & test:** triggered on every push and pull request.
-  * Whenever a team memebr pushes code to 'sprint1' branch or any branches, to merge their code/work. Github's server recognize the action happend, then look into `.github/workflows/` folder to see if any left instructions for what to do to react to the action. After Github finds the  `.yml` file, opens it and starts reading it line by line from top to bottom. After finding the specific section to handle the action, it type  `npm` commands like  `npm install` and npm `npm run test` .
-  * If this phase fails, Github Actions will report back with the any problem exist in the push code.
+  * Whenever a team member pushes code to 'sprint1' branch or any branches, to merge their code/work. GitHub's server recognize the action happened, then look into `.github/workflows/` folder to see if any left instructions for what to do to react to the action. After GitHub finds the  `.yml` file, opens it and starts reading it line by line from top to bottom. After finding the specific section to handle the action, it type  `npm` commands like  `npm install` and npm `npm run test` .
+  * If this phase fails, GitHub Actions will report back with the any problem exist in the push code.
 
 - **Deploy:** triggered on merge to `main`; deploys to Azure App Services.
-  * In the `.yml` file, defined by `deploy` as a separate job that has its own set of roles, when **Deply** action is triggered.
-  * A specific instruction is configed into  `.github/workflows/` to trigger when code is pushed or merged specifically into `main` branch, so this job configured to use Publish Profile that is set up in Azure Deployment Center which allows the Github Action log into Azure securely without needing to type a password every time. So when the trigger is met, the worrkflow perform:
+  * In the `.yml` file, defined by `deploy` as a separate job that has its own set of roles, when **Deploy** action is triggered.
+  * A specific instruction is configured into  `.github/workflows/` to trigger when code is pushed or merged specifically into `main` branch, so this job configured to use Publish Profile that is set up in Azure Deployment Center which allows the GitHub Action log into Azure securely without needing to type a password every time. So when the trigger is met, the workflow perform:
       * It downloads `"node-app"` artifact that the `build` job created. during "Build & testing" phase.
-      * It then executes command to upload code directly to the Azure APp Service.
+      * It then executes command to upload code directly to the Azure App Service.
   *  This result in our live website is instantly updated with new and merged code.
 
 ## Deployment
@@ -449,7 +450,7 @@ Describe: `.github/workflows/` includes a set of isntructions that tells what to
 Describe how to deploy and the URL of the live application. Include a note on environment variables (set in Azure App Services Configuration, never in source). _(Sprint 1 onward.)_
 
 ### Process
-The application itlitizes an automated CD pipeline managed by Gihub Actions, The deploymnet workflow is triggered whenever new code is merged or pushed to branches. During this process, the Github Actions runner completes by authenticating securely with Azure using the set Publish Profile secret, download the pre-built and tested code artifact generated during CI phase, then deploys the packaged application directly to Azure App Services.
+The application utilizes an automated CD pipeline managed by GitHub Actions, The deployment workflow is triggered whenever new code is merged or pushed to branches. During this process, the GitHub Actions runner completes by authenticating securely with Azure using the set Publish Profile secret, download the pre-built and tested code artifact generated during CI phase, then deploys the packaged application directly to Azure App Services.
 
 ### Live Application URL:
 https://team23-uc-se-messenger.azurewebsites.net/
@@ -460,7 +461,7 @@ https://team23-uc-se-messenger.azurewebsites.net/
 
 # Testing & Quality Assurance
 
-Our testing and quality assurance was based on individual task completion. Before any commits were pushed to the sprint1 branch, each team member would test the functionality of the messenger locally to ensure that nothing had been broken by the new code. Then, upon push, we would alert all other members in the Discord to what had been added/changed, as well as other things that they may have noticed regarding another member's code. This would allow us to review eachothers changes and be aware of what exactly they do, as well as find bugs or code that may cause problems down the line. (_**major** focus in Sprint 3._)
+Our testing and quality assurance was based on individual task completion. Before any commits were pushed to the sprint1 branch, each team member would test the functionality of the messenger locally to ensure that nothing had been broken by the new code. Then, upon push, we would alert all other members in the Discord to what had been added/changed, as well as other things that they may have noticed regarding another member's code. This would allow us to review each other's changes and be aware of what exactly they do, as well as find bugs or code that may cause problems down the line. (_**major** focus in Sprint 3._)
 
 In Sprint 1 we would test our changes as we were making them, then test the core functionality of the rest of the app before pushing changes.  
 
@@ -487,6 +488,8 @@ Manual test cases for user-facing flows, with expected vs. actual results. _(Spr
 _Start in Sprint 2; **required** in Sprint 3._
 
 Per the course academic integrity policy, the team must document all AI-assisted work on the team project. **Sprint 3 recommends the team to use a GenAI tool** for the final prototype and to document each substantive prompt.
+
+No AI was used in the design and development of Messenger.
 
 ---
 
@@ -522,7 +525,7 @@ Get comfortable with environment and tools, learn agile and scrum process and do
 
 #### Completed PBIs / Tasks (all below are done)
 1. ALL - Add your name to the project homepage	https://github.com/uc-se-sm26-team23/scrum-project/issues/5
-2. MArcus - Create a Github Project board for Scrum Team Planning	https://github.com/uc-se-sm26-team23/scrum-project/issues/1
+2. Marcus - Create a Github Project board for Scrum Team Planning	https://github.com/uc-se-sm26-team23/scrum-project/issues/1
 3. Jai/Connor - Create public repository	https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/issues/1
 4. Luke - Create Private Repository	https://github.com/uc-se-sm26-team23/scrum-project/issues/2
 5. Akul - Copy README.md template from course repository	https://github.com/uc-se-sm26-team23/scrum-project/issues/6
