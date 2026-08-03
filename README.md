@@ -109,19 +109,27 @@ Include the **use-case diagram** and a **brief description** (1–3 sentences) f
 
 ### Brief Description for each Use Cases
 
+
 | UC ID | Use Case            | Primary Actor | Brief Description |
 |-------|---------------------|---------------|-------------------|
-| UC-01 | Send Message | Connected User | Actor types a message and clicks Send; system receives the message and delivers it in real time to all connected users. |
-| UC-02 | Receive Message | Connected User | Users receive messages from the channels that they are in |
-| UC-03 | Modify Message | Connected User | Users can edit or delete messages that only they have already set to fix mistakes |
-| UC-04 | Create Channel | Connected User | User create 1-on-1 or group channels so that they can send messages to individuals or groups  |
-| UC-05 | Navigate Channels | Connected User | Users navigate to different channels  |
-| UC-06 | Show Online Users | Connected User | Users can see current logged-in users |
+| UC-01 | Send Messege | Authorized User | Actor types a message and clicks Send; system receives the message and delivers it in real time to all connected users. |
+| UC-02 | Receive Messege | Authorized User | Users receive messages from the channels that they are in |
+| UC-03 | Modify Message | Authorized User | Users can edit or delete messages that only they have already set to fix mistakes |
+| UC-04 | Create Channel | Authorized User | User create 1-on-1 or group channels so that they can send messages to individuals or groups  |
+| UC-05 | Navigate Channels | Authorized User | Users navigate to different channels  |
+| UC-06 | Show Online Users | Authorized User | Users can see current logged-in users |
 | UC-07 | Login/Logout User | Connected User | Users can log in with a username to access chats |
+| UC-08 | Authenticated Join Chat | Connected User | User is authorized before joining chat |
+| UC-09 | Authorize User | Connected User | User can be authorized with stored credentials |  
+| UC-10 | Register Account | Connected User | User can register a new account if they don't already have one | 
+| UC-11 | Store Messages | Authorized User | User's messages get stored to make them persistent | 
+| UC-12 | Retrieve Message | Authorized User | User's messages load back in on log in to continue conversations | 
+| UC-13 | Edit Profile Info | Authorized User | User can add, and update profile information | 
+| UC-14 | Forgot Password | Authorized User| User can change their password if they forgot |  
 ---
 
 ### Use Case Diagram
-![Use-Case-Diagram](https://www.plantuml.com/plantuml/png/PT7FQWCX40Rmkqynx3sKpP_qLW9xRLheaWUGzOihc15qDYMKldjTyI3fOUHpveUWdfBeAClDAu-ha0IApiv2naLCuW8hFKc8r0s1ENTWw98GEzA9oaIjJhFreEwCbC0MaSP74jmw-b54IyAaKnwFO4EhqHRbWClGj_ClJ71tF95jIyx1kElZIUnQCKHe0GspPeQlOj-A3trtzhyvj6QSmpTzidUCSjzKqR55xy4wVibhMAIeYbxLRtsrpUQjx7FLt3TvctDVywxfxrMkcWzD_wZK2MpMp_e3)
+![Use-Case-Diagram](https://www.plantuml.com/plantuml/png/PTBHgjf040RW-tsA8VTIez7gJL522osrBHKVODbCDWjn1dOdYYtdtKyIriCcNhZCxtp4zIU78DfBTsrLYxM0C7Xd6u7AUJJYc9GsmXwoaedG25Pm2UWpq076ZHgS9jiYP2SC0ScYX_CZ25up-Ay0ke16XtvzHgfWCDhY-81BcQVxlsZGtN16LYavSUNgnqoiKr5wr89GDfe8soYALFpIDsTVpMPorORly9jQHpZ-tn3HDaK_sJhwr9_SoQWY-foYOoSDaZYZX-v-iAFXToNItPooT_ymVTX-sf1rGT33qHZkIAB9bvEx2_kF4iEJp9eMx_3sgYPbVwsSm1_FjMiHlbFDJpKf_1jxoxtJ8TpPLqzJgBVuwYmMNyPIL7_4i4lcV9c6Oc2xcFP3sCUmJUP2zPyuRvBlytKQLaeDPuohDEJZAePrClSz7P2gxjg-0m00)
 
 
 # System Design
