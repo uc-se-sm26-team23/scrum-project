@@ -418,7 +418,7 @@ Identify assets, trust boundaries, and threats. STRIDE or attack-tree format is 
 
 ## Security Review Notes
 
-Summarize findings from your Sprint 2 security review and any remediation taken. _(Sprint 2 onward.)_
+All security requirements mentioned in lectures have been implemented. Validation exists at all layers. For penetration testing, XSS attacks were tested and were unable to harm the application, connecting to sockets via the console were attempted and failed to harm the application. All passwords are hashed. 
 
 ---
 
