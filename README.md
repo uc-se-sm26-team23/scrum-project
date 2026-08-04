@@ -391,6 +391,13 @@ List security requirements alongside functional requirements. _(Sprint 0.)_
   * Task: Include *.length* check in JavaScript code before process message
 - **SR-3:** The web server must implement a strict Content-Security-Policy (CSP) HTTP header that restrict execution of scripts to the application's self origin, preventing execution of unauthorized scripts.
   * Task: Configure server's response headers.
+- **SR-4:** Web server must authenticate user with stored credentials in MongoDB before allowing core functionality
+  * Task: Store user credentials in MongoDB and require users to authenticate before using the main application
+- **SR-5:** User credentials must be hashed in MongoDB so they aren't stored in plaintext
+  * Task: Implement `bcrypt` to hash and unhash user passwords as they are stored and retrieved in databas
+- **SR-6:** Web server must validate all responses from MongoDB before processing data and sending to clients
+- **SR-7:** Client must validate all responses from server before processing and displaying data to clients
+
 ## Threat Model
 
 Identify assets, trust boundaries, and threats. STRIDE or attack-tree format is acceptable. _(Sprint 0–1.)_
