@@ -123,6 +123,7 @@ Include the **use-case diagram** and a **brief description** (1–3 sentences) f
 
 ### Brief Description for each Use Cases
 
+
 | UC ID | Use Case            | Primary Actor | Brief Description |
 |-------|---------------------|---------------|-------------------|
 | UC-01 | Send Message | Authorized User | Actor types a message and clicks Send; system receives the message and delivers it in real time to all connected users. |
@@ -313,12 +314,18 @@ Describe your **MongoDB Atlas** schema: collections, fields, indexes, and relati
 
 // collection: privchat
 {
-
+  "sender": "sender",
+  "receiver": "receiver",
+  "message": "...",
+  "timestamp": 17850...
 }
 
 // collection: chat
 {
-
+  "sender": "sender",
+  "receiver": "receiver",
+  "message": "...",
+  "timestamp": 17850...
 }
 ```
 
@@ -732,6 +739,103 @@ Enter a unique username and click Join to access the public chat. Enter messages
 Refer to demo video on [homepage](https://uc-se-sm26-team23.github.io/)
 
 ---
+
+# GenAI Usage Reflection
+
+* GitHub Copilot CLI  
+
+Commit(s)
+------------------
+- https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/commit/f1836e1
+
+Description
+------------------
+- Added a CSS Style file for our `index.html` homepage
+
+Prompts (verbatim)
+------------------
+- "init"
+- "Peform ls to check which repo available"
+- "uc-se-sm26-team23.github.io" (selected target directory)
+- "I want to modify the index.html file in this repo with some fancy css style in a separate css file connected to the exisiting html file"
+- "sure, including urself as co-authro"
+- "yes" (when asked to push to remote)
+
+Actions performed by Copilot CLI
+--------------------------------------------------
+1. Initialized a git repository in /home/.../uc-se-sm26-team23.github.io. (git init)
+2. Edited index.html: inserted a stylesheet link tag in <head>:
+
+   <link rel="stylesheet" href="styles.css">
+
+3. Created new file: `styles.css` (full contents included below).
+4. Staged and committed changes locally with message "Add styles.css and link from index.html" and Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>, Commit SHA (short): d9e8497
+5. Pulled remote changes with rebase and pushed to origin/main (successful). Final pushed SHA: f1836e1
+
+styles.css (contents created)
+----------------------------------
+```css
+:root{
+  --bg1: #0f172a; /* dark navy */
+  --bg2: #0ea5a6; /* teal */
+  --card: rgba(255,255,255,0.04);
+  --accent: #ffd166;
+  --muted: #cbd5e1;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial; background:linear-gradient(135deg,var(--bg1),#071133 50%); color:var(--muted);}
+body{line-height:1.5;padding:24px}
+
+header{background:linear-gradient(90deg, rgba(14,165,166,0.12), rgba(255,209,102,0.06)); padding:28px; border-radius:12px; color:white; box-shadow:0 6px 18px rgba(2,6,23,0.6);}
+header h1{margin:0 0 6px;font-size:clamp(1.4rem,3vw,2.2rem);letter-spacing:0.6px}
+header p{margin:0;font-size:0.95rem;color:var(--muted)}
+
+#team ul{list-style:none;padding:0;margin:12px 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+#team li{background:var(--card);padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);}
+#team li strong{display:block;color:#fff}
+#team li a{color:var(--accent);text-decoration:none}
+
+main{margin-top:18px}
+section{margin-bottom:18px;background:transparent;padding:12px}
+
+#links a{color:var(--accent)}
+
+/* Responsive iframe */
+iframe{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+
+footer{margin-top:18px;text-align:center;color:var(--muted)}
+
+/* Small screens tweaks */
+@media (max-width:520px){body{padding:14px} header{padding:18px} #team ul{grid-template-columns:1fr}}
+```
+/* Subtle hover */
+#team li:hover{transform:translateY(-4px);transition:transform .18s ease}
+
+Files changed (summary)
+-----------------------
+- index.html: added <link rel="stylesheet" href="styles.css"> inside <head>
+- styles.css: newly created file
+
+Outputs accepted/modified/rejected
+---------------------------------
+- Accepted without modification: the link insertion in `index.html` and the generated `styles.css` file.
+- No generated code was rejected in this session.
+
+Impact assessment
+-----------------
+Quality:
+- Positive: Adds consistent, responsive styling and improves visual clarity and accessibility (responsive header, readable type, hover affordances).
+- Neutral: No automated tests exist to validate UI behavior; visual verification recommended.
+
+Security:
+- No secrets, credentials, or network credentials were introduced by the generated files.
+- Avoid committing secrets; add a .gitignore to prevent accidental commits of local node_modules or .env files.
+
+Productivity:
+- Positive: Saved manual CSS authoring and link insertion steps; reduced time-to-visual iteration.
+- Traceability: This COPILOT_USAGE.md records prompts and exact outputs for review.
+
 
 # License & Code of Conduct
 
