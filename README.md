@@ -49,14 +49,10 @@ _Teams are 3–5 students (per syllabus). Solo teams are not permitted._
 | 07/30/2026 | 0.4    | Adding all UC updates since last sprint, sprint 2 retro and touch ups    | ALL   |
 
 
-
 ---
 
 # Overview
 
-_Start in Sprint 0; refine across all sprints._
-
-_Describe the project in 2–4 paragraphs: the problem it addresses, the target users, and a high-level summary of the proposed solution. Include a **high-level architecture diagram**_ 
 
 The project is a messaging app with secure privacy features, private and group chat functionality. It will allow securechats for real time communications with seamless channel navigation whilsts showing online available users. It is intended for users of all age and audience that are able to access internet, though user stories largely target a student-professor dynamic.
 
@@ -64,8 +60,6 @@ The project is a messaging app with secure privacy features, private and group c
 ---
 
 # System Analysis
-
-_Start in Sprint 0; keep updating._
 
 ## User Requirements
 
@@ -153,8 +147,6 @@ Include the **use-case diagram** and a **brief description** (1–3 sentences) f
 
 
 # System Design
-
-_Start in Sprint 1; keep updating._
 
 ## Architecture
 
@@ -376,8 +368,6 @@ Describe your **MongoDB Atlas** schema: collections, fields, indexes, and relati
 
 # Security (SSDLC)
 
-_Start in Sprint 0; **mandatory** updates at the Sprint 1–2 SSDLC checkpoint and again in Sprint 3._
-
 This section documents how your team applies the **Secure Software Development Lifecycle** across every phase. Do **not** treat security as an afterthought — it is graded across all sprints.
 
 Our team applies the Secure Software Development Lifecycle by treating security as a cross-cutting concern throughout the messenger application’s design, implementation, testing, and deployment. Since the app supports real-time public and private messaging, we focus on protecting user-generated content, preventing XSS, and enforcing secure server headers such as Content-Security-Policy. Security requirements are documented alongside functional requirements, and each sprint will include review of potential threats, code-level mitigations, and testing to make sure security is built into the application rather than added at the end.
@@ -427,8 +417,6 @@ All security requirements mentioned in lectures have been implemented. Validatio
 ---
 
 # Implementation
-
-_Start in Sprint 1; keep updating._
 
 Specify your development approach, languages, frameworks, and runtime. Default stack for this course:
 
@@ -541,14 +529,6 @@ npm test
 ---
 
 # Software Process Management
-
-_Start in Sprint 0; keep updating._
-
-_Describe how your team applies **Scrum**: roles, ceremonies (sprint planning, daily stand-ups, review, retrospective), and tools (GitHub Projects board, GitHub Issues, pull requests)._
-
-_Include:_
-_- A screenshot of the **GitHub Projects board** (Todo / In Progress / Done) at the end of each sprint._
-_- A **Roadmap view** screenshot from GitHub Projects, or a timeline produced from issue milestones. (Note: GitHub Projects has a Roadmap view rather than a true Gantt chart; a Roadmap screenshot satisfies this requirement.)_
 
 ### Scrum Application
 Our team applies scrum extensively through the development of this application, but with a handful of modifications to account for the some of the challenges we face as students. For example, we don't strictly implement scrum roles, which means everyone in the team shares product owner, scrum master, and normal development responsibilities. This gives everyone the ability to gain a little bit of experience with each responsibility, and also allows flexibility for people to focus on what they feel is most important at a given point of time. If there's a point that one of us feels needs discussed, it will be shared via a Discord server that we're all members of, then everyone will contribute their thoughts on the point and a decision will be reached. As for ceremonies, we decided to modify how we participate in the ceremonies to take everyone's different schedules into account. Most ceremonies happen asynchronously on our Discord server, including sprint planning, daily stand-ups, review, and retrospective. Sprint planning will occur before each sprint starts where we use the course requirements and the use cases of our application designed in Sprint 0 to decide what the goals for the upcoming sprint are. Instead of strict daily stand-ups, our team members will send a message in the Discord server whenever they're about to work on something, and a quick summarizing message at the end when they've finished, including any issues they may have run into. Although not everyone participates in these every day (again, due to the varying schedules), this serves the same purpose as daily stand-ups due in an ordinary application of scrum. Sprint reviews are conducted as required, and usually in tandem with retrospectives where in total we accumulate all of our contributions to the repositories and project boards, and reflect on what went well, what could've been better, and what we want to improve for next sprint. These also occur asynchronously, where we require each member of the team to submit their information and reflections before recording final thoughts. Regardless of asynchronous meetings, we all meet regularly at lab time on Thursdays and often use the time to discuss trajectory, obstacles, and other important points that would be usually discusses in one of these ceremonies. 
@@ -772,8 +752,6 @@ Feature of our team's choice: Forgot password using OTP/Email, enable notificati
 ---
 
 # User Guide / Demo
-
-_Start in Sprint 1; finalize in Sprint 3._
 
 Write this section as both a **demo** (with screenshots of the running application) and a **how-to** for a first-time user. Cover sign-up, login, and the main user flows.
 
