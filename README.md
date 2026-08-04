@@ -524,7 +524,7 @@ In Sprint 1 we would test our changes as we were making them, then test the core
 
 ## Test Plan
 
-Summarize your testing strategy across unit, integration, and system testing. _(Sprint 2 onward.)_
+No formal testing suite was implemented due to lack of time. All testing was done manually as features were being developed, and before pull requests to ensure functionality. 
 
 ## Test Coverage
 
