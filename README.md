@@ -534,10 +534,6 @@ Report current test coverage and how to run the suite locally and in CI.
 npm test
 ```
 
-## QA Plan
-
-Manual test cases for user-facing flows, with expected vs. actual results. _(Sprint 3.)_
-
 ---
 
 # Software Process Management
