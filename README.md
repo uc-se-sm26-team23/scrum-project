@@ -505,16 +505,6 @@ Manual test cases for user-facing flows, with expected vs. actual results. _(Spr
 
 ---
 
-# GenAI Usage & Reflection
-
-_Start in Sprint 2; **required** in Sprint 3._
-
-Per the course academic integrity policy, the team must document all AI-assisted work on the team project. **Sprint 3 recommends the team to use a GenAI tool** for the final prototype and to document each substantive prompt.
-
-No AI was used in the design and development of Messenger.
-
----
-
 # Software Process Management
 
 _Start in Sprint 0; keep updating._
