@@ -322,7 +322,6 @@ v2
 
 ## User Interface
 
-Embed UI mockups or screenshots and describe the interaction model. Wireframes are acceptable for Sprint 1; final screenshots for Sprint 3. _(Sprint 1 onward.)_
 
 ### UC-07 Login/Logout User  
 
@@ -331,6 +330,12 @@ Embed UI mockups or screenshots and describe the interaction model. Wireframes a
 ### UC-01 Send Message  
 
 <img width="216" height="288" alt="image" src="https://github.com/user-attachments/assets/5059280d-96be-4a81-b9e8-abe9c8570540" />  
+<img width="522" height="676" alt="image" src="https://github.com/user-attachments/assets/13508edf-ee68-4fb4-82ce-2c1731d7a39e" />
+<img width="430" height="760" alt="image" src="https://github.com/user-attachments/assets/b8e3962c-845d-49f0-94df-05a9a020e8aa" />
+<img width="1061" height="772" alt="image" src="https://github.com/user-attachments/assets/ae4b3f30-d522-4c31-932b-beba3a4eef5b" />
+<img width="1280" height="685" alt="image" src="https://github.com/user-attachments/assets/90bc4248-27de-4f06-b35a-77f09cdf49d5" />
+
+
 
 
 ## Database
@@ -753,9 +758,21 @@ Feature of our team's choice: Forgot password using OTP/Email, enable notificati
 
 # User Guide / Demo
 
-Write this section as both a **demo** (with screenshots of the running application) and a **how-to** for a first-time user. Cover sign-up, login, and the main user flows.
 
-Enter a unique username and click Join to access the public chat. Enter messages into the textbox and click Send to send a message to every logged-in user. Click the User List button to view a list of currently logged-in users, and click any of their names to start a private chat with them. Press the allow notifications popup to allow notifications to appear for new messages when the Messenger application is minimized. Hover over your messages in the public chat and press the message options button (three dots) to open a menu to edit or delete past messages. 
+Enter a unique username and passwrod and click Join to access the public chat. Enter messages into the textbox and click Send to send a message to every logged-in user. Click the User List button to view a list of currently logged-in users, and click any of their names to start a private chat with them. Press the allow notifications popup to allow notifications to appear for new messages when the Messenger application is minimized. Hover over your messages in the public chat and press the message options button (three dots) to open a menu to edit or delete past messages. 
+
+
+<img width="547" height="723" alt="image" src="https://github.com/user-attachments/assets/252f313e-f8df-4153-b0df-9eef8ed79306" />
+
+If you dont have an account then Regsiter an account with all of the info as below.
+
+<img width="445" height="871" alt="image" src="https://github.com/user-attachments/assets/f7db60fb-db00-4bf2-9e37-97ee2932c1a4" />
+
+You can also edit info and send private message. also modify/delete messages later on.
+
+
+
+
 
 Refer to demo video on [homepage](https://uc-se-sm26-team23.github.io/)
 
