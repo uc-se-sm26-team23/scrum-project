@@ -415,6 +415,10 @@ Identify assets, trust boundaries, and threats. STRIDE or attack-tree format is 
 | User credentials | Credential stuffing | Spoofing | Rate limiting + bcrypt hashing |
 | Web artifacts  | Cross-Site Scripting (XSS) | Tampering | CSP, input validation and output encoding     |
 | Whole Application | DoS Tracffic Flooding | Denial of Service | Rate limiting (on our eventual server) to an appropriate amount of traffic (e.g. 50) for the Messenger application | 
+| MongoDB Application | NoSQL Injection (Query manipulation via malicious input objects) | Tampering / Information Disclosure | Using strict input sanitization, Mongoose schema validation, and parameterizing queries | 
+| Stored Chat History & User Profiles | Unauthorized Data Access / Data Breaches | Information Disclosure | Enforcing strict access control checks on the server-side before returning chat history or user profiles |
+
+
 
 ## Security Review Notes
 
