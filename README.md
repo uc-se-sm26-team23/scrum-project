@@ -747,7 +747,7 @@ Feature of our team's choice: Forgot password using OTP/Email, enable notificati
 | Marcus Ngyuyen| 10 | Implemented the login page with MongoDB credentials. Designed a recovery-password workflow using OPT sent out by an actual Gmail account. Created Forgot-Password UC and Scenario |
 | Luke Falanga | 10 | Implemented store private chat and store public chat, cleaned up some code |
 | Connor Slutsky | 10 | Implemented Retrieve Messages, and got Modify Message to work and persist changes with the database. |
-| Akul Jha | 10 | TODO |
+| Akul Jha | 10 | The tasks that I  worked on included the edit profile features that allows the user to edit form fields they entered while registering. This form also allows users to change the theme settings. I also worked with jai to allow the show all users function with the database, while he focused on making only online users pop up in the list and making the feature cleaner|
 | Jai Ong Sheng | 10 | Integrated `messengerdb.js` into project app `server.js`, App re-direct to `sprint2` branch. Added PBI: UC09: Authorize User, UC10: Register Account, UC11: Store Messages, UC12: Retrieve Messages, UC13: Edit Profile Info  w/ Description, User Stories, ACs, Sequence Diagram and PlantUML code. Implemented Features UC10: Register Account, added new fields to registration form for new users (fullName, email, phone and confirmation password). Modified UC06: Show Online Users to Show ALL Users. Embedded video sprint 2 into homepage. |
 
 #### Sprint Retrospective
