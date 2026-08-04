@@ -36,7 +36,7 @@ _Teams are 3–5 students (per syllabus). Solo teams are not permitted._
 | Live prototype (Azure App Services) | https://team23-uc-se-messenger.azurewebsites.net/ |
 | GitHub Projects board (private) | [https://github.com/orgs/uc-se-sm26-team23/projects/1](https://github.com/orgs/uc-se-sm26-team23/projects/1) |
 | Source code repository (private) | [https://github.com/uc-se-sm26-team23/scrum-project](https://github.com/uc-se-sm26-team23/scrum-project) |
-| MongoDB Atlas cluster (configuration only — no credentials) | _e.g., cluster name, region_ |
+| MongoDB Atlas cluster (configuration only — no credentials) | • Cluster Name: MessengerDB<br>• Regions:<br>&nbsp;&nbsp;&nbsp;&nbsp;• ac-z35urdl-shard-00-02.qbjrnkt.mongodb.net:27017 (Primary)<br>&nbsp;&nbsp;&nbsp;&nbsp;• ac-z35urdl-shard-00-01.qbjrnkt.mongodb.net:27017 (Secondary) <br>&nbsp;&nbsp;&nbsp;&nbsp;• ac-z35urdl-shard-00-00.qbjrnkt.mongodb.net:27017 (Secondary) |
 
 
 ## Revision History
@@ -46,6 +46,8 @@ _Teams are 3–5 students (per syllabus). Solo teams are not permitted._
 | 05/28/2026 | 0.1     | Initial draft (Sprint 0)             | ALL   |
 | 06/04/2026 | 0.2     | Added use cases and architecture     | ALL   |
 | 07/09/2026 | 0.3     | implemented CI/CD/join chat/onlineuser/modify message and other basic core features | ALL   |
+| 07/30/2026 | 0.4    | Adding all UC updates since last sprint, sprint 2 retro and touch ups    | ALL   |
+
 
 
 ---
@@ -78,6 +80,8 @@ List the high-level functional and non-functional requirements. These will be re
 - **F1.7:** Public chat and private chat are visually distinct (separate views or panels)
 - **F1.8:** Real-time typing status indicator for public and private chat
 - **F1.9:** Logged-in users can modify (edit and delete) previously sent messages in public chat (private chat implementation later)
+- **F1.10:** Logged in users must undergo authentication and are able to add more profile info/edit profile info.
+
 - **NFR-1 (Performance):** Minimal load time to see chat app, with high chat character limit and high group member limit
 - **NFR-2 (Usability):** Chat login and viewing of unread messages is readily available with seamless UI
 - **NFR-3 (Security — see §Security):** As a User, I want to be able to login securely and maintain secure access to my chats
@@ -99,7 +103,17 @@ Link to your **GitHub Projects board** (above) and include a representative scre
 
 
 ### Sprint 2
-- *to be updated w/ screenshots*
+<img width="1906" height="892" alt="image" src="https://github.com/user-attachments/assets/eea2235a-aefd-4e01-b68a-1e8faf1ee056" />
+<img width="932" height="902" alt="image" src="https://github.com/user-attachments/assets/7937d56d-d104-437d-b4fa-eaf6d01bfa73" />
+<img width="1917" height="1015" alt="image" src="https://github.com/user-attachments/assets/0faaf665-b234-4c81-85a0-f9161930072c" />
+<img width="953" height="916" alt="image" src="https://github.com/user-attachments/assets/c5f7f924-bc29-48b1-9037-76d55c8828e1" />
+
+
+
+
+
+
+
 
 ### Sprint 3
 - *to be updated w/ screenshots*
@@ -112,8 +126,8 @@ Include the **use-case diagram** and a **brief description** (1–3 sentences) f
 
 | UC ID | Use Case            | Primary Actor | Brief Description |
 |-------|---------------------|---------------|-------------------|
-| UC-01 | Send Messege | Authorized User | Actor types a message and clicks Send; system receives the message and delivers it in real time to all connected users. |
-| UC-02 | Receive Messege | Authorized User | Users receive messages from the channels that they are in |
+| UC-01 | Send Message | Authorized User | Actor types a message and clicks Send; system receives the message and delivers it in real time to all connected users. |
+| UC-02 | Receive Message | Authorized User | Users receive messages from the channels that they are in |
 | UC-03 | Modify Message | Authorized User | Users can edit or delete messages that only they have already set to fix mistakes |
 | UC-04 | Create Channel | Authorized User | User create 1-on-1 or group channels so that they can send messages to individuals or groups  |
 | UC-05 | Navigate Channels | Authorized User | Users navigate to different channels  |
@@ -195,6 +209,16 @@ For each use case in §Use Cases, describe how it is realized in code: which mod
 - AC-06.5: Given that the online users list is hidden, when I clicked the '+' button, Then the right sidebar must reappear, and the main chat area must shrink back to its original screen space.
 - AC-06.6: Given that I am viewing the online list panel, When connected user(s) logs into the webpage, Then their username must auto appear in online list immediately without needing to manual refresh page.
 - AC-06.7: Given that I am actively viewing the online list, When connected user(s) went offline, Then their username must immediately be gone from the online list without needing to manual refresh page.
+
+- AC6v2
+- AC-06.1: Given that I view the users list, When the list renders, Then the system must display all **registered users** stored in the database, regardless of their current connection status.
+- AC-06.2: Given that I am viewing the online list, When I check the roster, Then the system must display my own username and beside the username marked "(You)".
+- AC-06.3: Given that I log into the webpage, When the homepage loads, Then the online users list must display as an expanded sidebar panel on the far left side of the screen.
+- AC-06.4: Given that the online users list panel is open, When I click the 'x' or similiar button on the panel, Then the sidebar must hide, and allow the main chat area use the remaining screen space.
+- AC-06.5: Given that the online users list is hidden, when I clicked the '+' or similiar button, Then the left sidebar must reappear, and the main chat area must shrink back to its original screen space.
+- AC-06.6: Given that I am viewing the online list panel, When connected user(s) logs into the webpage, Then their username must auto appear in **online** list immediately without needing to manual refresh page.
+- AC-06.7: Given that I am viewing the users list, When a connected user disconnects, Then their status must immediately update to **offline** in the list without a manual page refresh.
+- AC-06.8: Given that I am viewing the users list, When the list renders or updates, Then **online users must be sorted and grouped above offline users** so that active users are always easier to find.
   
 - AC-07.1: When the connected user opens the webpage, they will be prompted to log in
 - AC-07.2: After the connected user fills out the username and clicks Log-In, the client ensures that all required login fields are filled before continuing validation.
@@ -204,17 +228,61 @@ For each use case in §Use Cases, describe how it is realized in code: which mod
 - AC-07.6: The connected user can click a logout option while authenticated.
 - AC-07.7: The system ends the connected user session and returns the connected user to the login page after logout.
 
-##Sequence Diagrams:
-#Modify Messages:
-![](https://www.plantuml.com/plantuml/png/XLJDSjCm4BxxANPwQcTgfgN0WGDJnd3Wq5F82JWeqgOMo9BHhXlozcWJMOuRGpKJUoRp_Npx8zyJgyX3vs1DM3SgFMvkwuTWx7PVFo2HUiIgKff3XEEvQ8Btg1cDKE85A89rrISLgsslF2U4i-Zv0l8HH3D7h30-OPmXLbMrXle3DF0UjBFw5t2qlKCmWGc21yB4x8wHuDl7fhwvUtNx8uLpqzyRTC4_4d00vGEt664WZ2TmSMj6dzOQX131M58RXz19tLOhjialzFAY2XtXae4UOfH8OZ3A9jrrqgKsxE2piPnI6FY43Xb7lTFemfBu0XqjAiYdT8CINsTG9hy-5hBWYWabjPJ4MulEJBm5-M7J9UMXDuhH51xZ7pucp2b5-XHW2R3hULymizP6_8bwL8KQJ00VM8POmjnDOQJ72_e--FeV7glaaSKpuJA_lvXhyBZxcl9VpQtAMOqAf9wmL2uLoy368CIAXpAlDsSIkT9D3CfeHMSjl9HYCPOqrrduwhkN_NGEzE6YK4bv3OjUquYDfTwf_TcmTfRRCRRrHbOun8NaAL1LbORdnNnfyJ8igxqjQjCW8luUa1WuW9bfmZQ63dIhl4Tthb06yPncFMFqohdzOI3R4ALVXwj6OFqBYZby8jAU6BjnaZxmTBsvLGowVCj4EgSmpxyoxsObpoVn7uSvMrell-e-FOVELNy1)
+- AC-08.1: A username field, a password field, and a Join button are present and usable on the login screen; submitting with an empty or malformed field displays an error and sends no request to the server.
+- AC-08.2: The server independently re-validates the structure of the received request; a structurally invalid request returns an error and no credential check is performed.
+- AC-08.3: The server checks the submitted credentials against the user list; an unknown username and a wrong password both produce the same generic invalid-user result.
+- AC-08.4: When the credentials are invalid, the login screen remains visible, the password field is cleared, and an invalid-user message is displayed.
+- AC-08.5: When the credentials are valid, the server marks the connection as authenticated before sending any further response.
+- AC-08.6: When the connection is authenticated, the client displays the chat screen.
+- AC-08.7: After a successful join, every currently authenticated client receives and displays the updated list of authenticated users.
 
-#Login/Logout User:
+- AC-09.1: Given that the user is on the login screen, When they submit a valid, registered username and password, Then they are authenticated and redirected to their chat area.
+- AC-09.2: Given that the user is on the login screen, When they attempt to submit a blank or poorly formatted username/password string, Then the client-side system blocks submission and displays a validation alert.
+- AC-09.3: Given that a login request passes client formatting, When the server matches the credentials against the database and finds a mismatch, Then no session is created and the user receives a specific error message.
+
+-  AC-10.1: Given the user is on the login screen, When the user selects the registration option, Then the registration form (username, password) is present and reachable without a page reload.
+- AC-10.2: Given the user is on the registration screen, When the user submits the form with an invalid username or password format, Then the input is blocked from submitting and the user receives a specific, actionable error message.
+- AC-10.3: Given the user submits the registration form with client-side valid inputs, When the server detects an invalid format upon independent re-validation, Then no account is created and the user receives a specific, actionable error message.
+- AC-10.4: Given the user submits validly formatted input, When the data layer detects an invalid format during independent re-validation before querying, Then no account is created in the database and the user receives a specific, actionable error message.
+- AC-10.5: Given the user submits a registration form with valid credentials, When the system detects that the username already exists, Then no new account is created and the user receives a specific, actionable error message.
+- AC-10.6: Given the user submits a new, unique username and a valid password, When the system validates all layers, hashes the password, and creates the account, Then the user receives a clear confirmation message and is returned to the login view.
+
+- AC-11.1: Given the authenticated users log back in, When the authenticated user went to the private or public chat area , Then the system retrieve the stored messages from MongoDB and display to the user.
+- AC-11.2: Given the private messages between two authenticated users are saved in the database, only the sender and receiver should be able to see these messages on login.
+
+- AC-12.1: Given a user has successfully authenticated into the system, then the system must immediately send and display current public and private chat history to the user's interface.
+- AC-12.2: The system will only load up to 100 public and private chat messages at a time, if their histories extend beyond that, to prevent long loading times.
+- AC-12.3: When the user scrolls to the top of the chat message, up to 100 more chat message for that particular conversation will be loaded in addition.
+
+-  AC-13.01: Given that I am on the "Edit Profile" page, When I modify my personal informations and click "Save", Then the system must process the updates.
+- AC-13.02: Given that I input personal information data, When the name field is left blank, Then the system must reject the submission and display a specific validation error.
+- AC-13.03: Given that a profile update is successfully processed or encounters an error, When the server responds, Then the system must display a temporary toast notification indicating success or failure.
+- AC-13.04: Given that my profile is successfully updated, When I return to the chat or main dashboard, Then the system must display my new/latest profile info without requiring a re-login.
+- AC-13.05 (Security): Profile input data received by the server must be strictly sanitized and HTML-escaped before persistence, preventing stored Cross-Site Scripting (XSS) attacks.
+- AC-13.06 (Security): The server must enforce strict object-level authorization checking, ensuring that the authenticated session ID matches the target user profile being edited.
+
+- AC-14.1: A "Forgot Password?" link is present on the login screen; clicking it displays an email input field and a Send Code button.
+- AC-14.2: Submitting an empty or malformed email displays a client-side error and sends no request to the server.
+- AC-14.3: Whether or not the submitted email matches a registered account, the server returns the same generic "if that email is registered, a code has been sent" response — an unknown email produces no distinguishable result.
+- AC-14.4: When the email matches an account, the server generates a 6-digit numeric OTP, hashes it with bcrypt before storing it (same as password storage), and sets a short expiry (currently 1 minute) alongside it.
+- AC-14.5: The OTP is emailed to the address on file; the plaintext OTP is never sent to the client or logged anywhere except inside the outgoing email.
+- AC-14.6: Submitting the code and new password re-validates the new password format server-side; an incorrect code, an expired code, or a code for a non-existent request all produce the same generic "Invalid or expired code" message.
+- AC-14.7: On a successful reset, the server hashes and stores the new password and clears the stored OTP and its expiry from the user document, making the code single-use.
+
+
+
+## Sequence Diagrams:
+# Modify Messages:
+![](https://www.plantuml.com/plantuml/png/XLJBRjim4BphAnOwLqNIj3q4HP10xJ4dmwUw1rfSHsoffKgkalhlozM3jXv5TM00SNPsPZJnOs3bkMiix0CMfOh7pMtnxBGvdOjd346zO9QfYfs7uScVEgwHs5IAKSkOpq45s6TjP3ALQHKnvAKr4PJ3-0YYd2Dsw5_Hpn2xBDj3yG0bt4FjuYtqHy28RmOnyFsfB6xktj_-YBBivVKHhQEN0En0aOiAFNHHsXLSTfI9tMY4w4cRe8uMeH77Oiau0jVAdv2X3RYreEgy5qcoOAADlFl86sht1knD6pcrux3O7zsD0Yfhgb_No0LH5DPQTGRKXa6H1eqM6PEsELk8bnMFb_sTPFDDcnHG_t8Sciq8Q5BvOL2vOKbaI50fZfD1gsTpI_hks4JchjNIapJ7-8UpX1QLaVeQO09Wq_8vOMRVpUDFh2PMA69oG8wb8KdCtKMCVC0DVd9K_6F73kv7yZImffLdDw63UiNaKjmTI96UjWPMtAKMV5nnZBQEtYbTgR3Awq1IQ6kbBqWSafftiABSBj2AyCrmFSapfANqpcyeHD9PbbByEjJlVsqQOIFRfyYsJDVZxmu30xknqWTAdVAkWQfMH6ZN52doSUxYo12ZfvZIUNCgAIGnV7A-wHDLrxzZ1ve2vbeD_za76lRePHC-BrpjUrSnx0fdDH-ZpYUQunc-236f1X_o1PkatIV-6C-kiNy1)
+
+# Login/Logout User:
 ![](https://www.plantuml.com/plantuml/png/bLHVRzCm47_FfpZr2QG6mK1CwWDQbuud9D2Yye9uy9nhQosnm_coic_FEN6yrLI8-I5owz-VtrbtllAiY8UkXQt7ibBoUNjPhWS-e6MZ5MCf1rGKIhCZcDQYSjQYPcm2YnQWF6oBNf4mJAyi2w8r8h20UGcYEaNKI0z89uYwQ1IhEmankcpYZyKJOdDT55ieFq6rWgyzMZZYNQ_sM5JXp-qAlf7hUeRMxOsLq2t35xS7sGU1cNbZ6Ga6YMvLX_1ZNKdHRzujOTfS_1pHLKH_LwsHNFX4U8M_ZMU_1DNs1rNQeKCoUWdMiLW5tEjPz68MVJ-9XaItk1SwAJRE2dxdg8jx3m_1R4Ic2FKAQhGDq7CQuQy1FOjDKe-h3fpDzGgg0-fxC3jGMhl1idWJgkOHflGpzKEY2WlAoV0MUI2Rc9uL3pxXGX7hUDGuzA7mIJL2yYJYomWMZqanpvq7a0xR6UeINeyIJQulu2gbFRaWFsYDtfyt2XSxzKjzSCVS13eXIbETPtnsT5JK0Bk8CtOF_j4pTec0hKTOdxts_wy0YHoz97_cz5SPQ9iYfVjN4ngRjU69stYMHunZ4rr6Xp1uRk2JoQjQe-_3TCh1pFielBpN8oBhyii9MKVaZG1rUed2T8ANaYLOJiYkEQfdBHB1gTW8pXpOJOyBX6Vd6JMKNLp9T-ZQuWy0)
 
-#Show Online Users:
+# Show Online Users:
 ![](https://www.plantuml.com/plantuml/png/dP91ZzCm48Nl-HMZNXO4HR10At50Yt95ub3rW50FRZ99h7KyOJnkj_nw9Yb9b9G0meVKSjyRls_63q4CIwmTx0EkKwEVrvlr5--inxKUSLX_ja6In6H23DUrIibxp0HpQ2KhC07sIQE5R6ORuqKLpgAN5VHB5UbKiKC-8KyKkoJPm_eZfF0179LWlH3K60Bw4XdEU6nCYKdQQdQgOVmUCGXKL6Fx3nYV0tNP8RRPmRNPTwDUsE89GM6i_cG3nbMjrWjy-vHg2rwzERI-BandZEnlItSNPf5PMRjZiBuWherOyaEbbt3Tt1-I9EtvSXiQPoxJci7cU3GCQcPRLj8Tz7NU7aPtRVXnSh4tDSBPIWMhPryfFb_rhllEfRQzsa95vrkAsw3zHgzCZ9DPeo1p533yfjEWQvXWvcps27TFTt2C8cC_tXqwtS1IjOmZhl8lAV6fQHjU6-iXguo0OJGpyG0xT3WskMcZwvwYm2XFq0MSip5IW_vVuLxCuTvF8WyXPdmBOiOWn0YaQkkD6o7L-GFdjZdfycJLWJw_pj9uaWfvpkse361zLtby-AgrnMLGM0zuGZ_KtSm0J9wFhr5eET3cRyDQTlPpM-0e2GDGKRJsFyDGb2dDzcOSDPrm12gOwkLWs_z6slwQpeD-O-r-0W00)
 
-
+# Retrieve Messages:
+![](https://www.plantuml.com/plantuml/png/5SwnQiGm40JGVhzYS2z2KgO83bTVSq8Vi2Slze8j2-tQuBy_kPdYmJ0pcdFpOrkHJCA3Utp_X9TuKpa5Jp7ZMOo8i-yDm__XYnJNp2xJtMa3s92eSkkgbOiZNkQotHw94i8V8dwnxZEqW292bzIb7kzLyrTjUh8ByiAEHQqFNKIZbAd_-W00)
 
 
 ## User Interface
@@ -371,17 +439,17 @@ Describe the GitHub Actions workflow(s) under `.github/workflows/`. _(Sprint 1 o
 
 ### Sprint 1
 
-Describe: `.github/workflows/` includes a set of isntructions that tells what to do when an event triggers. Once triggered, Github Actions look inside `.github/workflows/` folder to find out what to do when a specific event triggers. 
+Describe: `.github/workflows/` includes a set of instructions that tells what to do when an event triggers. Once triggered, GitHub Actions look inside `.github/workflows/` folder to find out what to do when a specific event triggers. 
 
 - **Build & test:** triggered on every push and pull request.
-  * Whenever a team memebr pushes code to 'sprint1' branch or any branches, to merge their code/work. Github's server recognize the action happend, then look into `.github/workflows/` folder to see if any left instructions for what to do to react to the action. After Github finds the  `.yml` file, opens it and starts reading it line by line from top to bottom. After finding the specific section to handle the action, it type  `npm` commands like  `npm install` and npm `npm run test` .
-  * If this phase fails, Github Actions will report back with the any problem exist in the push code.
+  * Whenever a team member pushes code to 'sprint1' branch or any branches, to merge their code/work. GitHub's server recognize the action happened, then look into `.github/workflows/` folder to see if any left instructions for what to do to react to the action. After GitHub finds the  `.yml` file, opens it and starts reading it line by line from top to bottom. After finding the specific section to handle the action, it type  `npm` commands like  `npm install` and npm `npm run test` .
+  * If this phase fails, GitHub Actions will report back with the any problem exist in the push code.
 
 - **Deploy:** triggered on merge to `main`; deploys to Azure App Services.
-  * In the `.yml` file, defined by `deploy` as a separate job that has its own set of roles, when **Deply** action is triggered.
-  * A specific instruction is configed into  `.github/workflows/` to trigger when code is pushed or merged specifically into `main` branch, so this job configured to use Publish Profile that is set up in Azure Deployment Center which allows the Github Action log into Azure securely without needing to type a password every time. So when the trigger is met, the worrkflow perform:
+  * In the `.yml` file, defined by `deploy` as a separate job that has its own set of roles, when **Deploy** action is triggered.
+  * A specific instruction is configured into  `.github/workflows/` to trigger when code is pushed or merged specifically into `main` branch, so this job configured to use Publish Profile that is set up in Azure Deployment Center which allows the GitHub Action log into Azure securely without needing to type a password every time. So when the trigger is met, the workflow perform:
       * It downloads `"node-app"` artifact that the `build` job created. during "Build & testing" phase.
-      * It then executes command to upload code directly to the Azure APp Service.
+      * It then executes command to upload code directly to the Azure App Service.
   *  This result in our live website is instantly updated with new and merged code.
 
 ## Deployment
@@ -389,7 +457,7 @@ Describe: `.github/workflows/` includes a set of isntructions that tells what to
 Describe how to deploy and the URL of the live application. Include a note on environment variables (set in Azure App Services Configuration, never in source). _(Sprint 1 onward.)_
 
 ### Process
-The application itlitizes an automated CD pipeline managed by Gihub Actions, The deploymnet workflow is triggered whenever new code is merged or pushed to branches. During this process, the Github Actions runner completes by authenticating securely with Azure using the set Publish Profile secret, download the pre-built and tested code artifact generated during CI phase, then deploys the packaged application directly to Azure App Services.
+The application utilizes an automated CD pipeline managed by GitHub Actions, The deployment workflow is triggered whenever new code is merged or pushed to branches. During this process, the GitHub Actions runner completes by authenticating securely with Azure using the set Publish Profile secret, download the pre-built and tested code artifact generated during CI phase, then deploys the packaged application directly to Azure App Services.
 
 ### Live Application URL:
 https://team23-uc-se-messenger.azurewebsites.net/
@@ -400,7 +468,7 @@ https://team23-uc-se-messenger.azurewebsites.net/
 
 # Testing & Quality Assurance
 
-Our testing and quality assurance was based on individual task completion. Before any commits were pushed to the sprint1 branch, each team member would test the functionality of the messenger locally to ensure that nothing had been broken by the new code. Then, upon push, we would alert all other members in the Discord to what had been added/changed, as well as other things that they may have noticed regarding another member's code. This would allow us to review eachothers changes and be aware of what exactly they do, as well as find bugs or code that may cause problems down the line. (_**major** focus in Sprint 3._)
+Our testing and quality assurance was based on individual task completion. Before any commits were pushed to the sprint1 branch, each team member would test the functionality of the messenger locally to ensure that nothing had been broken by the new code. Then, upon push, we would alert all other members in the Discord to what had been added/changed, as well as other things that they may have noticed regarding another member's code. This would allow us to review each other's changes and be aware of what exactly they do, as well as find bugs or code that may cause problems down the line. (_**major** focus in Sprint 3._)
 
 In Sprint 1 we would test our changes as we were making them, then test the core functionality of the rest of the app before pushing changes.  
 
@@ -427,6 +495,8 @@ Manual test cases for user-facing flows, with expected vs. actual results. _(Spr
 _Start in Sprint 2; **required** in Sprint 3._
 
 Per the course academic integrity policy, the team must document all AI-assisted work on the team project. **Sprint 3 recommends the team to use a GenAI tool** for the final prototype and to document each substantive prompt.
+
+No AI was used in the design and development of Messenger.
 
 ---
 
@@ -462,7 +532,7 @@ Get comfortable with environment and tools, learn agile and scrum process and do
 
 #### Completed PBIs / Tasks (all below are done)
 1. ALL - Add your name to the project homepage	https://github.com/uc-se-sm26-team23/scrum-project/issues/5
-2. MArcus - Create a Github Project board for Scrum Team Planning	https://github.com/uc-se-sm26-team23/scrum-project/issues/1
+2. Marcus - Create a Github Project board for Scrum Team Planning	https://github.com/uc-se-sm26-team23/scrum-project/issues/1
 3. Jai/Connor - Create public repository	https://github.com/uc-se-sm26-team23/uc-se-sm26-team23.github.io/issues/1
 4. Luke - Create Private Repository	https://github.com/uc-se-sm26-team23/scrum-project/issues/2
 5. Akul - Copy README.md template from course repository	https://github.com/uc-se-sm26-team23/scrum-project/issues/6
@@ -625,35 +695,35 @@ Users need to log in with a username/password stored in a database. An invalid u
 Feature of our team's choice: Forgot password using OTP/Email, enable notifications.
 
 #### Completed PBIs / Tasks
-1. TODO
-2. TODO
-3. TODO
+1. Use-Case-8: Authenticated Join Chat
+2. Use-Case-9: Authorize User
+3. Use-Case-3: Modify Message
+4. Use-Case-11: Store Messages
+5. Use-Case-12: Retrieve Messages
+6. Use-Case-13: Edit Profile Info
+7. Use-Case-14: Forgot Password
+
 
 #### Contributions
 
 | Member | Hours | Contribution Summary |
 |--------|-------|----------------------|
-| Member 1 | X | TODO |
-| Member 2 | X | TODO |
-| Member 3 | X | TODO |
-| Member 4 | X | TODO |
-| Member 5 | X | TODO |
+| Marcus Ngyuyen| 10 | Implemented the login page with MongoDB credentials. Designed a recovery-password workflow using OPT sent out by an actual Gmail account. Created Forgot-Password UC and Scenario |
+| Luke Falanga | 10 | Implemented store private chat and store public chat, cleaned up some code |
+| Connor Slutsky | 10 | Implemented Retrieve Messages, and got Modify Message to work and persist changes with the database. |
+| Akul Jha | 10 | TODO |
+| Jai Ong Sheng | 10 | TODO |
 
 #### Sprint Retrospective
 
 | Good | Could have been better | How to improve |
 |------|------------------------|----------------|
-|      |                        |                |
-|      |                        |                |
+|   Task completion   |   Time-management       |       Ask for help when needed     |
+|    Communication  |           in-person meetings             |       schedule time to work on project             |
 
-
-Working through the sprints is a continuous-improvement process. The retrospective happens at the end of a sprint, before planning the next one. Cover three things briefly:
-
-- **What went well** — celebrate and reinforce.
-- **What could have been better** — be specific (e.g., "we underestimated authentication" not "things were hard").
-- **How we will improve next sprint** — concrete, owned actions.
-
-Keep it under an hour. The output is bullet points in the table above and any new PBIs created on the board.
+- **What went well** - All members completed their assigned use-case tasks that were assigned at the beginning of the sprint, our team kept stable communication via Discord, and our team environment was positive and direct when it came to meetings (not much side-talk).
+- **What could have been better** — Time-management and in-person meetings. There were a few functional requirements that were not implemented until the last few days of the sprint. Though this is okay and partially a result of the end of semester meaning we had more coursework and projects due for other classes, improved time-management could ensure that everything is up to proper standards before sprint submissions. In-person meetings were fewer this sprint, also as a result of time mismanagement between all members.
+- **How we will improve next sprint** — Ask others for a helping hand if you are lacking in time to work on the project and they have already completed their sections, schedule time to work on the project.
 
 
 ---

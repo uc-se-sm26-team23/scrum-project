@@ -110,7 +110,7 @@ body {
 }
 
 /* ==================================================
-   2. Login Page Styles
+   2a. Login Page Styles
    ================================================== */
 .login-container {
     width: 350px;
@@ -202,6 +202,141 @@ body {
     pointer-events: none;
 }
 
+.register-text{
+    margin-top:15px;
+    text-align:center;
+}
+
+.register-text a{
+    color:#0d6efd;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.register-text a:hover{
+    text-decoration:underline;
+}
+
+#registerUI{
+    background-image: url("resources/Background_mini_messenger_login.jfif");
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background-repeat:no-repeat;
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+}
+
+#registerUI::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:var(--login-overlay);
+    pointer-events:none;
+}
+
+#registerBtn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: var(--action-color); 
+    color: var(--side-panel-text);     
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#registerBtn:hover {
+  background: var(--action-hover); 
+}
+
+.login-text{
+    margin-top:15px;
+    text-align:center;
+}
+
+.login-text a{
+    color:#0d6efd;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.login-text a:hover{
+    text-decoration:underline;
+}
+
+/* ==================================================
+   2b. Forgot Password Styles
+   ================================================== */
+#forgotPasswordUI{
+    background-image: url('resources/Background_mini_messenger_login.jfif');
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+#forgotPasswordUI::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--login-overlay);
+    pointer-events: none;
+}
+
+#sendOtpBtn,
+#resetPasswordBtn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: var(--action-color);
+    color: var(--side-panel-text);
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#sendOtpBtn:hover,
+#resetPasswordBtn:hover {
+    background: var(--action-hover);
+}
+
+#otp-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+.form-error{
+    color: #d92d20;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+.form-success{
+    color: #1b8d39;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
 /* ==================================================
    3. Chat Screen Styles
    ================================================== */
@@ -239,7 +374,7 @@ body {
   background-color: var(--bg-messages); 
 }
 
-.message, .priv-message { 
+.message { 
   background: var(--bg-bubble); 
   color: var(--text-body);
   border: 1px solid var(--border-color);
@@ -421,6 +556,98 @@ body {
 
     background:rgba(255,255,255,.15);
 
+}
+/*edit profile CSS*/
+#Edit_profile_btn {
+    position: fixed;
+    top: 70px;
+    right: 20px;      /* instead of left */
+    padding: 8px 15px;
+    background: var(--action-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 999;
+    transition: background .2s ease;
+}
+.profile-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.profile-modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    width: 350px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.profile-modal-content .form-group {
+    margin-bottom: 15px;
+}
+
+.profile-modal-content label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.profile-modal-content input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.feedback-msg {
+    margin-top: 10px;
+    font-size: 13px;
+    text-align: center;
+}
+
+
+/* Status dot shown next to each username in the user list.
+   Uses semi-transparent white for offline so it works across
+   all three color themes (blue, emerald, midnight). */
+.user-status-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+  
+.user-status-dot.online  { background-color: #22c55e; }           /* green — universally readable */
+.user-status-dot.offline { background-color: rgba(255,255,255,.3); } /* muted white on any panel color */
+  
+  /* Row alignment so dot + text sit on the same baseline */
+#user-list li {
+    display: flex;
+    align-items: center;
+}
+  
+  /* Dim offline rows so online users draw the eye first */
+#user-list li.user-offline {
+    opacity: 0.6;
 }
 /*
 ================================================== 

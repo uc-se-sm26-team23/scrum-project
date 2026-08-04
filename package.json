@@ -14,11 +14,21 @@
   "author": "Team 23",
   "type": "commonjs",
   "main": "src/server.js",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "start": "node src/server.js"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "mongodb": "^7.5.0",
+    "nodemailer": "^9.0.3",
     "socket.io": "^4.8.3"
+  },
+  "allowScripts": {
+    "bcrypt@6.0.0": true
   }
 }

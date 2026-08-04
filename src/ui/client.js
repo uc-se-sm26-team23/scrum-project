@@ -12,6 +12,11 @@ socket.on("connect", () => { //connected to the server
     console.log(`Connected to Socket.io server: 
     ${socket.io.opts.hostname}, port: ${socket.io.opts.port}`);
 
+    const savedTheme = localStorage.getItem("chat-theme");
+    if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
     // Temporary session restore using localStorage on reload page
     // Since localStorage is used, so to test, have different users on different domain to test. Else multiple users on same domain will get over-write.
 
@@ -20,14 +25,14 @@ socket.on("connect", () => { //connected to the server
     // use to check if username was saved from previous session
     var savedUsername = localStorage.getItem('username');
 
-    // if exist emit to server who the reconnected yser is
+    // if exist emit to server who the reconnected user is
     if (savedUsername) {
         socket.emit("set username", savedUsername)
 
-        // skin login page
+        /*// skin login page
         $('#loginUI').hide()
         // proceed to chat page
-        $('#chatUI').show()
+        $('#chatUI').show()*/
 
         console.log('Debug>Session restored for:', savedUsername); // UI testing only
 
@@ -105,9 +110,6 @@ $('#notify-no').on('click', noNotification);
 // LogOut button
 $('#logout-btn').on('click', logout);
 
-// gets incremented with each new message
-var messageId = 1;
-
 
 // ===============================
 // JOIN CHAT
@@ -124,36 +126,258 @@ if (loginUsernameInput) {
         if (e.key === 'Enter') joinChat();
     });
 }
+var passwordInput = document.getElementById('password');
+if (passwordInput) {
+    passwordInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') joinChat();
+    });
+}
 
 
 function joinChat() {
+    //input validation here before sending to the server
     const username = document.getElementById('username').value;
     const pattern = /^\w{3,20}$/;
     
-
     if (!username || !pattern.test(username)) {
         alert("Username cannot be empty and must be between 3–20 characters!");
         return;
     }
     
+    // Need to be removed after switching to mongoDB
     localStorage.setItem("username", username);
     socket.emit("set username", username);
 
-    // AC-02.05 - Request Notification on message
-    $("#notify-prompt").css("display", "block"); // show the prompt we made after joining
+    const password = document.getElementById('password').value;
+    const passwordpattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+    if (!password || !passwordpattern.test(password)){
+        document.getElementById('login-error').textContent="Password must be at least 6 characters long and contain at least one letter and one number";
+        return;
+    }
 
-    document.getElementById('loginUI').style.left = '100%';
-    document.getElementById('chatUI').style.display = '';
+    document.getElementById('login-error').textContent='';
+    // AC-08.1: send credentials (as JSON object) to server (UC-08)
+    const logincredentials = {username: username, password: password};
+    socket.emit('join', logincredentials);
+    // console.log("Debug>sent login credentials to server: " + JSON.stringify(logincredentials));
+    // AC-02.05 - Request Notification on message
+
+    socket.on('join-success', function(data) {
+        console.log('Join Success');
+        document.getElementById('loginUI').style.display = 'none';
+        document.getElementById('chatUI').style.display = '';
+        // document.getElementById('display-name').textContent = username; - there's no 'display-name' element? - connor
+        
+        const loggedInUsername = typeof data === 'object' ? data.username : data;
+       
+        if (loggedInUsername) {
+            localStorage.setItem("username", loggedInUsername);
+        }
+       
+        if (typeof data === 'object') {
+            localStorage.setItem("fullName", data.fullName || "");
+            localStorage.setItem("email", data.email || "");
+        }
+    });
+
+    socket.on('join-error', function(message) {
+        console.log('Join Error');
+        document.getElementById('login-error').textContent = message;
+    });
+        $("#notify-prompt").css("display", "block"); // show the prompt we made after joining
 }
 
+// Toggle: Login -> Register
+document.getElementById('showRegisterForm').addEventListener('click', function() {
+    document.getElementById('loginUI').style.display = 'none';
+    document.getElementById('registerUI').style.display = '';
+    document.getElementById('login-error').textContent = '';
 
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+});
+
+// Toggle: Register -> Login
+document.getElementById('showLoginForm').addEventListener('click', () => {
+
+    document.getElementById('registerUI').style.display = 'none';
+    document.getElementById('register-error').textContent = '';
+
+    document.getElementById('loginUI').style.display = '';
+
+    document.getElementById('reg-username').value = '';
+    document.getElementById('reg-password').value = '';
+    document.getElementById('reg-fullname').value = '';
+    document.getElementById('reg-email').value = '';
+    document.getElementById('reg-phone').value = '';
+    document.getElementById('reg-confirm-password').value = '';
+
+});
+
+// Toggle: Login -> ForgotPassword
+document.getElementById('showForgotPasswordForm').addEventListener('click', function() {
+    document.getElementById('loginUI').style.display = 'none';
+    document.getElementById('forgotPasswordUI').style.display = '';
+    document.getElementById('login-error').textContent = '';
+
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+});
+
+// Toggle: Forgot Password -> Login
+document.getElementById('showLoginFormFromForgot').addEventListener('click', function(e) {
+    document.getElementById('forgotPasswordUI').style.display = 'none';
+    document.getElementById('loginUI').style.display = '';
+    document.getElementById('otp-section').style.display = 'none';
+
+    document.getElementById('fp-email').value = '';
+    document.getElementById('fp-otp').value = '';
+    document.getElementById('fp-new-password').value = '';
+    document.getElementById('forgot-password-error').textContent = '';
+    document.getElementById('forgot-password-success').textContent = '';
+    document.getElementById('reset-password-error').textContent = '';
+});
+
+// ======================================================
+// Use Case 10: Register Account
+// ======================================================
+document.getElementById('registerBtn').addEventListener('click', registerAccount);
+
+function registerAccount() {
+
+  // AC-10.2 Client-side format validation before submission
+  const fullName_Input = document.getElementById('reg-fullname').value.trim();
+  const username_Input = document.getElementById('reg-username').value.trim();
+  const email_Input = document.getElementById('reg-email').value.trim();
+  const phone_Input = document.getElementById('reg-phone').value.trim();
+
+  const password_Input = document.getElementById('reg-password').value;
+  const confirmpassword_Input = document.getElementById('reg-confirm-password').value;
+
+  // Full name: letters and spaces only, 2-60 chars
+  const fullNamePattern = /^[A-Za-z\s]{2,60}$/;
+  if (!fullName_Input || !fullNamePattern.test(fullName_Input)) {
+
+    document.getElementById('register-error').textContent = "ERROR: Full Name Must Be 2-60 Characters (letters, spaces only)!";
+    return;
+
+  }
+
+  // Username: 3-20 chars, letters/numbers/underscore
+  const usernamePattern = /^\w{3,20}$/;
+  if (!username_Input || !usernamePattern.test(username_Input)) {
+
+    document.getElementById('register-error').textContent = "ERROR: Username Must be between 3-20 characters (letters, numbers, underscore)!";
+    return;
+
+  }
+
+  // Email: standard format - follow format: string@string.string
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email_Input || !emailPattern.test(email_Input)) {
+
+      document.getElementById('register-error').textContent = "ERROR: Please Enter A Valid Email Address!";
+      return;
+  }
+
+  // Phone: Exact US format 10 digits phone number
+  const phonePattern = /^\d{10}$/;
+  if (!phone_Input || !phonePattern.test(phone_Input)) {
+    
+    document.getElementById('register-error').textContent = "ERROR: Phone Number Must Be Exactly 10 digits!";
+    return;
+
+  }
+
+  // Password: min 6 chars, at least one letter and one number
+  const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+  if (!password_Input || !passwordPattern.test(password_Input)) {
+
+    document.getElementById('register-error').textContent = "ERROR: Password Must Be at least 6 characters w/ letters and numbers!";
+      return;
+
+  }
+  /// Confirm password must match
+  if (password_Input !== confirmpassword_Input) {
+
+    document.getElementById('register-error').textContent = "ERROR: Passwords Do Not Match!";
+    return;
+
+    }
+
+    // clear error message if none violates 
+  document.getElementById('register-error').textContent='';
+  // emit to server
+  socket.emit('register', {
+    fullName: fullName_Input, 
+    username: username_Input, 
+    email: email_Input, 
+    phone: phone_Input, 
+    password: password_Input });
+
+}
+
+// ======================================================
+// Forgot Password — request OTP
+// ======================================================
+document.getElementById('sendOtpBtn').addEventListener('click', function() {
+    const email = document.getElementById('fp-email').value.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email || !emailPattern.test(email)) {
+        document.getElementById('forgot-password-error').textContent = 'Please enter a valid email.';
+        return;
+    }
+
+    document.getElementById('forgot-password-error').textContent = '';
+    socket.emit('forgot-password', { email });
+});
+
+socket.on('forgot-password-success', function(message) {
+    document.getElementById('forgot-password-success').textContent = message;
+    document.getElementById('otp-section').style.display = '';
+});
+
+socket.on('forgot-password-error', function(message) {
+    document.getElementById('forgot-password-error').textContent = message;
+});
+
+// ======================================================
+// Forgot Password — verify OTP + reset
+// ======================================================
+document.getElementById('resetPasswordBtn').addEventListener('click', function() {
+    const email = document.getElementById('fp-email').value.trim();
+    const otp = document.getElementById('fp-otp').value.trim();
+    const newPassword = document.getElementById('fp-new-password').value;
+
+    const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+    if (!otp) {
+        document.getElementById('reset-password-error').textContent = 'Please enter the code.';
+        return;
+    }
+    if (!passwordPattern.test(newPassword)) {
+        document.getElementById('reset-password-error').textContent =
+            'Password must be at least 6 characters with letters and numbers.';
+        return;
+    }
+
+    document.getElementById('reset-password-error').textContent = '';
+    socket.emit('reset-password', { email, otp, newPassword });
+});
+
+socket.on('reset-password-success', function(message) {
+    alert(message);
+    document.getElementById('showLoginFormFromForgot').click();
+});
+
+socket.on('reset-password-error', function(message) {
+    document.getElementById('reset-password-error').textContent = message;
+});
 
 
 // =============================================================================
 // Use-Case-07: Authenticate User
 // =============================================================================
-
-
 // is this used anywhere?
 function authenticateUser() {
     var username = usernameInput.value.trim();
@@ -262,6 +486,30 @@ socket.on('privateStopTyping', (data) => {
     }
 });
 
+// Socket listerner for Register Account
+socket.on('register-success', function(username) {
+
+    // hide register UI 
+  document.getElementById('registerUI').style.display = 'none';
+  document.getElementById('register-error').textContent = '';
+
+  // clear input boxes
+  document.getElementById('reg-username').value = '';
+  document.getElementById('reg-password').value = '';
+  document.getElementById('reg-email').value = '';
+  document.getElementById('reg-phone').value = '';
+  document.getElementById('reg-password').value = '';
+  document.getElementById('reg-confirm-password').value = '';
+
+  // display login UI for login
+  document.getElementById('loginUI').style.display = '';
+  document.getElementById('login-success').textContent = `Account '${username}' created! You can now Log In!`;
+});
+
+socket.on('register-error', function(message) {
+  document.getElementById('register-error').textContent = message;
+});
+
 /*
 if nobody typing: clear indictaor
 if one person is typing: Show user typing...
@@ -302,73 +550,72 @@ function sendMessage() {
 
 // AC-02.01 & AC-02.05
 // get message from server
-socket.on('message', function(data) { // data (object) - { message: "Alice: hello", id: 1 }
-    
+socket.on('message', handleMessage)
+function handleMessage({message, id, timestamp, edited}) { // data (object) - { message: "Alice: hello", id: 1 }
     // get senderName
-    var senderName = data.message.split(':')[0];
+    var senderName = message.split(':')[0];
 
     // get current user's username from browser storage
     var currUsername = document.getElementById("username").value;
 
     /*if senderName equal currentUsername then 
     dont show notification to the current user 
-    
     else show notification because senderName isnt the current Username */
-
     if (senderName !== currUsername) {
-
-        showNotification(senderName + ' says:', data.message);
-
+        showNotification(senderName + ' says:', message);
     }
 
     // Else Always display message
-    displayMessage(data);
-});
+    displayMessage({msgText: message, messageId: id, timestamp: timestamp, edited: edited});
+};
 
 
-// data
-function displayMessage(data) { // server sends data as string
-    var msgText = data.message;
-    var messageId = data.id;
-
-    // create message div
-    const msg = document.createElement("div");
-    // msg.innerHTML = '<span style="color: #2431e5">[' + timestamp + ']</span> ' 
-    //                 + DOMPurify.sanitize(data);
-    msg.className = "message";
-    msg.id = "message-" + messageId;
-
-    // element that contains the text of the message
-    const msgTextElm = createMessageTextElement(messageId, msgText, false, false);
-    msg.appendChild(msgTextElm);
-
-    // get username of data
-    var messageSender = msgText.split(":")[0];
-    var username = document.getElementById("username").value
-    if (messageSender === username) { // only display options if they're your messages
-        // div that contains three dots and edit/delete buttonsconst 
-        msgOptDiv = createMessageOptionsElement(messageId);
-        msg.appendChild(msgOptDiv);
-    }
+// display message to public chat
+// TODO should pass in isEdited/isDeleted
+function displayMessage({msgText, messageId, timestamp, edited}) { // server sends data as string 
+    const msg = createMessage(msgText, messageId, timestamp, edited);
 
     messageList.appendChild(msg);
-
     // AC-02.03 - Auto-scroll to latest message.
     messageList.scrollTop = messageList.scrollHeight;
 }
 
 
+function createMessage(msgText, messageId, timestamp, isEdited=false, isDeleted=false) {
+    // create message div
+    const msg = document.createElement("div");
+    msg.className = "message";
+    msg.id = "message-" + messageId;
+
+    // element that contains the text of the message
+    const msgTextElm = createMessageTextElement(messageId, msgText, Number(timestamp), isEdited, isDeleted);
+    msg.appendChild(msgTextElm);
+
+    // get username of data to create msg options
+    if (!isDeleted) {
+        var sender = msgText.split(":")[0];
+        var username = localStorage.getItem("username");
+        if (sender === username) { // only display options if they're your messages
+            // div that contains three dots and edit/delete buttonsconst 
+            const msgOptDiv = createMessageOptionsElement(messageId);
+            msg.appendChild(msgOptDiv);
+        }
+    }
+
+    return msg;
+}
 
 
 // Handles sending private messages to a user
 function sendPrivateMessage() {
 
     var input = privChatMessageInput.value.trim();
+    // curr private user is a struct {socketId, username}
     if (!input || !currentPrivateUser) return;
 
     // Sends the message only to the current connected user you clicked on
     socket.emit("privateMessage", {
-        to: currentPrivateUser.socketId,
+        to: currentPrivateUser,
         message: input
     });
 
@@ -383,107 +630,67 @@ function sendPrivateMessage() {
 }
 
 // Handles private message reception
-socket.on('privateMessage', (data) => {
-    const chatId = data.self ? data.toSocket : data.fromSocket;
+// data params are fromUser, toUser, message, self, id, timestamp
+socket.on('privateMessage', ({self, toUser, fromUser, message, id, timestamp, edited}) => {
+    const chatUser = self ? toUser : fromUser; // i think this is the other user that you're talking to
+    // admin sends message
+    // test should put it in privateChats[admin]
+    // admin should put it in privateChats[test]
 
     // if data.self is true == our own message else from someone else so notify
-    if (!data.self) {
+    if (!self) {
         showNotification(
             'Private Message from',
-            `${data.from}: ${data.message}`
+            `${fromUser}: ${message}`
         );
     }
     
-
-    if (!privateChats[chatId]) {
-        privateChats[chatId] = [];
+    // init array if not there
+    if (!privateChats[chatUser]) {
+        privateChats[chatUser] = [];
     }
 
-    privateChats[chatId].push({
-        from: data.from,
-        message: data.message,
-        timestamp: new Date().toLocaleTimeString()
-    });
+    // create msg and add it to pC array
+    const msg = {
+        from: fromUser,
+        message: message,
+        timestamp: timestamp,
+        id: id,
+        edited: edited
+    };
+    privateChats[chatUser].push(msg);
 
-    if (
-        currentPrivateUser && 
-        currentPrivateUser.socketId === chatId
-    ) {
-        displayPrivateMessage(chatId);
+    // display message
+    if (currentPrivateUser && currentPrivateUser.username == chatUser) {
+        displayPrivateMessage(msg);
     }
     
     privateTypingIndicator.textContent = "";
-
 });
 
-// data: {}
-function displayMessage(data) {
-    var msgText = data.message;
-    var messageId = data.id;
 
-    // create message div
-    const msg = document.createElement("div");
-    // msg.innerHTML = '<span style="color: #2431e5">[' + timestamp + ']</span> ' 
-    //                 + DOMPurify.sanitize(data);
-    msg.className = "message";
-    msg.id = "message-" + messageId;
-
-    // element that contains the text of the message
-    const msgTextElm = createMessageTextElement(messageId, msgText, false);
-    msg.appendChild(msgTextElm);
-
-    // get username of data
-    var messageSender = msgText.split(":")[0];
-
-    var username = document.getElementById("username").value
-    if (messageSender === username) { // only display options if they're your messages
-        // div that contains three dots and edit/delete buttonsconst 
-        msgOptDiv = createMessageOptionsElement(messageId);
-        msg.appendChild(msgOptDiv);
-    }
-
-    messageList.appendChild(msg);
-
-    // AC-02.03 - Auto-scroll to latest message.
-    messageList.scrollTop = messageList.scrollHeight;
-}
-
-// Displays private messages
-function displayPrivateMessage(socketId){
+function loadPrivateMessages(toUser) {
     const messagesDiv = document.getElementById("private-messages");
     messagesDiv.innerHTML= "";
 
-    // Gets past conversation with current user or creates a new conversation
-    const conversation = privateChats[socketId] || [];
-
+    const conversation = privateChats[toUser] || [];
     // Displays each past message
     conversation.forEach(msg=>{ 
-
-        // Creates div for each message
-        const privMessageDiv=document.createElement("div");
-        privMessageDiv.className = 'priv-message'
-
-        // Displays the timestamp
-        const timestampSpan = document.createElement("span");
-        timestampSpan.classList.add("timestamp");
-        timestampSpan.textContent = `[${msg.timestamp}] `;
-        privMessageDiv.appendChild(timestampSpan);
-    
-        // Displays the message content
-        const messageSpan = document.createElement('span');
-        messageSpan.textContent = `${msg.from}: ${msg.message}`;
-        privMessageDiv.appendChild(messageSpan);
-
-        // commented out b/c they could be used to implement modify message in private chat
-        // const privMessageText = createMessageTextElement(socketId, msg, false, true); 
-        // privMessageDiv.appendChild(privMessageText);
-
-        // const privMsgOptDiv = createMessageOptionsElement(socketId);
-        // privMessageDiv.appendChild(privMsgOptDiv);
-
-        messagesDiv.appendChild(privMessageDiv);
-        
+        let isEdited = false;
+        let isDeleted = false;
+        if (msg.edited) isEdited = true;
+        if (msg.deleted) isDeleted = true;
+        const privMsg = createMessage(msg.from + ": " + msg.message, msg.id, msg.timestamp, isEdited, isDeleted);
+        messagesDiv.appendChild(privMsg);
     })
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+// Displays private messages
+function displayPrivateMessage({from, message, timestamp, id, edited}){
+    const messagesDiv = document.getElementById("private-messages");
+    const privMsg = createMessage(from + ": " + message, id, timestamp, edited);
+    messagesDiv.appendChild(privMsg);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
@@ -512,8 +719,8 @@ function editMessage(e) {
     var id = e.target.id.split("-"); // id is just a placeholder here
     id = id[id.length-1]; // get the real id (at the end of the array)
 
-    // get the message text
-    const msgText = document.getElementById("message-text-"+id);
+    // get the message content
+    const msgContent = document.getElementById("message-content-"+id);
 
     // create div "edit-message"
     const editMsgDiv = document.createElement("div");
@@ -532,8 +739,7 @@ function editMessage(e) {
 
     // get placeholder text
     // (take the text content and remove the "username: ")
-    var editPlaceholder = msgText.textContent.split(": ");
-
+    var editPlaceholder = msgContent.textContent.split(": ");
     editPlaceholder = editPlaceholder.splice(1); // remove username
     editPlaceholder = editPlaceholder.join(": "); // just in case there are any ": " in the message itself
 
@@ -543,6 +749,7 @@ function editMessage(e) {
     editInput.id = "edit-input-" + id;
     editInput.name = editInput.id;
     editInput.value = editPlaceholder;
+    editInput.placeholder = editPlaceholder; // so that submitEditMessage has access to the old text
     // on Enter press, submit edited message
     editInput.addEventListener("keypress", (e) => {
         if (e.key === "Enter") {
@@ -560,8 +767,8 @@ function editMessage(e) {
     editMsgDiv.appendChild(submitEditBtn);
 
     // replace text with div
-    const msgDiv = document.getElementById("message-"+id);
-    msgDiv.replaceChild(editMsgDiv, msgText);
+    const msgText = document.getElementById("message-text-"+id);
+    msgText.replaceChild(editMsgDiv, msgContent);
     
     // hide other buttons
     const msgOptDiv = document.getElementById("message-options-"+id);
@@ -573,6 +780,7 @@ function editMessage(e) {
     return;
 }
 
+// submit edited message to server
 function submitEditMessage(e) {
     // get id
     var id = e.target.id.split("-");
@@ -586,29 +794,44 @@ function submitEditMessage(e) {
         return;
     }
 
+    let sender = document.getElementById("username").value;
+    // get if public and receiver
+    // great great grandparent is 'messages' or 'private-messages'
+    let isPublic = true;
+    let receiver = null;
+    if (editInput.parentElement.parentElement.parentElement.parentElement.id === "private-messages") {
+        isPublic = false;
+        receiver = currentPrivateUser.username;
+    }
+    // get timestamp   
+    // title of timestamp includes the full epoch time
+    const timestampSpan = document.getElementById("timestamp-"+id);
+    let timestamp = timestampSpan.title;
+    // get old message
+    let oldMessage = editInput.placeholder;
+
     // send to server
-    socket.emit("edit", {id: id, message: document.getElementById("username").value + ": " + text});
+    socket.emit("edit", {id: id, newMessage: text, 
+        message: oldMessage, timestamp: timestamp, isPublic: isPublic, receiver: receiver, sender: sender});
     return;
 }
 
 // replace DOM elements with edited message
 // data should be {id: id, message: message}
 socket.on("edit", handleEditMessage);
-function handleEditMessage(data) {
-    var text = data.message;
-    var id = data.id;
+function handleEditMessage({id, message, timestamp}) {
+    var text = message; // TODO replace this
     // create message text again
-    const msgText = createMessageTextElement(id, text, true); // priv messages?
+    const msgText = createMessageTextElement(id, text, timestamp, true); // priv messages?
     // get sender
-    var sender = text.split(":")[0];
+    var sender = text.split(": ")[0];
     var username = document.getElementById("username").value;
     const msgDiv = document.getElementById("message-"+id);
 
-    if (sender === username) {
-        // replace edit div with message text if it's your own
-        const editDiv = document.getElementById("edit-message-"+id);
-        msgDiv.replaceChild(msgText, editDiv);
+    const oldMsgTextElm = document.getElementById("message-text-"+id);
+    msgDiv.replaceChild(msgText, oldMsgTextElm);
 
+    if (sender === username) {
         // show msgOptDiv (since it was hidden in editMessage) if it's your own
         const msgOptDiv = document.getElementById("message-options-"+id);
         msgOptDiv.style.display = "inline";
@@ -616,10 +839,27 @@ function handleEditMessage(data) {
         // hide the menu though
         const msgOptMenu = document.getElementById("message-options-menu-"+id);
         msgOptMenu.style.display = "none";
-    } else {
-        // replace the message normally if someone else edited theirs
-        const oldMsgTextElm = document.getElementById("message-text-"+id);
-        msgDiv.replaceChild(msgText, oldMsgTextElm);
+    }
+    
+    // if in private message update the privateChats struct
+    // get parent of msgDiv
+    if (!currentPrivateUser) return;
+    const gp = msgDiv.parentElement;
+    if (gp.id === "private-messages") { // TODO is this necessary if we already do the !currentPrivateUser?
+        // find the message based on the id
+        // TODO the key for privateChats should be the id, not the username? perhaps?
+        let index = -1;
+        for (let i = 0; i < privateChats[currentPrivateUser.username].length; i++) {
+          if (privateChats[currentPrivateUser.username][i].id == id) {
+                index = i;
+                break;
+            }
+        }
+        let newText = msgText.lastChild.innerHTML;
+        let newMessage = newText.split(": ").slice(1).join(": ");
+        privateChats[currentPrivateUser.username][index].timestamp = timestamp;
+        privateChats[currentPrivateUser.username][index].message = newMessage;
+        privateChats[currentPrivateUser.username][index].edited = true;
     }
 
     return;
@@ -638,78 +878,95 @@ function deleteMessage(e) {
     // get username
     username = document.getElementById("username").value;
 
+    // get isPublic and receiver
+    // great great grandparent is 'messages' or 'private-messages'
+    let isPublic = true;
+    let receiver = null;
+    const msgText = document.getElementById("message-"+id);
+    if (msgText.parentElement.id === "private-messages") {
+        isPublic = false;
+        receiver = currentPrivateUser.username;
+    }
+    // get timestamp   
+    // title of timestamp includes the full epoch time
+    const timestampSpan = document.getElementById("timestamp-"+id);
+    let timestamp = timestampSpan.title;
+    // get message
+    const msgContent = document.getElementById("message-content-"+id);
+    let message = msgContent.textContent.split(": ").slice(1).join(": ");
+
+    let data = {id: id, sender: username, receiver: receiver, isPublic: isPublic, message: message, timestamp: timestamp};
+
     // emit to server
-    socket.emit("delete", {id: id, username: username});
+    socket.emit("delete", {id: id, sender: username, receiver: receiver, isPublic: isPublic, message: message, timestamp: timestamp});
 
     return;
 }
 
 // removes/alters DOM element
 socket.on("delete", handleDeleteMessage);
-function handleDeleteMessage(data) {
-    var id = data.id;
-    var sender = data.username;
+function handleDeleteMessage({id, sender}) {
     var username = document.getElementById("username").value;
 
     // replace text content and timestamp
     const msgText = document.getElementById("message-content-"+id);
     const timestampElm = document.getElementById("timestamp-"+id);
-    const newTimestamp = new Date().toLocaleTimeString();
     msgText.innerHTML = "<i> deleted by " + sender + "</i>";
-    timestampElm.textContent = "[" + newTimestamp + "]";
 
     if (username === sender) {
         // remove message options if you delete your own message
         const msgOptDiv = document.getElementById("message-options-"+id);
         msgOptDiv.remove();
     }
+
+    // update privateChats if private
+    if (!currentPrivateUser) return;
+    const ggp = msgText.parentElement.parentElement.parentElement; // great grandparent
+    if (ggp.id === "private-messages") {
+        let index = -1;
+        for (let i = 0; i < privateChats[currentPrivateUser.username].length; i++) {
+          if (privateChats[currentPrivateUser.username][i].id == id) {
+                index = i;
+                break;
+            }
+        }
+        privateChats[currentPrivateUser.username][index].deleted = true;
+        privateChats[currentPrivateUser.username][index].message = ""; // clear message bc why not. it's deleted
+        privateChats[currentPrivateUser.username][index].timestamp = timestampElm.title
+        console.log("client.js::hDM title", timestampElm.title);
+    }
     return;
 }
 
 // create the <p>message</p> element
-// if the message is private, textContent is the msg struct that comes from the server
-//      {toSocket, sender, message, etc...}
-//      it's bad code, i'm aware
-function createMessageTextElement(id, textContent, isEdited, isPrivate) {
+// it's bad code, i'm aware
+// text content has to include the sender (e.g. "sender: message")
+// timestamp is unix time
+function createMessageTextElement(id, textContent, timestamp, isEdited, isDeleted=false) {
 
     // `${msg.from}: ${msg.message}`
     const msgTextDiv = document.createElement("div");
-    if (isPrivate) {
-        msgTextDiv.className = "priv-message-text";
-        msgTextDiv.id = "priv-message-text-" + id;
-    } else {
-        msgTextDiv.className = "message-text";
-        msgTextDiv.id = "message-text-" + id;
-    }
+    msgTextDiv.className = "message-text";
+    msgTextDiv.id = "message-text-" + id;
     msgTextDiv.style.display = "inline";
 
-    
     // AC-02.04 - Timestamps display in brower's local system clock
     const timestampSpan = document.createElement("span");
     // timestampSpan.style.color = "#2431e5";
     timestampSpan.classList.add("timestamp");
-    if (!isPrivate) {
-        var timestamp = new Date().toLocaleTimeString();
-        timestampSpan.textContent = `[${timestamp}] `;
-    } else {
-        timestampSpan.textContent = `[${textContent.timestamp}]`
-    }
-    if (isPrivate) {
-        timestampSpan.id = "priv-timestamp-"+id;
-        timestampSpan.className = "priv-timestamp";
-    } else {
-        timestampSpan.id = "timestamp-"+id;
-        timestampSpan.className = "timestamp";
-    }
+    timestampSpan.textContent = `[${new Date(timestamp).toLocaleString()}] `;
+    timestampSpan.id = "timestamp-"+id;
+    timestampSpan.className = "timestamp";
+    timestampSpan.title = timestamp; // this is the unix time
     msgTextDiv.appendChild(timestampSpan);
     
     // turn input into a text element
     const msgText = document.createElement("p");
-    if (isPrivate) {
-        textContent = textContent.message;
-    }
     var encodedText = encodeHTML(textContent);
-    if (!isEdited) { // AC-02.06 - Output-Encoding strings coming from server
+    if (isDeleted) {
+        let sender = encodedText.split(": ")[0];
+        msgText.innerHTML = "<i> deleted by " + sender + "</i>";
+    } else if (!isEdited) { // AC-02.06 - Output-Encoding strings coming from server
         msgText.innerHTML = encodedText;
     } else {
         //add (edited) next to username
@@ -718,16 +975,12 @@ function createMessageTextElement(id, textContent, isEdited, isPrivate) {
         encodedText = encodedText.join(": ");
         msgText.innerHTML = encodedText;
     }
-    if (isPrivate) {
-        msgText.className = "priv-message-content";
-        msgText.id = "priv-message-content-"+id;
-    } else {
-        msgText.className = "message-content";
-        msgText.id = "message-content-"+id;        
-    }
+    msgText.className = "message-content";
+    msgText.id = "message-content-"+id;        
     msgText.style.display = "inline";
     
     msgTextDiv.appendChild(msgText);
+    // console.log(`Debug> added message, id: ${id}, textContent: ${textContent}, timestamp: ${timestamp} / ${new Date(timestamp).toLocaleString()}`);
 
     return msgTextDiv;
 }
@@ -834,7 +1087,7 @@ function showNotification(sender, message_body) {
 
 
 // ==================================================
-// Use-Case-0X: Show online users
+// Use-Case-06: Show online users
 // ==================================================
 
 // show userlist panel
@@ -843,38 +1096,51 @@ document.getElementById('users-toggle-close').addEventListener('click', ShowUser
 
 socket.on('userList', function(users) {
     const userListElement = document.getElementById("user-list");
-    const currentUser = document.getElementById("username").value; // get logged in username
+   // const currentUser = document.getElementById("username").value; // get logged in username
     
     // Clear the current list
     userListElement.innerHTML = "";
 
     // Add each user to the list
     users.forEach(user => {
-    const li = document.createElement("li");
 
-    // li.style.cursor = "pointer";
+        const li = document.createElement("li");
+        // Green dot for online, dim dot for offline
+        const dot = document.createElement("span");
+        dot.classList.add("user-status-dot", user.online ? "online" : "offline");
+        li.appendChild(dot);
 
-    // Show "(You)" only for the current user
-    if (user.socketId === socket.id) {
-        li.textContent = `${user.username} (You)`;
-    } else {
-        li.textContent = user.username;
-    }
 
-    userListElement.appendChild(li);
+        const storedUsername = localStorage.getItem("username");
+        const isSelf = (user.socketId && user.socketId === socket.id) || (user.username === storedUsername);
 
-    // Opens the private chat UI when clicking a user on the userlist
-    li.addEventListener("click", () => {
-        openPrivateChat(user);
+        // Show "(You)" only for the current user
+        if (isSelf) {
+                li.appendChild(document.createTextNode(`${user.username} (You)`));
+            } else {
+                li.appendChild(document.createTextNode(user.username || user));
+            }
+        
+        // Offline rows are visually dimmed via CSS class
+        if (!user.online) {
+            li.classList.add("user-offline");
+        }
+
+        // Opens the private chat UI when clicking a user on the userlist
+        li.addEventListener("click", () => {
+            openPrivateChat(user);
+        });
+
+        userListElement.appendChild(li);
+
     });
-});
 });
 
 // Opens the private chat UI on the webpage
 function openPrivateChat(user){
     currentPrivateUser = user;
 
-    displayPrivateMessage(user.socketId);
+    loadPrivateMessages(user.username);
 
     document.getElementById("private-chat").style.display = "block";
     document.getElementById("private-header").textContent = 
@@ -895,18 +1161,129 @@ function ShowUsers(){
 
 }
 
+
+// ---------------------------
+// EDIT Profile
+// ---------------------------
+document.getElementById('Edit_profile_btn').addEventListener('click', () => {
+    const profileModal = document.getElementById('edit-profile-modal');
+    profileModal.style.display = 'flex';
+    document.getElementById('profile-feedback').textContent = '';
+    document.getElementById('edit-profile-form').reset();
+
+    const currentTheme = localStorage.getItem("chat-theme") || "modern-blue";
+    const themeSelector = document.getElementById('theme-selector');
+    if (themeSelector) {
+        themeSelector.value = currentTheme;
+    }
+});
+
+    document.getElementById('new-fullname').value = localStorage.getItem("fullName") || "";
+    document.getElementById('new-email').value = localStorage.getItem("email") || "";
+
+document.getElementById('close-profile-btn').addEventListener('click', () => {
+    document.getElementById('edit-profile-modal').style.display = 'none';
+});
+
+// Handle profile form submission
+document.getElementById('edit-profile-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+  const currentUsername = localStorage.getItem("username");
+    const newUsername = document.getElementById("new-username").value.trim();
+    const fullName = document.getElementById("new-fullname").value.trim(); // New field
+    const email = document.getElementById("new-email").value.trim();       // New field
+    const oldPassword = document.getElementById("old-password").value;
+    const newPassword = document.getElementById("new-password").value;
+    const feedback = document.getElementById("profile-feedback");
+    const selectedTheme = document.getElementById("theme-selector").value;
+
+    if (selectedTheme) {
+        document.documentElement.setAttribute('data-theme', selectedTheme);
+        localStorage.setItem("chat-theme", selectedTheme);
+    }
+
+    // Client-side validation for username
+    if (newUsername) {
+        const pattern = /^\w{3,20}$/;
+        if (!pattern.test(newUsername)) {
+            feedback.style.color = "red";
+            feedback.textContent = "New username must be between 3–20 characters!";
+            return;
+        }
+    }
+
+    // Client-side validation for password
+    if (newPassword) {
+        if (!oldPassword) {
+            feedback.style.color = "red";
+            feedback.textContent = "Old password is required to change password!";
+            return;
+        }
+        const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+        if (!passwordPattern.test(newPassword)) {
+            feedback.style.color = "red";
+            feedback.textContent = "New password must be at least 6 characters with letters and numbers!";
+            return;
+        }
+    }
+
+    // Emit update request to server
+    socket.emit("update-profile", {
+        currentUsername,
+        newUsername,
+        fullName,
+        email,
+        oldPassword,
+        newPassword
+    });
+});
+
+// Socket listeners for profile update responses
+socket.on("update-profile-success", (data) => {
+    const feedback = document.getElementById("profile-feedback");
+    feedback.style.color = "green";
+    feedback.textContent = data.message;
+
+    if (data.newUsername) {
+        localStorage.setItem("username", data.newUsername);
+        document.getElementById("username").value = data.newUsername;
+    }
+    const submittedFullName = document.getElementById("new-fullname").value.trim();
+    const submittedEmail = document.getElementById("new-email").value.trim();
+    if (submittedFullName !== "") {
+        localStorage.setItem("fullName", submittedFullName);
+    }
+    if (submittedEmail !== "") {
+        localStorage.setItem("email", submittedEmail);
+    }
+
+    setTimeout(() => {
+        document.getElementById("edit-profile-modal").style.display = "none";
+    }, 1500);
+});
+
+socket.on("update-profile-error", (message) => {
+    const feedback = document.getElementById("profile-feedback");
+    feedback.style.color = "red";
+    feedback.textContent = message;
+});
+
+
+
+
 function yesNotification() {
     // prompt user for permission
     Notification.requestPermission().then(function(permission) {
 
-        // hide yellow warning
+        // hide notification warning
         $("#notify-prompt").hide();
 
         // if allow notification
         if (permission == "granted") {
             notificationEnable = true;
 
-            // show the blue confirmation
+            // show the blue notification allow confirmation
             $("#notify-confirmed").show();
 
             // hide confirmation pop up after 3 second
@@ -934,25 +1311,18 @@ function logout() {
 
     /* Assuming only one person per domain
     When log out:
-    1. Remove saved username from localStorage
-
-    2. Disconnect the socket -> to remove user from userlist and broadcast status
-
-    3. clear chat messages 
-    4. clear status log
-    5. clear private chat messages
-    6. hide chat page
-    7. show login page
-    8. clear username input field
+    -Remove saved username from localStorage
+    - clear chat messages 
+    - clear status log
+    - clear private chat messages
+    - hide chat page
+    - show login page
+    - clear username input field
     */
 
     localStorage.removeItem('username');
 
-    // disable auto-reconnect before disconnecting
-    socket.io.opts.reconnection = false;
-    socket.disconnect();
-
-    $('#message').empty();
+    $('#messages').empty();
     $('#status').empty();
     $('#private-messages').empty();
 
@@ -960,6 +1330,9 @@ function logout() {
     $('#loginUI').show();
 
     $('#username').val('');
+    $('#password').val('');
+
+    privateChats = {};
 
     console.log('Debug>User logged out'); // UI testing only
 
