@@ -701,7 +701,7 @@ Feature of our team's choice: Forgot password using OTP/Email, enable notificati
 
 | Member | Hours | Contribution Summary |
 |--------|-------|----------------------|
-| Marcus Ngyuyen| 10 | TODO |
+| Marcus Ngyuyen| 10 | Implemented the login page with MongoDB credentials. Designed a recovery-password workflow using OPT sent out by an actual Gmail account. Created Forgot-Password UC and Scenario |
 | Luke Falanga | 10 | Implemented store private chat and store public chat, cleaned up some code |
 | Connor Slutsky | 10 | Implemented Retrieve Messages, and got Modify Message to work and persist changes with the database. |
 | Akul Jha | 10 | TODO |
