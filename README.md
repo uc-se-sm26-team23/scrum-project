@@ -81,7 +81,13 @@ List the high-level functional and non-functional requirements. These will be re
 - **F1.8:** Real-time typing status indicator for public and private chat
 - **F1.9:** Logged-in users can modify (edit and delete) previously sent messages in public chat (private chat implementation later)
 - **F1.10:** Logged in users must undergo authentication and are able to add more profile info/edit profile info.
-
+- **F2.1:** Users log in with a username/password stored in the database; an invalid username/password cannot log in
+- **F2.2:** Connected users (anyone) can register for a new account with additional fields (e.g., retype password, email, full name), in addition to username/password; a newly created account can log in
+- **F2.3:** Only logged-in users can send/receive messages
+- **F2.4:** Logged-in users can log out
+- **F2.5:** Logged-in users can change/edit their profile, including their password
+- **F2.6:** Chat messages are stored in the database; logged-in users can view chat history
+- **F2.7:** Users can opt into notifications so they can see new messages when they are not actively looking at the messenger tab
 - **NFR-1 (Performance):** Minimal load time to see chat app, with high chat character limit and high group member limit
 - **NFR-2 (Usability):** Chat login and viewing of unread messages is readily available with seamless UI
 - **NFR-3 (Security — see §Security):** As a User, I want to be able to login securely and maintain secure access to my chats
