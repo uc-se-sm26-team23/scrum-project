@@ -521,7 +521,10 @@ Our team applies scrum extensively through the development of this application, 
 ### Tools used
 Our team uses a variety of tools to manage the project and organize our code changes. Git and GitHub are used or version control. We use a GitHub Projects Board to organize our project management. We started with several tickets modeling our Personas and Scenarios, and used those to develop Use Cases which we turn into PBIs. Within each Use Case, we develop Acceptance Criteria and Sequence Diagrams, and we assign one Use Case per developer / team member to be completed (usually in whole, sometimes in part) in a sprint (with the option of assisting others). And GitHub pull requests are also utilized at the end of each sprint for merging changes and performing code reviews. 
 
-### Roadmap view
+## Roadmap view Sprint 2
+<img width="1752" height="500" alt="image" src="https://github.com/user-attachments/assets/0a38cfac-0aca-432d-88c4-b46d7b684aa2" />
+
+### Roadmap view Sprint 1
 <img width="1646" height="383" alt="image" src="https://github.com/user-attachments/assets/f897cb3e-e411-414c-b4a2-2a503522e0bb" />
 
 ## Scrum Process
