@@ -291,13 +291,35 @@ For each use case in §Use Cases, describe how it is realized in code: which mod
 # Use-Case-6: Show Online Users:
 ![](https://www.plantuml.com/plantuml/png/dP91ZzCm48Nl-HMZNXO4HR10At50Yt95ub3rW50FRZ99h7KyOJnkj_nw9Yb9b9G0meVKSjyRls_63q4CIwmTx0EkKwEVrvlr5--inxKUSLX_ja6In6H23DUrIibxp0HpQ2KhC07sIQE5R6ORuqKLpgAN5VHB5UbKiKC-8KyKkoJPm_eZfF0179LWlH3K60Bw4XdEU6nCYKdQQdQgOVmUCGXKL6Fx3nYV0tNP8RRPmRNPTwDUsE89GM6i_cG3nbMjrWjy-vHg2rwzERI-BandZEnlItSNPf5PMRjZiBuWherOyaEbbt3Tt1-I9EtvSXiQPoxJci7cU3GCQcPRLj8Tz7NU7aPtRVXnSh4tDSBPIWMhPryfFb_rhllEfRQzsa95vrkAsw3zHgzCZ9DPeo1p533yfjEWQvXWvcps27TFTt2C8cC_tXqwtS1IjOmZhl8lAV6fQHjU6-iXguo0OJGpyG0xT3WskMcZwvwYm2XFq0MSip5IW_vVuLxCuTvF8WyXPdmBOiOWn0YaQkkD6o7L-GFdjZdfycJLWJw_pj9uaWfvpkse361zLtby-AgrnMLGM0zuGZ_KtSm0J9wFhr5eET3cRyDQTlPpM-0e2GDGKRJsFyDGb2dDzcOSDPrm12gOwkLWs_z6slwQpeD-O-r-0W00)
 
-# Login/Logout User:
+v2
+<img width="900" height="1814" alt="image" src="https://github.com/user-attachments/assets/bc925c10-407a-40d0-adfc-4d1db8a34252" />
+
+
+# Use-Case-7: Login/Logout User:
 ![](https://www.plantuml.com/plantuml/png/bLHVRzCm47_FfpZr2QG6mK1CwWDQbuud9D2Yye9uy9nhQosnm_coic_FEN6yrLI8-I5owz-VtrbtllAiY8UkXQt7ibBoUNjPhWS-e6MZ5MCf1rGKIhCZcDQYSjQYPcm2YnQWF6oBNf4mJAyi2w8r8h20UGcYEaNKI0z89uYwQ1IhEmankcpYZyKJOdDT55ieFq6rWgyzMZZYNQ_sM5JXp-qAlf7hUeRMxOsLq2t35xS7sGU1cNbZ6Ga6YMvLX_1ZNKdHRzujOTfS_1pHLKH_LwsHNFX4U8M_ZMU_1DNs1rNQeKCoUWdMiLW5tEjPz68MVJ-9XaItk1SwAJRE2dxdg8jx3m_1R4Ic2FKAQhGDq7CQuQy1FOjDKe-h3fpDzGgg0-fxC3jGMhl1idWJgkOHflGpzKEY2WlAoV0MUI2Rc9uL3pxXGX7hUDGuzA7mIJL2yYJYomWMZqanpvq7a0xR6UeINeyIJQulu2gbFRaWFsYDtfyt2XSxzKjzSCVS13eXIbETPtnsT5JK0Bk8CtOF_j4pTec0hKTOdxts_wy0YHoz97_cz5SPQ9iYfVjN4ngRjU69stYMHunZ4rr6Xp1uRk2JoQjQe-_3TCh1pFielBpN8oBhyii9MKVaZG1rUed2T8ANaYLOJiYkEQfdBHB1gTW8pXpOJOyBX6Vd6JMKNLp9T-ZQuWy0)
 
 
+# Use-Case-8: Authenticated Join Chat
+<img width="764" height="938" alt="image" src="https://github.com/user-attachments/assets/2353f1cb-63fc-450e-9f0a-df017d6abc2f" />
 
-# Retrieve Messages:
+# Use-Case-9: Authorize User
+<img width="1011" height="766" alt="image" src="https://github.com/user-attachments/assets/7872606e-2518-4013-8dfb-89e3a71d1ef9" />
+
+# Use-Case 10: Register Account
+<img width="1504" height="1153" alt="image" src="https://github.com/user-attachments/assets/9872b4dc-90c8-4fe8-bf9a-472871256d22" />
+
+# Use-Case 11: Store Messages
+<img width="734" height="353" alt="image" src="https://github.com/user-attachments/assets/2a1b4ce5-0926-448b-8657-876aa7f7fdc3" />
+
+
+#  Use-Case 12: Retrieve Messages:
 ![](https://www.plantuml.com/plantuml/png/5SwnQiGm40JGVhzYS2z2KgO83bTVSq8Vi2Slze8j2-tQuBy_kPdYmJ0pcdFpOrkHJCA3Utp_X9TuKpa5Jp7ZMOo8i-yDm__XYnJNp2xJtMa3s92eSkkgbOiZNkQotHw94i8V8dwnxZEqW292bzIb7kzLyrTjUh8ByiAEHQqFNKIZbAd_-W00)
+
+#  Use-Case 13: Edit Profile Info:
+<img width="883" height="814" alt="image" src="https://github.com/user-attachments/assets/1dd9b5fa-aeed-420c-905d-70321f6ff97a" />
+
+#  Use-Case 14: Forgot Password:
+<img width="1003" height="1672" alt="image" src="https://github.com/user-attachments/assets/03745adb-12c6-4ffc-bc12-12541f2ba4e5" />
 
 
 ## User Interface
