@@ -879,8 +879,11 @@ Productivity:
 
 This project is developed for academic purposes as part of EECE/CS-3093C at the University of Cincinnati. The team follows the **ACM/IEEE Software Engineering Code of Ethics** (https://www.acm.org/code-of-ethics).
 
-If your team chooses to publish the repository after the course, add an explicit license (e.g., MIT) here and a `LICENSE` file at the repo root.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+
+> If your team chooses to publish the repository after the course, add an explicit license (e.g., MIT) here and a `LICENSE` file at the repo root.
 
 ---
 
-_End of template. Last template revision: 2026-07-09._
+_End of template. Last template revision: 2026-08-13._
