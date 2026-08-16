@@ -108,15 +108,6 @@ Link to your **GitHub Projects board** (above) and include a representative scre
 <img width="1917" height="1015" alt="image" src="https://github.com/user-attachments/assets/0faaf665-b234-4c81-85a0-f9161930072c" />
 <img width="953" height="916" alt="image" src="https://github.com/user-attachments/assets/c5f7f924-bc29-48b1-9037-76d55c8828e1" />
 
-
-
-
-
-
-
-
-### Sprint 3
-- *to be updated w/ screenshots*
 ## Use Cases
 
 Include the **use-case diagram** and a **brief description** (1–3 sentences) for each use case. _(Main focus of Sprint 0.)_
